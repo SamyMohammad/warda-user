@@ -105,7 +105,8 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
           key: _globalKey,
           backgroundColor: Theme.of(context).cardColor,
 
-          appBar: ResponsiveHelper.isDesktop(context)? const CustomAppBar(title: '')  :  DetailsAppBar(key: _key),
+          appBar: ResponsiveHelper.isDesktop(context)? const CustomAppBar(title: '')  : 
+           DetailsAppBar(key: _key),
 
           body: (itemController.item != null) ? ResponsiveHelper.isDesktop(context) ? DetailsWebView(
             cartModel: cartModel, stock: stock, priceWithAddOns: priceWithAddons,

@@ -159,23 +159,26 @@ class OrderView extends StatelessWidget {
                                   )),
                                 ),
                                 const SizedBox(height: Dimensions.paddingSizeSmall),
-                                isRunning ? InkWell(
-                                  onTap: () => Get.toNamed(RouteHelper.getOrderTrackingRoute(paginatedOrderModel!.orders![index].id)),
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeExtraSmall),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                                      border: Border.all(width: 1, color: Theme.of(context).primaryColor),
-                                    ),
-                                    child: Row(children: [
-                                      Image.asset(Images.tracking, height: 15, width: 15, color: Theme.of(context).primaryColor),
-                                      const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                                      Text(isParcel ? 'track_delivery'.tr : 'track_order'.tr, style: robotoMedium.copyWith(
-                                        fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).primaryColor,
-                                      )),
-                                    ]),
-                                  ),
-                                ) : Text(
+                                isRunning ?
+                                
+                                //  InkWell(
+                                //   onTap: () => Get.toNamed(RouteHelper.getOrderTrackingRoute(paginatedOrderModel!.orders![index].id)),
+                                //   child: Container(
+                                //     padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeExtraSmall),
+                                //     decoration: BoxDecoration(
+                                //       borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                                //       border: Border.all(width: 1, color: Theme.of(context).primaryColor),
+                                //     ),
+                                //     child: Row(children: [
+                                //       Image.asset(Images.tracking, height: 15, width: 15, color: Theme.of(context).primaryColor),
+                                //       const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                                //       Text(isParcel ? 'track_delivery'.tr : 'track_order'.tr, style: robotoMedium.copyWith(
+                                //         fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).primaryColor,
+                                //       )),
+                                //     ]),
+                                //   ),
+                                // )
+                                SizedBox() : Text(
                                   '${paginatedOrderModel.orders![index].detailsCount} ${paginatedOrderModel.orders![index].detailsCount! > 1 ? 'items'.tr : 'item'.tr}',
                                   style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeExtraSmall),
                                 ),

@@ -67,6 +67,7 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
       endDrawer: MenuDrawer(),
       endDrawerEnableOpenDragGesture: false,
       body: BlocBuilder<LocationCubit, LocationState>(
+        bloc: BlocProvider.of<LocationCubit>(context)..getCountryData(),
         builder: (context, state) {
           final cubit = BlocProvider.of<LocationCubit>(context);
           print('location state $state');

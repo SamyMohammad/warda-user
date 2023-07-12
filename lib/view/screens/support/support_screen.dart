@@ -50,7 +50,8 @@ class _SupportScreenState extends State<SupportScreen> {
 
             SupportButton(
               icon: Icons.call, title: 'call'.tr, color: Colors.red,
-              info: Get.find<SplashController>().configModel!.phone,
+              info: '+2010123456789',
+              //Get.find<SplashController>().configModel!.phone,
               onTap: () async {
                 if(await canLaunchUrlString('tel:${Get.find<SplashController>().configModel!.phone}')) {
                   launchUrlString('tel:${Get.find<SplashController>().configModel!.phone}');

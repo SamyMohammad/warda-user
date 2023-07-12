@@ -88,11 +88,12 @@ class _AddressScreenState extends State<AddressScreen> {
                             itemBuilder: (context, index) {
                               return AddressWidget(
                                 address: locationController.addressList![index], fromAddress: true,
-                                onTap: () {
-                                  Get.toNamed(RouteHelper.getMapRoute(
-                                    locationController.addressList![index], 'address', false
-                                  ));
-                                },
+                                onTap: null,
+                                // () {
+                                //   Get.toNamed(RouteHelper.getMapRoute(
+                                //     locationController.addressList![index], 'address', false
+                                //   ));
+                                // }
                                 onEditPressed: () {
                                   Get.toNamed(RouteHelper.getEditAddressRoute(locationController.addressList![index]));
                                 },

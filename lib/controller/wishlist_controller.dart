@@ -25,15 +25,17 @@ class WishListController extends GetxController implements GetxService {
   List<int?> get wishStoreIdList => _wishStoreIdList;
   bool get isRemoving => _isRemoving;
 
-  void addToWishList(Item? product, Store? store, bool isStore, {bool getXSnackBar = false}) async {
-    if(isStore) {
+  void addToWishList(Item? product, Store? store, bool isStore,
+      {bool getXSnackBar = false}) async {
+    if (isStore) {
       _wishStoreIdList.add(store!.id);
-      _wishStoreList!.add(store);
-    }else{
-      _wishItemList!.add(product);
+      _wishStoreList?.add(store);
+    } else {
+      _wishItemList?.add(product);
       _wishItemIdList.add(product!.id);
     }
-    Response response = await wishListRepo.addWishList(isStore ? store!.id : product!.id, isStore);
+    Response response = await wishListRepo.addWishList(
+        isStore ? store!.id : product!.id, isStore);
     if (response.statusCode == 200) {
       // if(isStore) {
       //   _wishStoreIdList.forEach((storeId) {
@@ -52,17 +54,19 @@ class WishListController extends GetxController implements GetxService {
       //   _wishItemList.add(product);
       //   _wishItemIdList.add(product.id);
       // }
-      showCustomSnackBar(response.body['message'], isError: false, getXSnackBar: getXSnackBar);
+      showCustomSnackBar(response.body['message'],
+          isError: false, getXSnackBar: getXSnackBar);
     } else {
-      if(isStore) {
+      if (isStore) {
         for (var storeId in _wishStoreIdList) {
           if (storeId == store!.id) {
-            _wishStoreIdList.removeAt(_wishStoreIdList.indexOf(storeId));
+            print('hell:: ${_wishStoreIdList}');
+            _wishStoreIdList.removeWhere((element) => element == storeId);
           }
         }
-      }else{
+      } else {
         for (var productId in _wishItemIdList) {
-          if(productId == product!.id){
+          if (productId == product!.id) {
             _wishItemIdList.removeAt(_wishItemIdList.indexOf(productId));
           }
         }
@@ -72,7 +76,8 @@ class WishListController extends GetxController implements GetxService {
     update();
   }
 
-  void removeFromWishList(int? id, bool isStore, {bool getXSnackBar = false}) async {
+  void removeFromWishList(int? id, bool isStore,
+      {bool getXSnackBar = false}) async {
     _isRemoving = true;
     update();
 
@@ -80,17 +85,17 @@ class WishListController extends GetxController implements GetxService {
     int? storeId, itemId;
     Store? store;
     Item? item;
-    if(isStore) {
+    if (isStore) {
       idIndex = _wishStoreIdList.indexOf(id);
-      if(idIndex != -1) {
+      if (idIndex != -1) {
         storeId = id;
         _wishStoreIdList.removeAt(idIndex);
-        store = _wishStoreList![idIndex];
+        store = _wishStoreList?[idIndex];
         _wishStoreList!.removeAt(idIndex);
       }
-    }else {
+    } else {
       idIndex = _wishItemIdList.indexOf(id);
-      if(idIndex != -1) {
+      if (idIndex != -1) {
         itemId = id;
         _wishItemIdList.removeAt(idIndex);
         item = _wishItemList![idIndex];
@@ -99,14 +104,14 @@ class WishListController extends GetxController implements GetxService {
     }
     Response response = await wishListRepo.removeWishList(id, isStore);
     if (response.statusCode == 200) {
-      showCustomSnackBar(response.body['message'], isError: false, getXSnackBar: getXSnackBar);
-    }
-    else {
+      showCustomSnackBar(response.body['message'],
+          isError: false, getXSnackBar: getXSnackBar);
+    } else {
       ApiChecker.checkApi(response, getXSnackBar: getXSnackBar);
-      if(isStore) {
+      if (isStore) {
         _wishStoreIdList.add(storeId);
         _wishStoreList!.add(store);
-      }else {
+      } else {
         _wishItemIdList.add(itemId);
         _wishItemList!.add(item);
       }
@@ -127,25 +132,31 @@ class WishListController extends GetxController implements GetxService {
       _wishStoreIdList = [];
       _wishItemIdList = [];
 
-      if(response.body['item'] != null){
+      if (response.body['item'] != null) {
         response.body['item'].forEach((item) async {
-          if(item['module_type'] == null || !Get.find<SplashController>().getModuleConfig(item['module_type']).newVariation!
-              || item['variations'] == null || item['variations'].isEmpty
-              || (item['food_variations'] != null && item['food_variations'].isNotEmpty)){
-
+          if (item['module_type'] == null ||
+              !Get.find<SplashController>()
+                  .getModuleConfig(item['module_type'])
+                  .newVariation! ||
+              item['variations'] == null ||
+              item['variations'].isEmpty ||
+              (item['food_variations'] != null &&
+                  item['food_variations'].isNotEmpty)) {
             Item i = Item.fromJson(item);
-            if(Get.find<SplashController>().module == null){
-              for (var zone in Get.find<LocationController>().getUserAddress()!.zoneData!) {
+            if (Get.find<SplashController>().module == null) {
+              for (var zone in Get.find<LocationController>()
+                  .getUserAddress()!
+                  .zoneData!) {
                 for (var module in zone.modules!) {
-                  if(module.id == i.moduleId){
-                    if(module.pivot!.zoneId == i.zoneId){
+                  if (module.id == i.moduleId) {
+                    if (module.pivot!.zoneId == i.zoneId) {
                       _wishItemList!.add(i);
                       _wishItemIdList.add(i.id);
                     }
                   }
                 }
               }
-            }else{
+            } else {
               _wishItemList!.add(i);
               _wishItemIdList.add(i.id);
             }
@@ -154,28 +165,29 @@ class WishListController extends GetxController implements GetxService {
       }
 
       response.body['store'].forEach((store) async {
-        if(Get.find<SplashController>().module == null){
-          for (var zone in Get.find<LocationController>().getUserAddress()!.zoneData!) {
+        if (Get.find<SplashController>().module == null) {
+          for (var zone
+              in Get.find<LocationController>().getUserAddress()!.zoneData!) {
             for (var module in zone.modules!) {
-              if(module.id == Store.fromJson(store).moduleId){
-                if(module.pivot!.zoneId == Store.fromJson(store).zoneId){
+              if (module.id == Store.fromJson(store).moduleId) {
+                if (module.pivot!.zoneId == Store.fromJson(store).zoneId) {
                   _wishStoreList!.add(Store.fromJson(store));
                   _wishStoreIdList.add(Store.fromJson(store).id);
                 }
               }
             }
           }
-        }else{
+        } else {
           Store? s;
-          try{
+          try {
             s = Store.fromJson(store);
-          }catch(_){}
-          if(s != null && Get.find<SplashController>().module!.id == s.moduleId) {
+          } catch (_) {}
+          if (s != null &&
+              Get.find<SplashController>().module!.id == s.moduleId) {
             _wishStoreList!.add(s);
             _wishStoreIdList.add(s.id);
           }
         }
-
       });
     } else {
       ApiChecker.checkApi(response);

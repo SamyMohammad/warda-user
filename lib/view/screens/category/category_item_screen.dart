@@ -34,7 +34,7 @@ class CategoryItemScreenState extends State<CategoryItemScreen> with TickerProvi
   void initState() {
     super.initState();
 
-    _tabController = TabController(length: 2, initialIndex: 0, vsync: this);
+    _tabController = TabController(length: 1, initialIndex: 0, vsync: this);
     Get.find<CategoryController>().getSubCategoryList(widget.categoryID);
     scrollController.addListener(() {
       if (scrollController.position.pixels == scrollController.position.maxScrollExtent
@@ -179,7 +179,8 @@ class CategoryItemScreenState extends State<CategoryItemScreen> with TickerProvi
             width: Dimensions.webMaxWidth,
             child: Column(children: [
 
-              (catController.subCategoryList != null && !catController.isSearching) ? Center(child: Container(
+              (catController.subCategoryList != null && !catController.isSearching) ?
+               Center(child: Container(
                 height: 40, width: Dimensions.webMaxWidth, color: Theme.of(context).cardColor,
                 padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeExtraSmall),
                 child: ListView.builder(
@@ -225,8 +226,8 @@ class CategoryItemScreenState extends State<CategoryItemScreen> with TickerProvi
                   labelStyle: robotoBold.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor),
                   tabs: [
                     Tab(text: 'item'.tr),
-                    Tab(text: Get.find<SplashController>().configModel!.moduleConfig!.module!.showRestaurantText!
-                        ? 'restaurants'.tr : 'stores'.tr),
+                    // Tab(text: Get.find<SplashController>().configModel!.moduleConfig!.module!.showRestaurantText!
+                    //     ? 'restaurants'.tr : 'stores'.tr),
                   ],
                 ),
               )),
@@ -270,14 +271,14 @@ class CategoryItemScreenState extends State<CategoryItemScreen> with TickerProvi
                         isStore: false, items: item, stores: null, noDataText: 'no_category_item_found'.tr,
                       ),
                     ),
-                    SingleChildScrollView(
-                      controller: storeScrollController,
-                      child: ItemsView(
-                        isStore: true, items: null, stores: stores,
-                        noDataText: Get.find<SplashController>().configModel!.moduleConfig!.module!.showRestaurantText!
-                            ? 'no_category_restaurant_found'.tr : 'no_category_store_found'.tr,
-                      ),
-                    ),
+                    // SingleChildScrollView(
+                    //   controller: storeScrollController,
+                    //   child: ItemsView(
+                    //     isStore: true, items: null, stores: stores,
+                    //     noDataText: Get.find<SplashController>().configModel!.moduleConfig!.module!.showRestaurantText!
+                    //         ? 'no_category_restaurant_found'.tr : 'no_category_store_found'.tr,
+                    //   ),
+                    // ),
                   ],
                 ),
               )),

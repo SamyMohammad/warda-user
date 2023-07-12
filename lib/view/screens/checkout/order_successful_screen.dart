@@ -57,17 +57,17 @@ class _OrderSuccessfulScreenState extends State<OrderSuccessfulScreen> {
             total = ((orderController.trackModel!.orderAmount! / 100) * Get.find<SplashController>().configModel!.loyaltyPointItemPurchasePoint!);
             success = orderController.trackModel!.paymentStatus == 'paid' || orderController.trackModel!.paymentMethod == 'cash_on_delivery';
             parcel = orderController.trackModel!.paymentMethod == 'parcel';
-            for(ZoneData zData in Get.find<LocationController>().getUserAddress()!.zoneData!) {
-              for(Modules m in zData.modules!) {
-                if(m.id == Get.find<SplashController>().module!.id) {
-                  maximumCodOrderAmount = m.pivot!.maximumCodOrderAmount;
-                  break;
-                }
-              }
-              if(zData.id ==  Get.find<LocationController>().getUserAddress()!.zoneId){
-                _isCashOnDeliveryActive = zData.cashOnDelivery;
-              }
-            }
+            // for(ZoneData zData in Get.find<LocationController>().getUserAddress()!.zoneData!) {
+            //   for(Modules m in zData.modules!) {
+            //     if(m.id == Get.find<SplashController>().module!.id) {
+            //       maximumCodOrderAmount = m.pivot!.maximumCodOrderAmount;
+            //       break;
+            //     }
+            //   }
+            //   if(zData.id ==  Get.find<LocationController>().getUserAddress()!.zoneId){
+            //     _isCashOnDeliveryActive = zData.cashOnDelivery;
+            //   }
+            // }
 
             if (!success && !Get.isDialogOpen! && orderController.trackModel!.orderStatus != 'canceled') {
               Future.delayed(const Duration(seconds: 1), () {

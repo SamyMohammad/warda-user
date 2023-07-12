@@ -22,9 +22,20 @@ class ItemsView extends StatefulWidget {
   final bool inStorePage;
   final bool isFeatured;
   final bool showTheme1Store;
-  const ItemsView({Key? key, required this.stores, required this.items, required this.isStore, this.isScrollable = false,
-    this.shimmerLength = 20, this.padding = const EdgeInsets.all(Dimensions.paddingSizeSmall), this.noDataText,
-    this.isCampaign = false, this.inStorePage = false, this.isFeatured = false, this.showTheme1Store = false}) : super(key: key);
+  const ItemsView(
+      {Key? key,
+      required this.stores,
+      required this.items,
+      required this.isStore,
+      this.isScrollable = false,
+      this.shimmerLength = 20,
+      this.padding = const EdgeInsets.all(Dimensions.paddingSizeSmall),
+      this.noDataText,
+      this.isCampaign = false,
+      this.inStorePage = false,
+      this.isFeatured = false,
+      this.showTheme1Store = false})
+      : super(key: key);
 
   @override
   State<ItemsView> createState() => _ItemsViewState();
@@ -35,60 +46,101 @@ class _ItemsViewState extends State<ItemsView> {
   Widget build(BuildContext context) {
     bool isNull = true;
     int length = 0;
-    if(widget.isStore) {
+    if (widget.isStore) {
       isNull = widget.stores == null;
-      if(!isNull) {
+      if (!isNull) {
         length = widget.stores!.length;
       }
-    }else {
+    } else {
       isNull = widget.items == null;
-      if(!isNull) {
+      if (!isNull) {
         length = widget.items!.length;
       }
     }
 
     return Column(children: [
-
-      !isNull ? length > 0 ? GridView.builder(
-        key: UniqueKey(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisSpacing: Dimensions.paddingSizeLarge,
-          mainAxisSpacing: ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeLarge : 0.01,
-          childAspectRatio: ResponsiveHelper.isDesktop(context) ? 4 : widget.showTheme1Store ? 2 : 3.5,
-          crossAxisCount: ResponsiveHelper.isMobile(context) ? 1 : 2,
-        ),
-        physics: widget.isScrollable ? const BouncingScrollPhysics() : const NeverScrollableScrollPhysics(),
-        shrinkWrap: widget.isScrollable ? false : true,
-        itemCount: length,
-        padding: widget.padding,
-        itemBuilder: (context, index) {
-          return widget.showTheme1Store ? StoreWidget(store: widget.stores![index], index: index, inStore: widget.inStorePage) : ItemWidget(
-            isStore: widget.isStore, item: widget.isStore ? null : widget.items![index], isFeatured: widget.isFeatured,
-            store: widget.isStore ? widget.stores![index] : null, index: index, length: length, isCampaign: widget.isCampaign,
-            inStore: widget.inStorePage,
-          );
-        },
-      ) : NoDataScreen(
-        text: widget.noDataText ?? (widget.isStore ? Get.find<SplashController>().configModel!.moduleConfig!.module!.showRestaurantText!
-            ? 'no_restaurant_available'.tr : 'no_store_available'.tr : 'no_item_available'.tr),
-      ) : GridView.builder(
-        key: UniqueKey(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisSpacing: Dimensions.paddingSizeLarge,
-          mainAxisSpacing: ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeLarge : 0.01,
-          childAspectRatio: ResponsiveHelper.isDesktop(context) ? 4 : widget.showTheme1Store ? 1.9 : 4,
-          crossAxisCount: ResponsiveHelper.isMobile(context) ? 1 : 2,
-        ),
-        physics: widget.isScrollable ? const BouncingScrollPhysics() : const NeverScrollableScrollPhysics(),
-        shrinkWrap: widget.isScrollable ? false : true,
-        itemCount: widget.shimmerLength,
-        padding: widget.padding,
-        itemBuilder: (context, index) {
-          return widget.showTheme1Store ? StoreShimmer(isEnable: isNull)
-              : ItemShimmer(isEnabled: isNull, isStore: widget.isStore, hasDivider: index != widget.shimmerLength-1);
-        },
-      ),
-
+      !isNull
+          ? length > 0
+              ? GridView.builder(
+                  key: UniqueKey(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisSpacing: Dimensions.paddingSizeLarge,
+                    mainAxisSpacing: ResponsiveHelper.isDesktop(context)
+                        ? Dimensions.paddingSizeLarge
+                        : 0.01,
+                    childAspectRatio: ResponsiveHelper.isDesktop(context)
+                        ? 4
+                        : widget.showTheme1Store
+                            ? 2
+                            : 3.5,
+                    crossAxisCount: ResponsiveHelper.isMobile(context) ? 1 : 2,
+                  ),
+                  physics: widget.isScrollable
+                      ? const BouncingScrollPhysics()
+                      : const NeverScrollableScrollPhysics(),
+                  shrinkWrap: widget.isScrollable ? false : true,
+                  itemCount: length,
+                  padding: widget.padding,
+                  itemBuilder: (context, index) {
+                    return widget.showTheme1Store
+                        ? StoreWidget(
+                            store: widget.stores![index],
+                            index: index,
+                            inStore: widget.inStorePage)
+                        : ItemWidget(
+                            isStore: widget.isStore,
+                            item: widget.isStore ? null : widget.items![index],
+                            isFeatured: widget.isFeatured,
+                            store:
+                                widget.isStore ? widget.stores![index] : null,
+                            index: index,
+                            length: length,
+                            isCampaign: widget.isCampaign,
+                            inStore: widget.inStorePage,
+                          );
+                  },
+                )
+              : NoDataScreen(
+                  text: widget.noDataText ??
+                      (widget.isStore
+                          ? Get.find<SplashController>()
+                                  .configModel!
+                                  .moduleConfig!
+                                  .module!
+                                  .showRestaurantText!
+                              ? 'no_restaurant_available'.tr
+                              : 'no_store_available'.tr
+                          : 'no_item_available'.tr),
+                )
+          : GridView.builder(
+              key: UniqueKey(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisSpacing: Dimensions.paddingSizeLarge,
+                mainAxisSpacing: ResponsiveHelper.isDesktop(context)
+                    ? Dimensions.paddingSizeLarge
+                    : 0.01,
+                childAspectRatio: ResponsiveHelper.isDesktop(context)
+                    ? 4
+                    : widget.showTheme1Store
+                        ? 1.9
+                        : 4,
+                crossAxisCount: ResponsiveHelper.isMobile(context) ? 1 : 2,
+              ),
+              physics: widget.isScrollable
+                  ? const BouncingScrollPhysics()
+                  : const NeverScrollableScrollPhysics(),
+              shrinkWrap: widget.isScrollable ? false : true,
+              itemCount: widget.shimmerLength,
+              padding: widget.padding,
+              itemBuilder: (context, index) {
+                return widget.showTheme1Store
+                    ? StoreShimmer(isEnable: isNull)
+                    : ItemShimmer(
+                        isEnabled: isNull,
+                        isStore: widget.isStore,
+                        hasDivider: index != widget.shimmerLength - 1);
+              },
+            ),
     ]);
   }
 }

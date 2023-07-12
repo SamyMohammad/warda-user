@@ -107,14 +107,15 @@ class CheckoutScreenState extends State<CheckoutScreen> {
       _floorController.text =
           Get.find<LocationController>().getUserAddress()?.floor ?? '';
 
-      Get.find<LocationController>().getZone(false, updateInAddress: true);
+      Get.find<LocationController>().getZone(false, updateInAddress: false);
       if (Get.find<UserController>().userInfoModel == null) {
         Get.find<UserController>().getUserInfo();
       }
       Get.find<CouponController>().getCouponList();
-      if (Get.find<LocationController>().addressList == null) {
-        Get.find<LocationController>().getAddressList();
-      }
+      // if (Get.find<LocationController>().addressList == null) {
+      // }
+
+      Get.find<LocationController>().getAddressList();
       if (widget.storeId == null) {
         _cartList = [];
         widget.fromCart
@@ -157,7 +158,6 @@ class CheckoutScreenState extends State<CheckoutScreen> {
     bool isLoggedIn = Get.find<AuthController>().isLoggedIn();
     Module? module =
         Get.find<SplashController>().configModel!.moduleConfig!.module;
-
     return Scaffold(
       appBar: CustomAppBar(title: 'checkout'.tr),
       endDrawer: const MenuDrawer(),
@@ -168,19 +168,25 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                 List<DropdownItem<int>> addressList = [];
                 address = [];
                 if (Get.find<LocationController>().getUserAddress() != null) {
-                  addressList.add(DropdownItem<int>(
-                      value: 0,
-                      child: SizedBox(
-                        width: context.width > Dimensions.webMaxWidth
-                            ? Dimensions.webMaxWidth - 50
-                            : context.width - 50,
-                        child: AddressWidget(
-                          address:
-                              Get.find<LocationController>().getUserAddress(),
-                          fromAddress: false,
-                          fromCheckout: true,
-                        ),
-                      )));
+                  if (Get.find<LocationController>()
+                          .getUserAddress()!
+                          .addressType
+                          .runtimeType !=
+                      Null) {
+                    addressList.add(DropdownItem<int>(
+                        value: 0,
+                        child: SizedBox(
+                          width: context.width > Dimensions.webMaxWidth
+                              ? Dimensions.webMaxWidth - 50
+                              : context.width - 50,
+                          child: AddressWidget(
+                            address:
+                                Get.find<LocationController>().getUserAddress(),
+                            fromAddress: false,
+                            fromCheckout: true,
+                          ),
+                        )));
+                  }
                 }
                 if (locationController.getUserAddress().runtimeType != Null) {
                   address.add(locationController.getUserAddress()!);
@@ -194,18 +200,22 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                         .contains(storeController.store!.zoneId)) {
                       address.add(locationController.addressList![index]);
 
-                      addressList.add(DropdownItem<int>(
-                          value: index + 1,
-                          child: SizedBox(
-                            width: context.width > Dimensions.webMaxWidth
-                                ? Dimensions.webMaxWidth - 50
-                                : context.width - 50,
-                            child: AddressWidget(
-                              address: locationController.addressList![index],
-                              fromAddress: false,
-                              fromCheckout: true,
-                            ),
-                          )));
+                      if (locationController
+                              .addressList![index].addressType.runtimeType !=
+                          Null) {
+                        addressList.add(DropdownItem<int>(
+                            value: index + 1,
+                            child: SizedBox(
+                              width: context.width > Dimensions.webMaxWidth
+                                  ? Dimensions.webMaxWidth - 50
+                                  : context.width - 50,
+                              child: AddressWidget(
+                                address: locationController.addressList![index],
+                                fromAddress: false,
+                                fromCheckout: true,
+                              ),
+                            )));
+                      }
                     }
                   }
                 }
@@ -261,17 +271,37 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                   todayClosed = storeController.isStoreClosed(
                       true,
                       storeController.store!.active!,
-                      storeController.store!.schedules);
+                      storeController.store!.schedules,
+                      storeController.store!.orderPlaceToScheduleInterval,
+                      storeController.store!.open);
+                  print('helll::: >> $todayClosed');
                   tomorrowClosed = storeController.isStoreClosed(
                       false,
                       storeController.store!.active!,
-                      storeController.store!.schedules);
+                      storeController.store!.schedules,
+                      storeController.store!.orderPlaceToScheduleInterval,
+                      storeController.store!.open);
                   _taxPercent = storeController.store!.tax;
                 }
                 return GetBuilder<CouponController>(
                     builder: (couponController) {
                   return GetBuilder<OrderController>(
                       builder: (orderController) {
+                    // if (mounted) {
+
+                    // }
+                    if (address.length > 1 &&
+                        address[orderController.addressIndex ?? 0]
+                                .addressType
+                                .runtimeType ==
+                            Null) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        print(
+                            'hellOOOOOOO: ${address[orderController.addressIndex ?? 0].addressType.runtimeType}');
+                        orderController.setAddressIndex(1);
+                      });
+                    }
+
                     double? deliveryCharge = -1;
                     double? charge = -1;
                     double? maxCodOrderAmount;
@@ -927,8 +957,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                       fontSize: Dimensions.fontSizeSmall)),
                             ),
                           ]),
-                      (address[orderController.addressIndex!].runtimeType !=
-                              AddressModel)
+                      (address.isNotEmpty)
                           ? Container(
                               constraints: BoxConstraints(
                                   minHeight: ResponsiveHelper.isDesktop(context)
@@ -943,29 +972,30 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                               ),
                               child: CustomDropdown<int>(
                                 onChange: (int? value, int index) {
-                                  orderController.getDistanceInKM(
-                                    LatLng(
-                                      double.parse(address[index].latitude!),
-                                      double.parse(address[index].longitude!),
-                                    ),
-                                    LatLng(
-                                        double.parse(
-                                            storeController.store!.latitude!),
-                                        double.parse(
-                                            storeController.store!.longitude!)),
-                                  );
+                                  // orderController.getDistanceInKM(
+                                  //   LatLng(
+                                  //     double.parse(address[index].latitude!),
+                                  //     double.parse(address[index].longitude!),
+                                  //   ),
+                                  //   LatLng(
+                                  //       double.parse(
+                                  //           storeController.store!.latitude!),
+                                  //       double.parse(
+                                  //           storeController.store!.longitude!)),
+                                  // );
+
                                   orderController.setAddressIndex(index);
 
                                   _streetNumberController.text =
-                                      address[orderController.addressIndex!]
+                                      address[orderController.addressIndex ?? 0]
                                               .streetNumber ??
                                           '';
                                   _houseController.text =
-                                      address[orderController.addressIndex!]
+                                      address[orderController.addressIndex ?? 0]
                                               .house ??
                                           '';
                                   _floorController.text =
-                                      address[orderController.addressIndex!]
+                                      address[orderController.addressIndex ?? 0]
                                               .floor ??
                                           '';
                                 },
@@ -989,12 +1019,19 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                       Dimensions.paddingSizeExtraSmall),
                                 ),
                                 items: addressList,
-                                child: AddressWidget(
-                                  address:
-                                      address[orderController.addressIndex!],
-                                  fromAddress: false,
-                                  fromCheckout: true,
-                                ),
+                                child:
+                                    address[orderController.addressIndex ?? 0]
+                                                .addressType
+                                                .runtimeType !=
+                                            Null
+                                        ? AddressWidget(
+                                            address: address[
+                                                orderController.addressIndex ??
+                                                    1],
+                                            fromAddress: false,
+                                            fromCheckout: true,
+                                          )
+                                        : SizedBox(),
                               ),
                             )
                           : SizedBox(),
@@ -2007,7 +2044,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                   DateTime scheduleEndDate = DateTime.now();
                   if (orderController.timeSlots == null ||
                       orderController.timeSlots!.isEmpty) {
-                    isAvailable = false;
+                    // isAvailable = false;
                   } else {
                     DateTime date = orderController.selectedDateSlot == 0
                         ? DateTime.now()
@@ -2056,7 +2093,8 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                       _tipController.text != 'not_now' &&
                       double.parse(_tipController.text.trim()) < 0) {
                     showCustomSnackBar('tips_can_not_be_negative'.tr);
-                  } else if ((orderController.selectedDateSlot == 0 &&
+                  } else if ((
+                          // orderController.selectedDateSlot == 0 &&
                           todayClosed) ||
                       (orderController.selectedDateSlot == 1 &&
                           tomorrowClosed)) {
@@ -2078,20 +2116,22 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                   } else if (orderController.paymentMethodIndex != 0 &&
                       widget.storeId != null) {
                     showCustomSnackBar('payment_method_is_not_available'.tr);
-                  } else if (orderController.timeSlots == null ||
-                      orderController.timeSlots!.isEmpty) {
-                    if (storeController.store!.scheduleOrder!) {
-                      showCustomSnackBar('select_a_time'.tr);
-                    } else {
-                      showCustomSnackBar(Get.find<SplashController>()
-                              .configModel!
-                              .moduleConfig!
-                              .module!
-                              .showRestaurantText!
-                          ? 'restaurant_is_closed'.tr
-                          : 'store_is_closed'.tr);
-                    }
-                  } else if (!isAvailable) {
+                  }
+                  // else if (orderController.timeSlots == null ||
+                  //     orderController.timeSlots!.isEmpty) {
+                  //   if (storeController.store!.scheduleOrder!) {
+                  //     showCustomSnackBar('select_a_time'.tr);
+                  //   } else {
+                  //     showCustomSnackBar(Get.find<SplashController>()
+                  //             .configModel!
+                  //             .moduleConfig!
+                  //             .module!
+                  //             .showRestaurantText!
+                  //         ? 'restaurant_is_closed'.tr
+                  //         : 'store_is_closed'.tr);
+                  //   }
+                  // }
+                  else if (!isAvailable) {
                     showCustomSnackBar(
                         'one_or_more_products_are_not_available_for_this_selected_time'
                             .tr);
@@ -2109,7 +2149,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                             .tr);
                   } else {
                     AddressModel? finalAddress =
-                        address[orderController.addressIndex!];
+                        address[orderController.addressIndex ?? 0];
 
                     if (widget.storeId == null) {
                       List<Cart> carts = [];
@@ -2176,7 +2216,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                             cart: carts,
                             couponDiscountAmount:
                                 Get.find<CouponController>().discount,
-                            distance: orderController.distance,
+                            distance: 0,
                             scheduleAt: !storeController.store!.scheduleOrder!
                                 ? null
                                 : (orderController.selectedDateSlot == 0 &&

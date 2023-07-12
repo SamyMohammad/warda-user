@@ -29,6 +29,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:warda/view/screens/location/widget/module_dialog.dart';
 import 'package:warda/view/screens/location/widget/permission_dialog.dart';
 
+import '../helper/cashe_helper.dart';
+
 class LocationController extends GetxController implements GetxService {
   final LocationRepo locationRepo;
   LocationController({required this.locationRepo});
@@ -174,7 +176,7 @@ class LocationController extends GetxController implements GetxService {
     }
     ZoneResponseModel responseModel;
     Response response = await locationRepo.getZone();
-    
+
     if (response.statusCode == 200) {
       _inZone = true;
       _zoneID = int.parse(jsonDecode(response.body['zone_id'])[0].toString());
@@ -216,20 +218,20 @@ class LocationController extends GetxController implements GetxService {
     return responseModel;
   }
 
-  Future<void> syncZoneData() async {
-    ZoneResponseModel response = await getZone(false, updateInAddress: true);
+  // Future<void> syncZoneData() async {
+  //   ZoneResponseModel response = await getZone(false, updateInAddress: true);
 
-    AddressModel? address = getUserAddress();
-    address?.zoneId = response.zoneIds[0];
-    address?.zoneIds = [];
-    address?.zoneIds!.addAll(response.zoneIds);
-    address?.zoneData = [];
-    address?.zoneData!.addAll(response.zoneData);
-    address?.areaIds = [];
-    address?.areaIds!.addAll(response.areaIds);
-    await saveUserAddress(address ?? AddressModel());
-    update();
-  }
+  //   AddressModel? address = getUserAddress();
+  //   address?.zoneId = response.zoneIds[0];
+  //   address?.zoneIds = [];
+  //   address?.zoneIds!.addAll(response.zoneIds);
+  //   address?.zoneData = [];
+  //   address?.zoneData!.addAll(response.zoneData);
+  //   address?.areaIds = [];
+  //   address?.areaIds!.addAll(response.areaIds);
+  //   await saveUserAddress(address ?? AddressModel());
+  //   update();
+  // }
 
   void updatePosition(CameraPosition? position, bool fromAddress) async {
     if (_updateAddAddressData) {
@@ -398,6 +400,19 @@ class LocationController extends GetxController implements GetxService {
           AddressModel.fromJson(jsonDecode(locationRepo.getUserAddress()!));
     } catch (_) {}
     return addressModel;
+  }
+
+  Future<bool> haveCityId() async {
+    bool haveZoneId = false;
+    String cityId = await CasheHelper().read(AppConstants.zoneId) ?? '';
+    if (cityId != '') {
+      haveZoneId = true;
+    } else {
+      haveZoneId = false;
+    }
+
+    print('hellllllllllll:>> $haveZoneId');
+    return haveZoneId;
   }
 
   void setAddressTypeIndex(int index, {bool isUpdate = true}) {
@@ -605,7 +620,7 @@ class LocationController extends GetxController implements GetxService {
     if (response.statusCode == 200 && response.body['status'] == 'OK') {
       address = response.body['results'][0]['formatted_address'].toString();
     } else {
-     // showCustomSnackBar(response.body['error_message'] ?? response.bodyString);
+      // showCustomSnackBar(response.body['error_message'] ?? response.bodyString);
     }
     return address;
   }
@@ -686,15 +701,22 @@ class LocationController extends GetxController implements GetxService {
       );
     } else if (Get.find<AuthController>().isLoggedIn()) {
       Get.dialog(const CustomLoader(), barrierDismissible: false);
+      bool haveZoneId = await Get.find<LocationController>().haveCityId();
       await Get.find<LocationController>().getAddressList();
+
       Get.back();
       if (Get.find<LocationController>().addressList!.isEmpty) {
         //Get.toNamed(RouteHelper.getPickMapRoute(page, false));
 
         Get.offNamed(RouteHelper.getAccessLocationRoute(page));
       } else {
+        print('hellllllllllll:>> $offNamed,,$offAll,,$haveZoneId');
         if (offNamed) {
-          Get.offNamed(RouteHelper.getAccessLocationRoute(page));
+          if (haveZoneId) {
+            Get.offNamed(RouteHelper.getInitialRoute(fromSplash: true));
+          } else {
+            Get.offNamed(RouteHelper.getAccessLocationRoute(page));
+          }
         } else if (offAll) {
           Get.offAllNamed(RouteHelper.getAccessLocationRoute(page));
         } else {

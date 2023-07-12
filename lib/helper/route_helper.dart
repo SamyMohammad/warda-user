@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:warda/controller/location_controller.dart';
 import 'package:warda/controller/splash_controller.dart';
 import 'package:warda/data/model/body/notification_body.dart';
@@ -78,6 +79,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:warda/view/screens/wallet/wallet_screen.dart';
 
+import '../view/screens/location/cubit/location_cubit.dart';
 import 'cashe_helper.dart';
 
 class RouteHelper {
@@ -348,7 +350,8 @@ class RouteHelper {
         name: initial,
         page: () {
           bool isSelected =
-              CasheHelper().read('city_selected').runtimeType == String;
+              CasheHelper().read(AppConstants.zoneId).runtimeType == String;
+          print('hellllllllllll: ${isSelected}');
           return getRoute(
               DashboardScreen(
                   pageIndex: 0,
@@ -358,6 +361,10 @@ class RouteHelper {
     GetPage(
         name: splash,
         page: () {
+          bool isSelected =
+              CasheHelper().read(AppConstants.zoneId).runtimeType == String;
+          print(
+              'hellllllllllll: ${CasheHelper().read(AppConstants.zoneId).runtimeType}');
           NotificationBody? data;
           if (Get.parameters['data'] != 'null') {
             List<int> decode =

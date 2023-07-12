@@ -214,10 +214,10 @@ class AppConstants {
         languageName: 'عربى',
         countryCode: 'SA',
         languageCode: 'ar'),
-    LanguageModel(
-        imageUrl: Images.arabic,
-        languageName: 'Spanish',
-        countryCode: 'ES',
-        languageCode: 'es'),
+    // LanguageModel(
+    //     imageUrl: Images.arabic,
+    //     languageName: 'Spanish',
+    //     countryCode: 'ES',
+    //     languageCode: 'es'),
   ];
 }

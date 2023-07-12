@@ -86,7 +86,7 @@ class SplashScreenState extends State<SplashScreen> {
             Get.offNamed(RouteHelper.getUpdateRoute(
                 AppConstants.appVersion < minimumVersion));
           } else {
-              print('hello spash:: ${widget.body != null}');
+            print('hello spash:: ${widget.body != null}');
             if (widget.body != null) {
               if (widget.body!.notificationType == NotificationType.order) {
                 Get.offNamed(RouteHelper.getOrderDetailsRoute(

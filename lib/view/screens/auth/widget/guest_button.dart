@@ -13,7 +13,14 @@ class GuestButton extends StatelessWidget {
         minimumSize: const Size(1, 40),
       ),
       onPressed: () {
-        Navigator.pushReplacementNamed(context, RouteHelper.getInitialRoute());
+        // Navigator.pushReplacementNamed(context, RouteHelper.getInitialRoute());
+        
+                  // Get.find<LocationController>()
+                  //     .navigateToLocationScreen('splash', offNamed: true);
+         Navigator.pushReplacementNamed(
+            context, RouteHelper.getAccessLocationRoute('splash'));
+
+
       },
       child: RichText(text: TextSpan(children: [
         TextSpan(text: '${'continue_as'.tr} ', style: robotoRegular.copyWith(color: Theme.of(context).disabledColor)),

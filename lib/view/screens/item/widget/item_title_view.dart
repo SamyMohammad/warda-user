@@ -176,22 +176,23 @@ class ItemTitleView extends StatelessWidget {
             ]),
             const SizedBox(height: 5),
 
-            InkWell(
-              onTap: () {
-                if(inStorePage) {
-                  Get.back();
-                }else {
-                  Get.offNamed(RouteHelper.getStoreRoute(item!.storeId, 'item'));
-                }
-              },
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 5, 5, 5),
-                child: Text(
-                  item!.storeName!,
-                  style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
-                ),
-              ),
-            ),
+            // InkWell(
+            //   onTap: () {
+            //     if(inStorePage) {
+            //       Get.back();
+            //     }else {
+            //       Get.offNamed(RouteHelper.getStoreRoute(item!.storeId, 'item'));
+            //     }
+            //   },
+            //   child: Padding(
+            //     padding: const EdgeInsets.fromLTRB(0, 5, 5, 5),
+            //     child: Text(
+            //       item!.storeName!,
+            //       style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
+            //     ),
+            //   ),
+            // ),
+            
             const SizedBox(height: Dimensions.paddingSizeExtraSmall),
 
             Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
@@ -210,16 +211,16 @@ class ItemTitleView extends StatelessWidget {
                 ) : const SizedBox(),
                 SizedBox(height: discount > 0 ? 5 : 0),
 
-                !isCampaign ? Row(children: [
-                  Text(item!.avgRating!.toStringAsFixed(1), style: robotoRegular.copyWith(
-                    color: Theme.of(context).hintColor,
-                    fontSize: Dimensions.fontSizeLarge,
-                  )),
-                  const SizedBox(width: 5),
+                // !isCampaign ? Row(children: [
+                //   Text(item!.avgRating!.toStringAsFixed(1), style: robotoRegular.copyWith(
+                //     color: Theme.of(context).hintColor,
+                //     fontSize: Dimensions.fontSizeLarge,
+                //   )),
+                //   const SizedBox(width: 5),
 
-                  RatingBar(rating: item!.avgRating, ratingCount: item!.ratingCount),
+                //   RatingBar(rating: item!.avgRating, ratingCount: item!.ratingCount),
 
-                ]) : const SizedBox(),
+                // ]) : const SizedBox(),
               ])),
 
               Column(children: [

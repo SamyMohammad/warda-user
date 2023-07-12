@@ -40,10 +40,10 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
 
   void _loadData() async {
     await Get.find<OrderController>().trackOrder(widget.orderID, null, true);
-    await Get.find<LocationController>().getCurrentLocation(true, notify: false, defaultLatLng: LatLng(
-      double.parse(Get.find<LocationController>().getUserAddress()!.latitude!),
-      double.parse(Get.find<LocationController>().getUserAddress()!.longitude!),
-    ));
+    // await Get.find<LocationController>().getCurrentLocation(true, notify: false, defaultLatLng: LatLng(
+    //   double.parse(Get.find<LocationController>().getUserAddress()!.latitude!),
+    //   double.parse(Get.find<LocationController>().getUserAddress()!.longitude!),
+    // ));
   }
 
   void _startApiCall(){

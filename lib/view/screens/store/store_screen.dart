@@ -309,10 +309,13 @@ class _StoreScreenState extends State<StoreScreen> {
                                                         (scrollingRate * 15),
                                                     fit: BoxFit.cover,
                                                   ),
-                                                  storeController
-                                                          .isStoreOpenNow(
-                                                              store.active!,
-                                                              store.schedules)
+                                                  // storeController.isStoreOpenNow(
+                                                  //         store.active!,
+                                                  //         store.schedules,
+                                                  //         store
+                                                  //             .orderPlaceToScheduleInterval,
+                                                  //         store.open)
+                                                  store.active!
                                                       ? const SizedBox()
                                                       : Positioned(
                                                           bottom: 0,

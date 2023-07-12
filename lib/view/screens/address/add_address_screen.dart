@@ -85,7 +85,10 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
     if(GetPlatform.isAndroid) {
       try {
         PhoneNumber phoneNumber = await PhoneNumberUtil().parse(number);
-        _countryDialCode = '+${phoneNumber.countryCode}';
+       
+       setState(() {
+          _countryDialCode = '+${phoneNumber.countryCode}';
+       });
         _contactPersonNumberController.text = phoneNumber.nationalNumber;
       } catch (_) {}
     }
@@ -94,6 +97,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
   @override
   Widget build(BuildContext context) {
     bool isLoggedIn = Get.find<AuthController>().isLoggedIn();
+    print('hell:: ${_countryDialCode}');
     return Scaffold(
       appBar: CustomAppBar(title: widget.address == null ? 'add_new_address'.tr : 'update_address'.tr),
       body: isLoggedIn ? GetBuilder<UserController>(builder: (userController) {
@@ -120,83 +124,85 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
               padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeSmall, horizontal: Dimensions.paddingSizeLarge),
               child: Center(child: SizedBox(width: Dimensions.webMaxWidth, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
 
-                Container(
-                  height: 140,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                    border: Border.all(width: 2, color: Theme.of(context).primaryColor),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                    child: Stack(clipBehavior: Clip.none, children: [
-                      GoogleMap(
-                        initialCameraPosition: CameraPosition(target: _initialPosition, zoom: 16),
-                        minMaxZoomPreference: const MinMaxZoomPreference(0, 16),
-                        onTap: (latLng) {
-                          Get.toNamed(
-                            RouteHelper.getPickMapRoute('add-address', false),
-                            arguments: PickMapScreen(
-                              fromAddAddress: true, fromSignUp: false, googleMapController: locationController.mapController,
-                              route: null, canRoute: false,
-                            ),
-                          );
-                        },
-                        zoomControlsEnabled: false,
-                        compassEnabled: false,
-                        indoorViewEnabled: true,
-                        mapToolbarEnabled: false,
-                        onCameraIdle: () {
-                          locationController.updatePosition(_cameraPosition, true);
-                        },
-                        onCameraMove: ((position) => _cameraPosition = position),
-                        onMapCreated: (GoogleMapController controller) {
-                          locationController.setMapController(controller);
-                          if(widget.address == null) {
-                            locationController.getCurrentLocation(true, mapController: controller);
-                          }
-                        },
-                      ),
-                      locationController.loading ? const Center(child: CircularProgressIndicator()) : const SizedBox(),
-                      Center(child: !locationController.loading ? Image.asset(Images.pickMarker, height: 50, width: 50)
-                          : const CircularProgressIndicator()),
-                      Positioned(
-                        bottom: 10, right: 0,
-                        child: InkWell(
-                          onTap: () => _checkPermission(() {
-                            locationController.getCurrentLocation(true, mapController: locationController.mapController);
-                          }),
-                          child: Container(
-                            width: 30, height: 30,
-                            margin: const EdgeInsets.only(right: Dimensions.paddingSizeLarge),
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimensions.radiusSmall), color: Colors.white),
-                            child: Icon(Icons.my_location, color: Theme.of(context).primaryColor, size: 20),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: 10, right: 0,
-                        child: InkWell(
-                          onTap: () {
-                            Get.toNamed(
-                              RouteHelper.getPickMapRoute('add-address', false),
-                              arguments: PickMapScreen(
-                                fromAddAddress: true, fromSignUp: false, googleMapController: locationController.mapController,
-                                route: null, canRoute: false,
-                              ),
-                            );
-                          },
-                          child: Container(
-                            width: 30, height: 30,
-                            margin: const EdgeInsets.only(right: Dimensions.paddingSizeLarge),
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimensions.radiusSmall), color: Colors.white),
-                            child: Icon(Icons.fullscreen, color: Theme.of(context).primaryColor, size: 20),
-                          ),
-                        ),
-                      ),
-                    ]),
-                  ),
-                ),
+                // Container(
+                //   height: 140,
+                //   width: MediaQuery.of(context).size.width,
+                //   decoration: BoxDecoration(
+                //     borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                //     border: Border.all(width: 2, color: Theme.of(context).primaryColor),
+                //   ),
+                //   child: ClipRRect(
+                //     borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                //     child: Stack(clipBehavior: Clip.none, children: [
+                //       GoogleMap(
+                //         initialCameraPosition: CameraPosition(target: _initialPosition, zoom: 16),
+                //         minMaxZoomPreference: const MinMaxZoomPreference(0, 16),
+                //         onTap: (latLng) {
+                //           Get.toNamed(
+                //             RouteHelper.getPickMapRoute('add-address', false),
+                //             arguments: PickMapScreen(
+                //               fromAddAddress: true, fromSignUp: false, googleMapController: locationController.mapController,
+                //               route: null, canRoute: false,
+                //             ),
+                //           );
+                //         },
+                //         zoomControlsEnabled: false,
+                //         compassEnabled: false,
+                //         indoorViewEnabled: true,
+                //         mapToolbarEnabled: false,
+                //         onCameraIdle: () {
+                //           locationController.updatePosition(_cameraPosition, true);
+                //         },
+                //         onCameraMove: ((position) => _cameraPosition = position),
+                //         onMapCreated: (GoogleMapController controller) {
+                //           locationController.setMapController(controller);
+                //           if(widget.address == null) {
+                //             locationController.getCurrentLocation(true, mapController: controller);
+                //           }
+                //         },
+                //       ),
+                      
+                //       locationController.loading ? const Center(child: CircularProgressIndicator()) : const SizedBox(),
+                //       Center(child: !locationController.loading ? Image.asset(Images.pickMarker, height: 50, width: 50)
+                //           : const CircularProgressIndicator()),
+                //       Positioned(
+                //         bottom: 10, right: 0,
+                //         child: InkWell(
+                //           onTap: () => _checkPermission(() {
+                //             locationController.getCurrentLocation(true, mapController: locationController.mapController);
+                //           }),
+                //           child: Container(
+                //             width: 30, height: 30,
+                //             margin: const EdgeInsets.only(right: Dimensions.paddingSizeLarge),
+                //             decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimensions.radiusSmall), color: Colors.white),
+                //             child: Icon(Icons.my_location, color: Theme.of(context).primaryColor, size: 20),
+                //           ),
+                //         ),
+                //       ),
+                //       Positioned(
+                //         top: 10, right: 0,
+                //         child: InkWell(
+                //           onTap: () {
+                //             Get.toNamed(
+                //               RouteHelper.getPickMapRoute('add-address', false),
+                //               arguments: PickMapScreen(
+                //                 fromAddAddress: true, fromSignUp: false, googleMapController: locationController.mapController,
+                //                 route: null, canRoute: false,
+                //               ),
+                //             );
+                //           },
+                //           child: Container(
+                //             width: 30, height: 30,
+                //             margin: const EdgeInsets.only(right: Dimensions.paddingSizeLarge),
+                //             decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimensions.radiusSmall), color: Colors.white),
+                //             child: Icon(Icons.fullscreen, color: Theme.of(context).primaryColor, size: 20),
+                //           ),
+                //         ),
+                //       ),
+                //     ]),
+                //   ),
+                // ),
+               
                 const SizedBox(height: Dimensions.paddingSizeSmall),
 
                 Center(child: Text(

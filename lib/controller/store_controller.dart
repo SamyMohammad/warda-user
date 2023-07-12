@@ -389,28 +389,44 @@ class StoreController extends GetxController implements GetxService {
     update();
   }
 
-  bool isStoreClosed(bool today, bool active, List<Schedules>? schedules) {
-    if (!active) {
-      return true;
+  bool isStoreClosed(bool today, bool active, List<Schedules>? schedules,
+      int? orderPlaceToScheduleInterval, int? status) {
+    bool isClose = false;
+    if (status == 0) {
+      isClose = true;
+    } else {
+      isClose = false;
+      //       if (!active) {
+      //   isClose = true;
+      //   return true;
+      // }
+      // DateTime date = DateTime.now();
+      // if (!today) {
+      //   date = date.add(const Duration(days: 1));
+      // }
+      // int weekday = date.weekday;
+      // if (weekday == 7) {
+      //   weekday = 0;
+      // }
+      // if (orderPlaceToScheduleInterval != 0) {
+      //   for (int index = 0; index < schedules!.length; index++) {
+      //     if (weekday == schedules[index].day) {
+      //       isClose = false;
+      //       return false;
+      //     }
+      //   }
+      // } else {
+      //   isClose = false;
+      //   return false;
+      // }
     }
-    DateTime date = DateTime.now();
-    if (!today) {
-      date = date.add(const Duration(days: 1));
-    }
-    int weekday = date.weekday;
-    if (weekday == 7) {
-      weekday = 0;
-    }
-    for (int index = 0; index < schedules!.length; index++) {
-      if (weekday == schedules[index].day) {
-        return false;
-      }
-    }
-    return true;
+    print('helll::: ::: $isClose');
+    return isClose;
   }
 
-  bool isStoreOpenNow(bool active, List<Schedules>? schedules) {
-    if (isStoreClosed(true, active, schedules)) {
+  bool isStoreOpenNow(bool active, List<Schedules>? schedules,
+      int? orderPlaceToScheduleInterval,int? status) {
+    if (isStoreClosed(true, active, schedules, orderPlaceToScheduleInterval,status)) {
       return false;
     }
     int weekday = DateTime.now().weekday;

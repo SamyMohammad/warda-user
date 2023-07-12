@@ -27,8 +27,23 @@ class LocationRepo {
   }
 
   Future<Response> addAddress(AddressModel addressModel) async {
-    return await apiClient.postData(
-        AppConstants.addAddressUri, addressModel.toJson());
+    Map<String, dynamic> body = {
+      "address_type": addressModel.addressType,
+      "contact_person_name": addressModel.contactPersonName,
+      "contact_person_number": addressModel.contactPersonNumber,
+      "address": addressModel.address,
+    };
+    if (addressModel.floor.runtimeType != Null) {
+      body.addEntries({"floor": addressModel.floor}.entries);
+    }
+    if (addressModel.house.runtimeType != Null) {
+      body.addEntries({"house": addressModel.house}.entries);
+    }
+    // if (addressModel.additionalAddress !=null) {
+    //   body.addEntries(
+    //       {"additional_address": addressModel.additionalAddress}.entries);
+    // }
+    return await apiClient.postData(AppConstants.addAddressUri, body);
   }
 
   Future<Response> updateAddress(

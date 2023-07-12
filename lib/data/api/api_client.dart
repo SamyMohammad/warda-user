@@ -37,9 +37,9 @@ class ApiClient extends GetxService {
     if (GetPlatform.isWeb &&
         sharedPreferences.containsKey(AppConstants.moduleId)) {
       try {
-        moduleID = ModuleModel.fromJson(
-                jsonDecode(sharedPreferences.getString(AppConstants.moduleId)!))
-            .id;
+        // moduleID = ModuleModel.fromJson(
+        //         jsonDecode(sharedPreferences.getString(AppConstants.moduleId)!))
+        //     .id;
       } catch (_) {}
     }
     updateHeader(
@@ -62,9 +62,9 @@ class ApiClient extends GetxService {
       String? longitude,
       {bool setHeader = true}) async {
     Map<String, String> _header = {};
-    if (moduleID != null) {
-      _header.addAll({AppConstants.moduleId: moduleID.toString()});
-    }
+    // if (moduleID != null) {
+    //   _header.addAll({AppConstants.moduleId: moduleID.toString()});
+    // }
     String cityId = await CasheHelper().read(AppConstants.zoneId);
     _header.addAll({
       'Content-Type': 'application/json; charset=UTF-8',
@@ -73,7 +73,7 @@ class ApiClient extends GetxService {
           languageCode ?? AppConstants.languages[0].languageCode!,
       // AppConstants.LATITUDE: latitude != null ? jsonEncode(latitude) : null,
       // AppConstants.LONGITUDE: longitude != null ? jsonEncode(longitude) : null,
-      // "moduleId": '1',
+      "moduleId": '1',
       "zoneId": '[$cityId]',
       'Authorization': 'Bearer $token'
     });
@@ -87,14 +87,13 @@ class ApiClient extends GetxService {
     } else {
       _mainHeaders.addEntries({'zoneId': '[$cityId]'}.entries);
     }
-
     print('hell::updateHeader ${_mainHeaders}');
   }
 
   Future<Response> getData(String uri,
       {Map<String, dynamic>? query, Map<String, String>? headers}) async {
     try {
-      print('====>Header: $_mainHeaders API Call: $uri ');
+      print('====>Header: ${_mainHeaders['moduleId']} API Call: $uri ');
       if (uri == '/api/v1/config/get-zone-id') {
         print('hello:: getZone ${headers},,,,$uri');
       }
@@ -103,7 +102,7 @@ class ApiClient extends GetxService {
       }
       if (uri.contains(AppConstants.storeUri) ||
           uri.contains(AppConstants.bannerUri)) {
-        _mainHeaders.remove(AppConstants.moduleId);
+        //_mainHeaders.remove(AppConstants.moduleId);
       }
       http.Response response = await http
           .get(
@@ -113,7 +112,7 @@ class ApiClient extends GetxService {
           .timeout(Duration(seconds: timeoutInSeconds));
       if (uri.contains(AppConstants.storeUri) ||
           uri.contains(AppConstants.bannerUri)) {
-        _mainHeaders.addEntries({AppConstants.moduleId: '1'}.entries);
+        //_mainHeaders.addEntries({AppConstants.moduleId: '1'}.entries);
       }
       return handleResponse(response, uri);
     } catch (e) {
@@ -140,7 +139,7 @@ class ApiClient extends GetxService {
           )
           .timeout(Duration(seconds: timeout ?? timeoutInSeconds));
 
-    print('hell: ${jsonEncode(body)}');
+      print('hell: ${jsonEncode(body)}');
       return handleResponse(response, uri);
     } catch (e) {
       return Response(statusCode: 1, statusText: noInternetMessage);

@@ -15,6 +15,8 @@ class LocationCubit extends Cubit<LocationState> {
   Country? countrySelected;
   City? citySelected;
   final ApiClient apiClient;
+  String? countryName;
+  String? cityName;
 
   Future<Either<String, GetCountriesCitiesModel>> getCountryData() async {
     var client = http.Client();
@@ -48,10 +50,29 @@ class LocationCubit extends Cubit<LocationState> {
         citySelected: citySelected));
   }
 
+  readCountryAndCity() async {
+    countryName =
+        await CasheHelper().read(AppConstants.countrySelectedKey) ?? '';
+    cityName = await CasheHelper().read(AppConstants.citySelectedKey) ?? '';
+    emit(LocationInitial());
+  }
+
   updateHeaderWithCityId() {
     if (citySelected.runtimeType != Null) {
       apiClient.updateCityId(citySelected?.id.toString() ?? '');
     }
+  }
+
+  Future<bool> haveCityId() async {
+    bool haveZoneId = false;
+    String cityId = await CasheHelper().read(AppConstants.zoneId) ?? '';
+    if (cityId != '') {
+      haveZoneId = true;
+    } else {
+      haveZoneId = false;
+    }
+
+    return haveZoneId;
   }
 
   changeCity(City city) {

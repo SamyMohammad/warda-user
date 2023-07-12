@@ -1,3 +1,4 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:warda/controller/auth_controller.dart';
 import 'package:warda/controller/banner_controller.dart';
 import 'package:warda/controller/campaign_controller.dart';
@@ -29,14 +30,14 @@ import 'package:warda/view/screens/home/widget/category_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:warda/view/screens/home/widget/module_view.dart';
+import 'package:warda/view/screens/location/cubit/location_cubit.dart';
 import 'package:warda/view/screens/parcel/parcel_category_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   static Future<void> loadData(bool reload) async {
-
-      Get.find<LocationController>().syncZoneData();
+    //Get.find<LocationController>().syncZoneData();
     if (Get.find<SplashController>().module != null &&
         !Get.find<SplashController>()
             .configModel!
@@ -44,14 +45,14 @@ class HomeScreen extends StatefulWidget {
             .module!
             .isParcel!) {
       Get.find<BannerController>().getBannerList(reload);
-      Get.find<LocationController>().syncZoneData();
+      //Get.find<LocationController>().syncZoneData();
       Get.find<CategoryController>().getCategoryList(reload);
       // Get.find<StoreController>().getPopularStoreList(reload, 'all', false);
       // Get.find<CampaignController>().getItemCampaignList(reload);
-      // Get.find<ItemController>().getPopularItemList(reload, 'all', false);
       // Get.find<StoreController>().getLatestStoreList(reload, 'all', false);
       // Get.find<ItemController>().getReviewedItemList(reload, 'all', false);
       Get.find<StoreController>().getStoreList(1, reload);
+      Get.find<ItemController>().getPopularItemList(reload, 'all', false);
     }
     if (Get.find<AuthController>().isLoggedIn()) {
       Get.find<UserController>().getUserInfo();
@@ -87,12 +88,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
 
-    HomeScreen.loadData(false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      HomeScreen.loadData(true);
     if (!ResponsiveHelper.isWeb()) {
-      Get.find<LocationController>().getZone(
-          false,
-          updateInAddress: true);
+      Get.find<LocationController>().getZone(false, updateInAddress: true);
     }
+    });
   }
 
   @override
@@ -129,15 +130,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     print('error::: ${Get.find<SplashController>().module}');
                     if (Get.find<SplashController>().module != null) {
                       await Get.find<BannerController>().getBannerList(true);
-                      await Get.find<LocationController>().syncZoneData();
+                      //await Get.find<LocationController>().syncZoneData();
                       await Get.find<CategoryController>()
                           .getCategoryList(true);
                       // await Get.find<StoreController>()
                       //     .getPopularStoreList(true, 'all', false);
                       // await Get.find<CampaignController>()
                       //     .getItemCampaignList(true);
-                      // await Get.find<ItemController>()
-                      //     .getPopularItemList(true, 'all', false);
+                      await Get.find<ItemController>()
+                          .getPopularItemList(true, 'all', false);
                       // await Get.find<StoreController>()
                       //     .getLatestStoreList(true, 'all', false);
                       // await Get.find<ItemController>()
@@ -223,71 +224,103 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 .navigateToLocationScreen(
                                                     'home'),
                                         child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            vertical:
-                                                Dimensions.paddingSizeSmall,
-                                            horizontal: ResponsiveHelper
-                                                    .isDesktop(context)
-                                                ? Dimensions.paddingSizeSmall
-                                                : 0,
-                                          ),
-                                          // child: GetBuilder<LocationController>(
-                                          //     builder: (locationController) {
-                                          //   return
-                                          //    Row(
-                                          //     crossAxisAlignment:
-                                          //         CrossAxisAlignment.center,
-                                          //     mainAxisAlignment:
-                                          //         MainAxisAlignment.start,
-                                          //     children: [
-                                          //       Icon(
-                                          //         locationController
-                                          //                     .getUserAddress()
-                                          //                     ?.addressType ==
-                                          //                 'home'
-                                          //             ? Icons.home_filled
-                                          //             : locationController
-                                          //                         .getUserAddress()
-                                          //                         ?.addressType ==
-                                          //                     'office'
-                                          //                 ? Icons.work
-                                          //                 : Icons.location_on,
-                                          //         size: 20,
-                                          //         color: Theme.of(context)
-                                          //             .textTheme
-                                          //             .bodyLarge!
-                                          //             .color,
-                                          //       ),
-                                          //       const SizedBox(width: 10),
-                                          //       Flexible(
-                                          //         child: Text(
-                                          //           locationController
-                                          //               .getUserAddress()!
-                                          //               .address!,
-                                          //           style:
-                                          //               robotoRegular.copyWith(
-                                          //             color: Theme.of(context)
-                                          //                 .textTheme
-                                          //                 .bodyLarge!
-                                          //                 .color,
-                                          //             fontSize: Dimensions
-                                          //                 .fontSizeSmall,
-                                          //           ),
-                                          //           maxLines: 1,
-                                          //           overflow:
-                                          //               TextOverflow.ellipsis,
-                                          //         ),
-                                          //       ),
-                                          //       Icon(Icons.arrow_drop_down,
-                                          //           color: Theme.of(context)
-                                          //               .textTheme
-                                          //               .bodyLarge!
-                                          //               .color),
-                                          //     ],
-                                          //   );
+                                            padding: EdgeInsets.symmetric(
+                                              vertical:
+                                                  Dimensions.paddingSizeSmall,
+                                              horizontal: ResponsiveHelper
+                                                      .isDesktop(context)
+                                                  ? Dimensions.paddingSizeSmall
+                                                  : 0,
+                                            ),
+                                            child: BlocBuilder<LocationCubit,
+                                                LocationState>(
+                                              bloc: BlocProvider.of<
+                                                  LocationCubit>(context)
+                                                ..readCountryAndCity(),
+                                              builder: (context, state) {
+                                                var cubit = BlocProvider.of<
+                                                    LocationCubit>(context);
+                                                return Container(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.7,
+                                                  child: Text(
+                                                    "${cubit.countryName ?? ''} - ${cubit.cityName ?? ''}",
+                                                    textAlign: TextAlign.center,
+                                                    style:
+                                                        robotoRegular.copyWith(
+                                                      color: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyLarge!
+                                                          .color,
+                                                      fontSize: Dimensions
+                                                          .fontSizeLarge,
+                                                    ),
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                );
+                                              },
+                                            )
+                                            // child: GetBuilder<LocationController>(
+                                            //     builder: (locationController) {
+                                            //   return
+                                            //    Row(
+                                            //     crossAxisAlignment:
+                                            //         CrossAxisAlignment.center,
+                                            //     mainAxisAlignment:
+                                            //         MainAxisAlignment.start,
+                                            //     children: [
+                                            //       Icon(
+                                            //         locationController
+                                            //                     .getUserAddress()
+                                            //                     ?.addressType ==
+                                            //                 'home'
+                                            //             ? Icons.home_filled
+                                            //             : locationController
+                                            //                         .getUserAddress()
+                                            //                         ?.addressType ==
+                                            //                     'office'
+                                            //                 ? Icons.work
+                                            //                 : Icons.location_on,
+                                            //         size: 20,
+                                            //         color: Theme.of(context)
+                                            //             .textTheme
+                                            //             .bodyLarge!
+                                            //             .color,
+                                            //       ),
+                                            //       const SizedBox(width: 10),
+                                            // Flexible(
+                                            //   child: Text(
+                                            //     locationController
+                                            //         .getUserAddress()!
+                                            //         .address!,
+                                            //     style:
+                                            //         robotoRegular.copyWith(
+                                            //       color: Theme.of(context)
+                                            //           .textTheme
+                                            //           .bodyLarge!
+                                            //           .color,
+                                            //       fontSize: Dimensions
+                                            //           .fontSizeSmall,
+                                            //     ),
+                                            //     maxLines: 1,
+                                            //     overflow:
+                                            //         TextOverflow.ellipsis,
+                                            //   ),
+                                            // ),
+                                            //       Icon(Icons.arrow_drop_down,
+                                            //           color: Theme.of(context)
+                                            //               .textTheme
+                                            //               .bodyLarge!
+                                            //               .color),
+                                            //     ],
+                                            //   );
 
-                                          // }),
-                                        ),
+                                            // }),
+                                            ),
                                       )),
                                       InkWell(
                                         child:
@@ -421,86 +454,86 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 //     isPopular: true,
                                                 //     isFeatured: false),
                                                 // const ItemCampaignView(),
-                                                // const PopularItemView(
-                                                //     isPopular: true),
+                                                const PopularItemView(
+                                                    isPopular: true),
                                                 // const PopularStoreView(
                                                 //     isPopular: false,
                                                 //     isFeatured: false),
                                                 // const PopularItemView(
                                                 //     isPopular: false),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          10, 15, 0, 5),
-                                                  child: Row(children: [
-                                                    Expanded(
-                                                        child: Text(
-                                                      Get.find<SplashController>()
-                                                              .configModel!
-                                                              .moduleConfig!
-                                                              .module!
-                                                              .showRestaurantText!
-                                                          ? 'all_restaurants'.tr
-                                                          : 'all_stores'.tr,
-                                                      style: robotoMedium.copyWith(
-                                                          fontSize: Dimensions
-                                                              .fontSizeLarge),
-                                                    )),
-                                                    const FilterView(),
-                                                  ]),
-                                                ),
-                                                GetBuilder<StoreController>(
-                                                    builder: (storeController) {
-                                                  return PaginatedListView(
-                                                    scrollController:
-                                                        _scrollController,
-                                                    totalSize: storeController
-                                                                .storeModel !=
-                                                            null
-                                                        ? storeController
-                                                            .storeModel!
-                                                            .totalSize
-                                                        : null,
-                                                    offset: storeController
-                                                                .storeModel !=
-                                                            null
-                                                        ? storeController
-                                                            .storeModel!.offset
-                                                        : null,
-                                                    onPaginate: (int?
-                                                            offset) async =>
-                                                        await storeController
-                                                            .getStoreList(
-                                                                offset!, false),
-                                                    itemView: ItemsView(
-                                                      isStore: true,
-                                                      items: null,
-                                                      stores: storeController
-                                                                  .storeModel !=
-                                                              null
-                                                          ? storeController
-                                                              .storeModel!
-                                                              .stores
-                                                          : null,
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                        horizontal: ResponsiveHelper
-                                                                .isDesktop(
-                                                                    context)
-                                                            ? Dimensions
-                                                                .paddingSizeExtraSmall
-                                                            : Dimensions
-                                                                .paddingSizeSmall,
-                                                        vertical: ResponsiveHelper
-                                                                .isDesktop(
-                                                                    context)
-                                                            ? Dimensions
-                                                                .paddingSizeExtraSmall
-                                                            : 0,
-                                                      ),
-                                                    ),
-                                                  );
-                                                }),
+                                                // Padding(
+                                                //   padding:
+                                                //       const EdgeInsets.fromLTRB(
+                                                //           10, 15, 0, 5),
+                                                //   child: Row(children: [
+                                                //     Expanded(
+                                                //         child: Text(
+                                                //       Get.find<SplashController>()
+                                                //               .configModel!
+                                                //               .moduleConfig!
+                                                //               .module!
+                                                //               .showRestaurantText!
+                                                //           ? 'all_restaurants'.tr
+                                                //           : 'all_stores'.tr,
+                                                //       style: robotoMedium.copyWith(
+                                                //           fontSize: Dimensions
+                                                //               .fontSizeLarge),
+                                                //     )),
+                                                //     const FilterView(),
+                                                //   ]),
+                                                // ),
+                                                // GetBuilder<StoreController>(
+                                                //     builder: (storeController) {
+                                                //   return PaginatedListView(
+                                                //     scrollController:
+                                                //         _scrollController,
+                                                //     totalSize: storeController
+                                                //                 .storeModel !=
+                                                //             null
+                                                //         ? storeController
+                                                //             .storeModel!
+                                                //             .totalSize
+                                                //         : null,
+                                                //     offset: storeController
+                                                //                 .storeModel !=
+                                                //             null
+                                                //         ? storeController
+                                                //             .storeModel!.offset
+                                                //         : null,
+                                                //     onPaginate: (int?
+                                                //             offset) async =>
+                                                //         await storeController
+                                                //             .getStoreList(
+                                                //                 offset!, false),
+                                                //     itemView: ItemsView(
+                                                //       isStore: true,
+                                                //       items: null,
+                                                //       stores: storeController
+                                                //                   .storeModel !=
+                                                //               null
+                                                //           ? storeController
+                                                //               .storeModel!
+                                                //               .stores
+                                                //           : null,
+                                                //       padding:
+                                                //           EdgeInsets.symmetric(
+                                                //         horizontal: ResponsiveHelper
+                                                //                 .isDesktop(
+                                                //                     context)
+                                                //             ? Dimensions
+                                                //                 .paddingSizeExtraSmall
+                                                //             : Dimensions
+                                                //                 .paddingSizeSmall,
+                                                //         vertical: ResponsiveHelper
+                                                //                 .isDesktop(
+                                                //                     context)
+                                                //             ? Dimensions
+                                                //                 .paddingSizeExtraSmall
+                                                //             : 0,
+                                                //       ),
+                                                //     ),
+                                                //   );
+                                                // }),
                                               ])
                                         : ModuleView(
                                             splashController: splashController),
