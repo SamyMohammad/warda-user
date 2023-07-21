@@ -87,3 +87,13 @@ flutter:
           weight: 700
         - asset: assets/font/Roboto-Black.ttf
           weight: 900
+    - family: Philosopher
+      fonts:
+        - asset: assets/font/Philosopher-Regular.ttf
+          weight: 400
+        - asset: assets/font/Philosopher-BoldItalic.ttf
+          weight: 500
+        - asset: assets/font/Philosopher-Bold.ttf
+          weight: 700
+        - asset: assets/font/Philosopher-Italic.ttf
+          weight: 900

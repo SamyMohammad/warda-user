@@ -7,7 +7,8 @@ class AppConstants {
   static const String appName = '99Warda';
   static const double appVersion = 1.0;
 
-  static const Color primaryColor = Color(0xFFa6737c);
+  static const Color primaryColor = Color(0xFFBA264A);
+  static const String fontFamily = "Philosopher";
   static const String baseUrl = 'https://warda.spiromo.store';
   static const String categoryUri = '/api/v1/categories';
   static const String bannerUri = '/api/v1/banners';

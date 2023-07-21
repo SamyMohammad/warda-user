@@ -79,6 +79,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:warda/view/screens/wallet/wallet_screen.dart';
 
+import '../view/screens/auth/auth_onBoarding_screen.dart';
 import '../view/screens/location/cubit/location_cubit.dart';
 import 'cashe_helper.dart';
 
@@ -88,6 +89,7 @@ class RouteHelper {
   static const String language = '/language';
   static const String onBoarding = '/on-boarding';
   static const String signIn = '/sign-in';
+  static const String authOnboarding = '/auth-onboarding';
   static const String signUp = '/sign-up';
   static const String verification = '/verification';
   static const String accessLocation = '/access-location';
@@ -162,6 +164,8 @@ class RouteHelper {
   static String getLanguageRoute(String page) => '$language?page=$page';
   static String getOnBoardingRoute() => onBoarding;
   static String getSignInRoute(String page) => '$signIn?page=$page';
+  static String getAuthOnBoardingRoute(String page) =>
+      '$authOnboarding?page=$page';
   static String getSignUpRoute() => signUp;
   static String getVerificationRoute(
       String? number, String? token, String page, String pass) {
@@ -378,6 +382,15 @@ class RouteHelper {
         page: () =>
             ChooseLanguageScreen(fromMenu: Get.parameters['page'] == 'menu')),
     GetPage(name: onBoarding, page: () => const OnBoardingScreen()),
+    GetPage(
+        name: authOnboarding,
+        page: () => AuthOnBoardingScreen(
+              exitFromApp: Get.parameters['page'] == signUp ||
+                  Get.parameters['page'] == splash ||
+                  Get.parameters['page'] == onBoarding,
+              backFromThis: Get.parameters['page'] != splash &&
+                  Get.parameters['page'] != onBoarding,
+            )),
     GetPage(
         name: signIn,
         page: () => SignInScreen(
