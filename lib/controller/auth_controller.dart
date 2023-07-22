@@ -200,11 +200,11 @@ class AuthController extends GetxController implements GetxService {
     return responseModel;
   }
 
-  Future<ResponseModel> login(String? email, String password,
+  Future<ResponseModel> login(String? username, String password,
       {bool alreadyInApp = false}) async {
     _isLoading = true;
     update();
-    Response response = await authRepo.login(email: email, password: password);
+    Response response = await authRepo.login(username: username, password: password);
     ResponseModel responseModel;
     if (response.statusCode == 200) {
       if (Get.find<SplashController>().configModel!.customerVerification! &&

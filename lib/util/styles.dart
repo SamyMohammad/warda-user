@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'app_constants.dart';
 
 final robotoRegular = TextStyle(
-  fontFamily: 'Roboto',
+  fontFamily: AppConstants.fontFamilyCommon,
   fontWeight: FontWeight.w400,
   fontSize: Dimensions.fontSizeDefault,
 );
@@ -17,19 +17,19 @@ final wardaRegular = TextStyle(
 );
 
 final robotoMedium = TextStyle(
-  fontFamily: 'Roboto',
+  fontFamily: AppConstants.fontFamilyCommon,
   fontWeight: FontWeight.w500,
   fontSize: Dimensions.fontSizeDefault,
 );
 
 final robotoBold = TextStyle(
-  fontFamily: 'Roboto',
+  fontFamily: AppConstants.fontFamilyCommon,
   fontWeight: FontWeight.w700,
   fontSize: Dimensions.fontSizeDefault,
 );
 
 final robotoBlack = TextStyle(
-  fontFamily: 'Roboto',
+  fontFamily: AppConstants.fontFamilyCommon,
   fontWeight: FontWeight.w900,
   fontSize: Dimensions.fontSizeDefault,
 );

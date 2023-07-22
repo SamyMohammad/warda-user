@@ -42,6 +42,7 @@ class SignInScreenState extends State<SignInScreen> {
   final FocusNode _emailFocus = FocusNode();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String? _countryDialCode;
   bool _canExit = GetPlatform.isWeb ? true : false;
@@ -157,14 +158,23 @@ class SignInScreenState extends State<SignInScreen> {
                                 )
                               : const SizedBox(),
 
-                          Image.asset(Images.logo, width: 125),
+                          Image.asset(Images.logoColor, width: 125),
                           // SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
                           // Center(child: Text(AppConstants.APP_NAME, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge))),
                           const SizedBox(
                               height: Dimensions.paddingSizeExtraLarge),
-
                           Align(
-                            alignment: Alignment.topLeft,
+                            alignment: Alignment.topCenter,
+                            child: Text('hey_welcome_back'.tr,
+                                style: robotoRegular.copyWith(
+                                  fontSize: context.height * 0.035,
+                                  color: Colors.grey,
+                                )),
+                          ),
+                          const SizedBox(
+                              height: Dimensions.paddingSizeExtraLarge),
+                          Align(
+                            alignment: Alignment.topCenter,
                             child: Text('sign_in'.tr,
                                 style: robotoBold.copyWith(
                                     fontSize: Dimensions.fontSizeExtraLarge)),
@@ -191,14 +201,14 @@ class SignInScreenState extends State<SignInScreen> {
                           // ),
                           CustomTextField(
                             titleText: ResponsiveHelper.isDesktop(context)
-                                ? 'email'.tr
-                                : 'enter_email_address'.tr,
-                            hintText: 'enter_email_address'.tr,
-                            controller: _emailController,
+                                ? 'user_name'.tr
+                                : 'user_name'.tr,
+                            hintText: 'user_name'.tr,
+                            controller: _usernameController,
                             focusNode: _emailFocus,
                             inputAction: TextInputAction.done,
-                            prefixIcon: Icons.email,
-                            inputType: TextInputType.emailAddress,
+                            //  prefixIcon: Icons.email,
+                            inputType: TextInputType.name,
                             isPassword: false,
                             showTitle: ResponsiveHelper.isDesktop(context),
                             onSubmit: (text) => (GetPlatform.isWeb)
@@ -211,13 +221,13 @@ class SignInScreenState extends State<SignInScreen> {
                           CustomTextField(
                             titleText: ResponsiveHelper.isDesktop(context)
                                 ? 'password'.tr
-                                : 'enter_your_password'.tr,
-                            hintText: 'enter_your_password'.tr,
+                                : 'password'.tr,
+                            hintText: 'password'.tr,
                             controller: _passwordController,
                             focusNode: _passwordFocus,
                             inputAction: TextInputAction.done,
                             inputType: TextInputType.visiblePassword,
-                            prefixIcon: Icons.lock,
+                            // prefixIcon: Icons.lock,
                             isPassword: true,
                             showTitle: ResponsiveHelper.isDesktop(context),
                             onSubmit: (text) => (GetPlatform.isWeb)
@@ -226,39 +236,31 @@ class SignInScreenState extends State<SignInScreen> {
                           ),
                           const SizedBox(height: Dimensions.paddingSizeDefault),
 
-                          Row(children: [
-                            Expanded(
-                              child: ListTile(
-                                onTap: () => authController.toggleRememberMe(),
-                                leading: Checkbox(
-                                  visualDensity: const VisualDensity(
-                                      horizontal: -4, vertical: -4),
-                                  activeColor: Theme.of(context).primaryColor,
-                                  value: authController.isActiveRememberMe,
-                                  onChanged: (bool? isChecked) =>
-                                      authController.toggleRememberMe(),
-                                ),
-                                title: Text('remember_me'.tr),
-                                contentPadding: EdgeInsets.zero,
-                                visualDensity: const VisualDensity(
-                                    horizontal: 0, vertical: -4),
-                                dense: true,
-                                horizontalTitleGap: 0,
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () => Get.toNamed(
-                                  RouteHelper.getForgotPassRoute(false, null)),
-                              child: Text('${'forgot_password'.tr}?',
-                                  style: robotoMedium.copyWith(
-                                      color: Theme.of(context).hintColor)),
-                            ),
-                          ]),
-                          const SizedBox(height: Dimensions.paddingSizeLarge),
+                          // Row(children: [
+                          //   Expanded(
+                          //     child: ListTile(
+                          //       onTap: () => authController.toggleRememberMe(),
+                          //       leading: Checkbox(
+                          //         visualDensity: const VisualDensity(
+                          //             horizontal: -4, vertical: -4),
+                          //         activeColor: Theme.of(context).primaryColor,
+                          //         value: authController.isActiveRememberMe,
+                          //         onChanged: (bool? isChecked) =>
+                          //             authController.toggleRememberMe(),
+                          //       ),
+                          //       title: Text('remember_me'.tr),
+                          //       contentPadding: EdgeInsets.zero,
+                          //       visualDensity: const VisualDensity(
+                          //           horizontal: 0, vertical: -4),
+                          //       dense: true,
+                          //       horizontalTitleGap: 0,
+                          //     ),
+                          //   ),
+                          // ]),
 
-                          ConditionCheckBox(
-                              authController: authController,
-                              fromSignUp: false),
+                          // ConditionCheckBox(
+                          //     authController: authController,
+                          //     fromSignUp: false),
                           const SizedBox(height: Dimensions.paddingSizeDefault),
 
                           CustomButton(
@@ -269,13 +271,26 @@ class SignInScreenState extends State<SignInScreen> {
                           ),
                           const SizedBox(
                               height: Dimensions.paddingSizeExtraLarge),
+                          TextButton(
+                            onPressed: () => Get.toNamed(
+                                RouteHelper.getForgotPassRoute(false, null)),
+                            child: Text('${'forgot_password'.tr}?',
+                                style: robotoMedium.copyWith(
+                                    color: Colors.black,
+                                    decoration: TextDecoration.underline)),
+                          ),
+                          const SocialMediaLogin(),
 
-                          Row(
+                          const SizedBox(
+                              height: Dimensions.paddingSizeExtraLarge),
+
+                          Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text('do_not_have_account'.tr,
                                     style: robotoRegular.copyWith(
-                                        color: Theme.of(context).hintColor)),
+                                        color: Theme.of(context).primaryColor,
+                                        fontSize: 13)),
                                 InkWell(
                                   onTap: () {
                                     if (ResponsiveHelper.isDesktop(context)) {
@@ -290,16 +305,17 @@ class SignInScreenState extends State<SignInScreen> {
                                         Dimensions.paddingSizeExtraSmall),
                                     child: Text('sign_up'.tr,
                                         style: robotoMedium.copyWith(
-                                            color: Theme.of(context)
-                                                .primaryColor)),
+                                            color: Colors.black,
+                                            decoration:
+                                                TextDecoration.underline)),
                                   ),
                                 ),
                               ]),
                           const SizedBox(height: Dimensions.paddingSizeSmall),
 
-                          const SocialLoginWidget(),
+                          // const SocialLoginWidget(),
 
-                          const GuestButton(),
+                          // const GuestButton(),
                         ]),
                   ),
                 );
@@ -313,7 +329,7 @@ class SignInScreenState extends State<SignInScreen> {
 
   void _login(AuthController authController, String countryDialCode) async {
     String phone = _phoneController.text.trim();
-    String email = _emailController.text.trim();
+    String username = _usernameController.text.trim();
     String password = _passwordController.text.trim();
     String numberWithCountryCode = countryDialCode + phone;
     bool isValid = GetPlatform.isAndroid ? false : true;
@@ -326,8 +342,8 @@ class SignInScreenState extends State<SignInScreen> {
         isValid = true;
       } catch (_) {}
     }
-    if (email.isEmpty) {
-      showCustomSnackBar('enter_email_address'.tr);
+    if (username.isEmpty) {
+      showCustomSnackBar('enter_your_username'.tr);
     }
     //  else if (!isValid) {
     //   showCustomSnackBar('invalid_phone_number'.tr);
@@ -338,11 +354,11 @@ class SignInScreenState extends State<SignInScreen> {
       showCustomSnackBar('password_should_be'.tr);
     } else {
       authController
-          .login(email, password, alreadyInApp: widget.backFromThis)
+          .login(username, password, alreadyInApp: widget.backFromThis)
           .then((status) async {
         if (status.isSuccess) {
           if (authController.isActiveRememberMe) {
-            authController.saveUserEmailANdPassword(email, password);
+            authController.saveUserEmailANdPassword(username, password);
           } else {
             authController.clearUserNumberAndPassword();
           }

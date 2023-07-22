@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:warda/util/images.dart';
 import 'package:warda/util/styles.dart';
 
+import '../../../helper/route_helper.dart';
+
 class AuthOnBoardingScreen extends StatelessWidget {
   final bool exitFromApp;
   final bool backFromThis;
@@ -49,7 +51,10 @@ class AuthOnBoardingScreen extends StatelessWidget {
                         color: Colors.white,
                         fontWeight: FontWeight.w700,
                       ),
-                    )),
+                    ), () {
+                  Get.toNamed(
+                      RouteHelper.getSignInRoute(RouteHelper.authOnboarding));
+                }),
                 SizedBox(
                   width: context.width * 0.05,
                 ),
@@ -62,7 +67,9 @@ class AuthOnBoardingScreen extends StatelessWidget {
                         color: Colors.white,
                         fontWeight: FontWeight.w700,
                       ),
-                    )),
+                    ), () {
+                  Get.toNamed(RouteHelper.getSignUpRoute());
+                }),
               ],
             ),
             SizedBox(
@@ -74,12 +81,13 @@ class AuthOnBoardingScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      Icons.facebook_outlined,
-                      color: Colors.white,
+                    Image.asset(
+                      Images.facebook,
+                      width: context.height * 0.045,
+                      height: context.height * 0.04,
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
                       child: Text(
                         'Connect with facebook'.toUpperCase(),
                         style: robotoRegular.copyWith(
@@ -89,7 +97,8 @@ class AuthOnBoardingScreen extends StatelessWidget {
                       ),
                     ),
                   ],
-                )),
+                ),
+                null),
             SizedBox(
               height: context.height * 0.015,
             ),
@@ -99,9 +108,10 @@ class AuthOnBoardingScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      Icons.facebook,
-                      color: Colors.white,
+                    Image.asset(
+                      Images.google,
+                      width: context.height * 0.045,
+                      height: context.height * 0.04,
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -114,24 +124,29 @@ class AuthOnBoardingScreen extends StatelessWidget {
                       ),
                     ),
                   ],
-                )),
+                ),
+                null),
           ],
         ),
       ),
     );
   }
 
-  Widget buttubAuthOnboarding(double width, double height, Widget brnContent) {
-    return Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.2),
-          border: Border.all(color: Colors.white)),
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: brnContent,
+  Widget buttubAuthOnboarding(
+      double width, double height, Widget brnContent, Function()? onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.2),
+            border: Border.all(color: Colors.white)),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: brnContent,
+          ),
         ),
       ),
     );

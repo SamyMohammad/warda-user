@@ -51,8 +51,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                                       colors: onBoardingController
                                           .onBoardingList[index]
                                           .backgroundColor,
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter),
+                                      begin: Alignment.center,
+                                      end: Alignment.bottomCenter,
+                                      tileMode: TileMode.clamp),
                                 ),
                                 child: Stack(
                                     alignment: Alignment.center,

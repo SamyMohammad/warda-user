@@ -52,6 +52,7 @@ class Images {
   static const String maintenance = 'assets/image/maintenance.png';
   static const String noInternet = 'assets/image/no_internet.png';
   static const String google = 'assets/image/google.png';
+  static const String googleColor = 'assets/image/google_color.png';
   static const String facebook = 'assets/image/facebook.png';
   static const String restaurantJoin = 'assets/image/restaurant_join.png';
   static const String deliveryManJoin = 'assets/image/delivery_man_join.png';

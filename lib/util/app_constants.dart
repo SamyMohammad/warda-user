@@ -9,6 +9,8 @@ class AppConstants {
 
   static const Color primaryColor = Color(0xFFBA264A);
   static const String fontFamily = "Philosopher";
+  static const String fontFamilyCommon = "Poppins" ; //Roboto
+
   static const String baseUrl = 'https://warda.spiromo.store';
   static const String categoryUri = '/api/v1/categories';
   static const String bannerUri = '/api/v1/banners';
