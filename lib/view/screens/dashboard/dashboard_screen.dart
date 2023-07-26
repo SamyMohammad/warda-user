@@ -12,6 +12,7 @@ import 'package:warda/util/dimensions.dart';
 import 'package:warda/view/base/cart_widget.dart';
 import 'package:warda/view/base/custom_dialog.dart';
 import 'package:warda/view/screens/checkout/widget/congratulation_dialogue.dart';
+import 'package:warda/view/screens/coupon/coupon_screen.dart';
 import 'package:warda/view/screens/dashboard/widget/address_bottom_sheet.dart';
 import 'package:warda/view/screens/dashboard/widget/bottom_nav_item.dart';
 import 'package:warda/view/screens/favourite/favourite_screen.dart';
@@ -21,6 +22,9 @@ import 'package:warda/view/screens/order/order_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../util/images.dart';
+import '../cart/cart_screen.dart';
+import '../category/category_screen.dart';
 import 'widget/running_order_view_widget.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -68,7 +72,7 @@ class DashboardScreenState extends State<DashboardScreen> {
         Future.delayed(const Duration(seconds: 1),
             () => showAnimatedDialog(context, const CongratulationDialogue()));
       }
-    //  suggestAddressBottomSheet();
+      //  suggestAddressBottomSheet();
       Get.find<OrderController>().getRunningOrders(1);
     }
 
@@ -78,11 +82,11 @@ class DashboardScreenState extends State<DashboardScreen> {
 
     _screens = [
       const HomeScreen(),
-      const FavouriteScreen(),
-      // const CartScreen(fromNav: true),
-      const SizedBox(),
-      const OrderScreen(),
+      const CartScreen(fromNav: true),
+      const CategoryScreen(fromNav: true,),
+      const CouponScreen(fromNav: true,),
       const MenuScreenNew()
+      // const ProfileScreen()
     ];
 
     Future.delayed(const Duration(seconds: 1), () {
@@ -156,33 +160,33 @@ class DashboardScreenState extends State<DashboardScreen> {
 
           // endDrawer: const MenuScreenNew(),
 
-          floatingActionButton: ResponsiveHelper.isDesktop(context)
-              ? null
-              : (widget.fromSplash &&
-                      Get.find<LocationController>().showLocationSuggestion &&
-                      active)
-                  ? null
-                  : (orderController.showBottomSheet &&
-                          orderController.runningOrderModel != null &&
-                          orderController.runningOrderModel!.orders!.isNotEmpty)
-                      ? const SizedBox()
-                      : FloatingActionButton(
-                          elevation: 5,
-                          backgroundColor: _pageIndex == 2
-                              ? Theme.of(context).primaryColor
-                              : Theme.of(context).cardColor,
-                          onPressed: () {
-                            // _setPage(2);
-                            Get.toNamed(RouteHelper.getCartRoute());
-                          },
-                          child: CartWidget(
-                              color: _pageIndex == 2
-                                  ? Theme.of(context).cardColor
-                                  : Theme.of(context).disabledColor,
-                              size: 30),
-                        ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
+          // floatingActionButton: ResponsiveHelper.isDesktop(context)
+          //     ? null
+          //     : (widget.fromSplash &&
+          //             Get.find<LocationController>().showLocationSuggestion &&
+          //             active)
+          //         ? null
+          //         : (orderController.showBottomSheet &&
+          //                 orderController.runningOrderModel != null &&
+          //                 orderController.runningOrderModel!.orders!.isNotEmpty)
+          //             ? const SizedBox()
+          //             : FloatingActionButton(
+          //                 elevation: 5,
+          //                 backgroundColor: _pageIndex == 2
+          //                     ? Theme.of(context).primaryColor
+          //                     : Theme.of(context).cardColor,
+          //                 onPressed: () {
+          //                   // _setPage(2);
+          //                   Get.toNamed(RouteHelper.getCartRoute());
+          //                 },
+          //                 child: CartWidget(
+          //                     color: _pageIndex == 2
+          //                         ? Theme.of(context).cardColor
+          //                         : Theme.of(context).disabledColor,
+          //                     size: 30),
+          //               ),
+          // floatingActionButtonLocation:
+          //     FloatingActionButtonLocation.centerDocked,
 
           bottomNavigationBar: ResponsiveHelper.isDesktop(context)
               ? const SizedBox()
@@ -202,29 +206,49 @@ class DashboardScreenState extends State<DashboardScreen> {
                           child: Padding(
                             padding: const EdgeInsets.all(
                                 Dimensions.paddingSizeExtraSmall),
-                            child: Row(children: [
-                              BottomNavItem(
-                                  iconData: Icons.home,
-                                  isSelected: _pageIndex == 0,
-                                  onTap: () => _setPage(0)),
-                              BottomNavItem(
-                                  iconData: Icons.favorite,
-                                  isSelected: _pageIndex == 1,
-                                  onTap: () => _setPage(1)),
-                              const Expanded(child: SizedBox()),
-                              BottomNavItem(
-                                  iconData: Icons.shopping_bag,
-                                  isSelected: _pageIndex == 3,
-                                  onTap: () => _setPage(3)),
-                              BottomNavItem(
-                                  iconData: Icons.menu,
-                                  isSelected: _pageIndex == 4,
-                                  onTap: () => _setPage(4)),
-                              // BottomNavItem(iconData: Icons.menu, isSelected: _pageIndex == 4, onTap: () => _openEndDrawer()),
-                              // BottomNavItem(iconData: Icons.menu, isSelected: _pageIndex == 4, onTap: () {
-                              //   Get.bottomSheet(const MenuScreen(), backgroundColor: Colors.transparent, isScrollControlled: true);
-                              // }),
-                            ]),
+                            child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  BottomNavItem(
+                                      selectedImg: Images.homeColor,
+                                      unselectedImg: Images.homeBlack,
+                                      title: 'home',
+                                      isSelected: _pageIndex == 0,
+                                      onTap: () => _setPage(0)),
+                                  BottomNavItem(
+                                      selectedImg: Images.cartColor,
+                                      unselectedImg: Images.cartBlack,
+                                      title: 'cart',
+                                      isSelected: _pageIndex == 1,
+                                      onTap: () => _setPage(1)),
+
+                                  BottomNavItem(
+                                      selectedImg: Images.categoriesColor,
+                                      unselectedImg: Images.categoriesBlack,
+                                      title: 'categories',
+                                      isSelected: _pageIndex == 2,
+                                      isCategoryItem: true,
+                                      onTap: () => _setPage(2)),
+
+                                  const Expanded(child: SizedBox()),
+                                  BottomNavItem(
+                                      selectedImg: Images.couponColor,
+                                      unselectedImg: Images.couponBlack,
+                                      title: 'Coupon',
+                                      isSelected: _pageIndex == 3,
+                                      onTap: () => _setPage(3)),
+                                  BottomNavItem(
+                                      selectedImg: Images.profileColor,
+                                      unselectedImg: Images.profileBlack,
+                                      title: 'profile',
+                                      isSelected: _pageIndex == 4,
+                                      onTap: () => _setPage(4)),
+                                  // BottomNavItem(iconData: Icons.menu, isSelected: _pageIndex == 4, onTap: () => _openEndDrawer()),
+                                  // BottomNavItem(iconData: Icons.menu, isSelected: _pageIndex == 4, onTap: () {
+                                  //   Get.bottomSheet(const MenuScreen(), backgroundColor: Colors.transparent, isScrollControlled: true);
+                                  // }),
+                                ]),
                           ),
                         ),
           body: ExpandableBottomSheet(

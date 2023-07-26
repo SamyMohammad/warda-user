@@ -31,7 +31,7 @@ class SignUpBody {
     data['f_name'] = fName;
     data['l_name'] = lName;
     data['phone'] = phone;
-    data['username'] = username;
+    data['user_name'] = username;
     data['email'] = email;
     data['password'] = password;
     data['ref_code'] = refCode;

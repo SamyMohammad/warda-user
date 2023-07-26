@@ -11,6 +11,7 @@ import 'package:warda/helper/date_converter.dart';
 import 'package:warda/helper/price_converter.dart';
 import 'package:warda/helper/responsive_helper.dart';
 import 'package:warda/helper/route_helper.dart';
+import 'package:warda/util/app_constants.dart';
 import 'package:warda/util/dimensions.dart';
 import 'package:warda/util/images.dart';
 import 'package:warda/util/styles.dart';
@@ -145,7 +146,7 @@ class ItemWidget extends StatelessWidget {
                   child: Padding(
                 padding: EdgeInsets.symmetric(
                     vertical: desktop ? 0 : Dimensions.paddingSizeExtraSmall),
-                child: Row(children: [
+                child: Column(children: [
                   Stack(children: [
                     ClipRRect(
                       borderRadius:
@@ -157,10 +158,10 @@ class ItemWidget extends StatelessWidget {
                         height: desktop
                             ? 120
                             : length == null
-                                ? 100
-                                : 65,
-                        width: desktop ? 120 : 80,
-                        fit: BoxFit.cover,
+                                ? context.height * 0.12
+                                : context.height * 0.15,
+                        width: desktop ? 120 : context.width * 0.3,
+                        fit: BoxFit.fitHeight,
                       ),
                     ),
                     isStore
@@ -186,12 +187,22 @@ class ItemWidget extends StatelessWidget {
                           Wrap(
                               crossAxisAlignment: WrapCrossAlignment.center,
                               children: [
-                                Text(
-                                  isStore ? store!.name! : item!.name!,
-                                  style: robotoMedium.copyWith(
-                                      fontSize: Dimensions.fontSizeSmall),
-                                  maxLines: desktop ? 2 : 1,
-                                  overflow: TextOverflow.ellipsis,
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      width: context.width * 0.35,
+                                      child: Text(
+                                        isStore ? store!.name! : item!.name!,
+                                        style: robotoMedium.copyWith(
+                                            fontSize: Dimensions.fontSizeLarge),
+                                        maxLines: desktop ? 2 : 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    favWidget(context, desktop)
+                                  ],
                                 ),
                                 const SizedBox(
                                     width: Dimensions.paddingSizeExtraSmall),
@@ -223,8 +234,8 @@ class ItemWidget extends StatelessWidget {
                                   isStore
                                       ? store!.address ?? ''
                                       :
-                                      //  item!.storeName ?? 
-                                       '',
+                                      //  item!.storeName ??
+                                      '',
                                   style: robotoRegular.copyWith(
                                     fontSize: Dimensions.fontSizeExtraSmall,
                                     color: Theme.of(context).disabledColor,
@@ -251,7 +262,7 @@ class ItemWidget extends StatelessWidget {
                           //             : item!.ratingCount,
                           //       )
                           //     :
-                               const SizedBox(),
+                          const SizedBox(),
                           SizedBox(
                               height: (!isStore && desktop)
                                   ? Dimensions.paddingSizeExtraSmall
@@ -266,7 +277,7 @@ class ItemWidget extends StatelessWidget {
                               ? Text(
                                   '(${item!.unitType ?? ''})',
                                   style: robotoRegular.copyWith(
-                                      fontSize: Dimensions.fontSizeExtraSmall,
+                                      fontSize: Dimensions.fontSizeExtraLarge,
                                       color: Theme.of(context).hintColor),
                                 )
                               : const SizedBox(),
@@ -286,7 +297,9 @@ class ItemWidget extends StatelessWidget {
                                         discount: discount,
                                         discountType: discountType),
                                     style: robotoMedium.copyWith(
-                                        fontSize: Dimensions.fontSizeSmall),
+                                        fontSize: Dimensions.fontSizeExtraLarge,
+                                        fontWeight: FontWeight.w400,
+                                        color: AppConstants.primaryColor),
                                     textDirection: TextDirection.ltr,
                                   ),
                                   SizedBox(
@@ -299,7 +312,8 @@ class ItemWidget extends StatelessWidget {
                                               item!.price),
                                           style: robotoMedium.copyWith(
                                             fontSize:
-                                                Dimensions.fontSizeExtraSmall,
+                                                Dimensions.fontSizeDefault,
+                                            fontWeight: FontWeight.w400,
                                             color:
                                                 Theme.of(context).disabledColor,
                                             decoration:
@@ -311,68 +325,6 @@ class ItemWidget extends StatelessWidget {
                                 ]),
                         ]),
                   ),
-                  Column(
-                      mainAxisAlignment: isStore
-                          ? MainAxisAlignment.center
-                          : MainAxisAlignment.spaceBetween,
-                      children: [
-                        const SizedBox(),
-                        fromCartSuggestion
-                            ? Container(
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).primaryColor,
-                                  shape: BoxShape.circle,
-                                ),
-                                padding: const EdgeInsets.all(
-                                    Dimensions.paddingSizeExtraSmall),
-                                child: Icon(Icons.add,
-                                    color: Theme.of(context).cardColor),
-                              )
-                            : GetBuilder<WishListController>(
-                                builder: (wishController) {
-                                bool isWished = isStore
-                                    ? wishController.wishStoreIdList
-                                        .contains(store!.id)
-                                    : wishController.wishItemIdList
-                                        .contains(item!.id);
-                                return InkWell(
-                                  onTap: !wishController.isRemoving
-                                      ? () {
-                                          if (Get.find<AuthController>()
-                                              .isLoggedIn()) {
-                                            isWished
-                                                ? wishController
-                                                    .removeFromWishList(
-                                                        isStore
-                                                            ? store!.id
-                                                            : item!.id,
-                                                        isStore)
-                                                : wishController.addToWishList(
-                                                    item, store, isStore);
-                                          } else {
-                                            showCustomSnackBar(
-                                                'you_are_not_logged_in'.tr);
-                                          }
-                                        }
-                                      : null,
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: desktop
-                                            ? Dimensions.paddingSizeSmall
-                                            : 0),
-                                    child: Icon(
-                                      isWished
-                                          ? Icons.favorite
-                                          : Icons.favorite_border,
-                                      size: desktop ? 30 : 25,
-                                      color: isWished
-                                          ? Theme.of(context).primaryColor
-                                          : Theme.of(context).disabledColor,
-                                    ),
-                                  ),
-                                );
-                              }),
-                      ]),
                 ]),
               )),
             ]),
@@ -395,5 +347,55 @@ class ItemWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget favWidget(BuildContext context, bool desktop) {
+    return Column(
+        mainAxisAlignment:
+            isStore ? MainAxisAlignment.center : MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          fromCartSuggestion
+              ? Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    shape: BoxShape.circle,
+                  ),
+                  padding:
+                      const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
+                  child: Icon(Icons.add, color: Theme.of(context).cardColor),
+                )
+              : GetBuilder<WishListController>(builder: (wishController) {
+                  bool isWished = isStore
+                      ? wishController.wishStoreIdList.contains(store!.id)
+                      : wishController.wishItemIdList.contains(item!.id);
+                  return InkWell(
+                    onTap: !wishController.isRemoving
+                        ? () {
+                            if (Get.find<AuthController>().isLoggedIn()) {
+                              isWished
+                                  ? wishController.removeFromWishList(
+                                      isStore ? store!.id : item!.id, isStore)
+                                  : wishController.addToWishList(
+                                      item, store, isStore);
+                            } else {
+                              showCustomSnackBar('you_are_not_logged_in'.tr);
+                            }
+                          }
+                        : null,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: desktop ? Dimensions.paddingSizeSmall : 0),
+                      child: Icon(
+                        isWished ? Icons.favorite : Icons.favorite_border,
+                        size: desktop ? 30 : 25,
+                        color: isWished
+                            ? Theme.of(context).primaryColor
+                            : Theme.of(context).disabledColor,
+                      ),
+                    ),
+                  );
+                }),
+        ]);
   }
 }

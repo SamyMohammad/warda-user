@@ -1,3 +1,5 @@
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart'
+    as staggeredGridview;
 import 'package:warda/controller/category_controller.dart';
 import 'package:warda/controller/splash_controller.dart';
 import 'package:warda/helper/responsive_helper.dart';
@@ -13,7 +15,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CategoryScreen extends StatefulWidget {
-  const CategoryScreen({Key? key}) : super(key: key);
+  const CategoryScreen({Key? key, this.fromNav = false}) : super(key: key);
+  final bool fromNav;
 
   @override
   State<CategoryScreen> createState() => _CategoryScreenState();
@@ -25,58 +28,122 @@ class _CategoryScreenState extends State<CategoryScreen> {
     Get.find<CategoryController>().getCategoryList(false);
 
     return Scaffold(
-      appBar: CustomAppBar(title: 'categories'.tr),
-      endDrawer: const MenuDrawer(),endDrawerEnableOpenDragGesture: false,
-      body: SafeArea(child: Scrollbar(child: SingleChildScrollView(child: FooterView(child: SizedBox(
-        width: Dimensions.webMaxWidth,
-        child: GetBuilder<CategoryController>(builder: (catController) {
-          return catController.categoryList != null ? catController.categoryList!.isNotEmpty ? GridView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: ResponsiveHelper.isDesktop(context) ? 6 : ResponsiveHelper.isTab(context) ? 4 : 3,
-              childAspectRatio: (1/1),
-              mainAxisSpacing: Dimensions.paddingSizeSmall,
-              crossAxisSpacing: Dimensions.paddingSizeSmall,
+      appBar: PreferredSize(
+        preferredSize: Size(context.width, context.height * 0.12),
+        child: CustomAppBar(
+          title: 'categories'.tr,
+          showLogo: true,
+          backButton: !widget.fromNav,
+        ),
+      ),
+      endDrawer: const MenuDrawer(),
+      endDrawerEnableOpenDragGesture: false,
+      body: Center(
+        child: SafeArea(
+            child: Container(
+          width: context.width * 0.95,
+          alignment: Alignment.center,
+          child: Scrollbar(
+              child: SingleChildScrollView(
+                  child: FooterView(
+                      child: SizedBox(
+            width: Dimensions.webMaxWidth,
+            child: Container(
+              child: GetBuilder<CategoryController>(builder: (catController) {
+                return catController.categoryList != null
+                    ? catController.categoryList!.isNotEmpty
+                        ? staggeredGridview.StaggeredGrid.count(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 2,
+                            children: List.generate(
+                                catController.categoryList!.length, (index) {
+                              int indexFakeData = index;
+                              return staggeredGridview.StaggeredGridTile.count(
+                                crossAxisCellCount: (((index + 1) % 3 == 0 &&
+                                                (index + 2) % 4 == 0) ||
+                                            ((index + 1) % 4 == 0 &&
+                                                (index) % 3 == 0)) ||
+                                        ((index + 2) % 4 == 0 &&
+                                            (index) % 3 == 0) ||
+                                        ((index + 1) % 4 == 0 &&
+                                            (index - 1) % 3 == 0) ||
+                                        ((index + 2) % 4 == 0 &&
+                                            (index - 1) % 3 == 0) ||
+                                        ((index + 1) % 4 == 0 &&
+                                            (index - 2) % 3 == 0)
+                                    ? 1
+                                    : 2,
+                                mainAxisCellCount: 1.1,
+                                child: Container(
+                                  margin: EdgeInsets.all(8),
+                                  width: context.width * 0.8,
+                                  height: context.height * 0.1,
+                                  child: InkWell(
+                                    onTap: () => Get.toNamed(
+                                        RouteHelper.getCategoryItemRoute(
+                                      catController
+                                          .categoryList![indexFakeData].id,
+                                      catController
+                                          .categoryList![indexFakeData].name!,
+                                    )),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(context).hintColor,
+                                        borderRadius: BorderRadius.circular(
+                                            Dimensions.radiusSmall),
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color: Colors.grey[
+                                                  Get.isDarkMode ? 800 : 200]!,
+                                              blurRadius: 5,
+                                              spreadRadius: 1)
+                                        ],
+                                        // image: DecorationImage(
+                                        //     onError: (exception, stackTrace) {},
+                                        //     image: NetworkImage(
+                                        //         '${Get.find<SplashController>().configModel!.baseUrls!.categoryImageUrl}/${catController.categoryList![indexFakeData].image}')
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      Dimensions.radiusSmall),
+                                              child: CustomImage(
+                                                fit: BoxFit.cover,
+                                                width: context.width,
+                                                height: context.height * 0.255,
+                                                image:
+                                                    '${Get.find<SplashController>().configModel!.baseUrls!.categoryImageUrl}/${catController.categoryList![indexFakeData].image}',
+                                              ),
+                                            ),
+                                            Text(
+                                              catController
+                                                  .categoryList![indexFakeData]
+                                                  .name!,
+                                              textAlign: TextAlign.center,
+                                              style: wardaRegular.copyWith(
+                                                  fontSize: 30,
+                                                  color: Colors.white),
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ]),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
+                          )
+                        : NoDataScreen(text: 'no_category_found'.tr)
+                    : const Center(child: CircularProgressIndicator());
+              }),
             ),
-            padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
-            itemCount: catController.categoryList!.length,
-            itemBuilder: (context, index) {
-              return InkWell(
-                onTap: () => Get.toNamed(RouteHelper.getCategoryItemRoute(
-                  catController.categoryList![index].id, catController.categoryList![index].name!,
-                )),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                    borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                    boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200]!, blurRadius: 5, spreadRadius: 1)],
-                  ),
-                  alignment: Alignment.center,
-                  child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                      child: CustomImage(
-                        height: 50, width: 50, fit: BoxFit.cover,
-                        image: '${Get.find<SplashController>().configModel!.baseUrls!.categoryImageUrl}/${catController.categoryList![index].image}',
-                      ),
-                    ),
-                    const SizedBox(height: Dimensions.paddingSizeExtraSmall),
-
-                    Text(
-                      catController.categoryList![index].name!, textAlign: TextAlign.center,
-                      style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall),
-                      maxLines: 2, overflow: TextOverflow.ellipsis,
-                    ),
-
-                  ]),
-                ),
-              );
-            },
-          ) : NoDataScreen(text: 'no_category_found'.tr) : const Center(child: CircularProgressIndicator());
-        }),
-      ))))),
+          )))),
+        )),
+      ),
     );
   }
 }

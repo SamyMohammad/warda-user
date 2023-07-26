@@ -404,7 +404,7 @@ class LocationController extends GetxController implements GetxService {
 
   Future<bool> haveCityId() async {
     bool haveZoneId = false;
-    String cityId = await CasheHelper().read(AppConstants.zoneId) ?? '';
+    String cityId = await CasheHelper().read(AppConstants.zoneId);
     if (cityId != '') {
       haveZoneId = true;
     } else {
@@ -688,6 +688,9 @@ class LocationController extends GetxController implements GetxService {
 
   Future<void> navigateToLocationScreen(String page,
       {bool offNamed = false, bool offAll = false}) async {
+    bool isSelected =
+        CasheHelper().read(AppConstants.zoneId).runtimeType == String;
+
     bool fromSignup = page == RouteHelper.signUp;
     bool fromHome = page == 'home';
     if (!fromHome && Get.find<LocationController>().getUserAddress() != null) {
@@ -705,12 +708,12 @@ class LocationController extends GetxController implements GetxService {
       await Get.find<LocationController>().getAddressList();
 
       Get.back();
-      if (Get.find<LocationController>().addressList!.isEmpty) {
+      if (!isSelected) {
+        //Get.find<LocationController>().addressList!.isEmpty
         //Get.toNamed(RouteHelper.getPickMapRoute(page, false));
 
         Get.offNamed(RouteHelper.getAccessLocationRoute(page));
       } else {
-        print('hellllllllllll:>> $offNamed,,$offAll,,$haveZoneId');
         if (offNamed) {
           if (haveZoneId) {
             Get.offNamed(RouteHelper.getInitialRoute(fromSplash: true));

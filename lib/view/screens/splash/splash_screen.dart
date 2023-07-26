@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:warda/controller/auth_controller.dart';
 import 'package:warda/controller/cart_controller.dart';
 import 'package:warda/controller/location_controller.dart';
@@ -14,6 +15,9 @@ import 'package:warda/util/images.dart';
 import 'package:warda/view/base/no_internet_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../helper/cashe_helper.dart';
+import '../location/cubit/location_cubit.dart';
 
 class SplashScreen extends StatefulWidget {
   final NotificationBody? body;
@@ -68,7 +72,9 @@ class SplashScreenState extends State<SplashScreen> {
     _onConnectivityChanged.cancel();
   }
 
-  void _route() {
+  void _route() async {
+    bool haveZoneId =
+        await BlocProvider.of<LocationCubit>(context).haveCityId();
     Get.find<SplashController>().getConfigData().then((isSuccess) {
       if (isSuccess) {
         Timer(const Duration(seconds: 1), () async {
@@ -86,7 +92,6 @@ class SplashScreenState extends State<SplashScreen> {
             Get.offNamed(RouteHelper.getUpdateRoute(
                 AppConstants.appVersion < minimumVersion));
           } else {
-            print('hello spash:: ${widget.body != null}');
             if (widget.body != null) {
               if (widget.body!.notificationType == NotificationType.order) {
                 Get.offNamed(RouteHelper.getOrderDetailsRoute(
@@ -103,13 +108,15 @@ class SplashScreenState extends State<SplashScreen> {
                     fromNotification: true));
               }
             } else {
-              print('hello spash:: ${Get.find<AuthController>().isLoggedIn()}');
               if (Get.find<AuthController>().isLoggedIn()) {
                 Get.find<AuthController>().updateToken();
                 if (Get.find<LocationController>().getUserAddress() != null) {
                   await Get.find<WishListController>().getWishList();
                   Get.offNamed(RouteHelper.getInitialRoute(fromSplash: true));
+                } else if (haveZoneId) {
+                  Get.offNamed(RouteHelper.getInitialRoute(fromSplash: true));
                 } else {
+                  print('hello spash:: zone id is write >  ${haveZoneId}');
                   Get.find<LocationController>()
                       .navigateToLocationScreen('splash', offNamed: true);
                 }

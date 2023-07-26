@@ -51,9 +51,14 @@ class LocationCubit extends Cubit<LocationState> {
   }
 
   readCountryAndCity() async {
-    countryName =
-        await CasheHelper().read(AppConstants.countrySelectedKey) ?? '';
-    cityName = await CasheHelper().read(AppConstants.citySelectedKey) ?? '';
+    countryName = await CasheHelper().read(AppConstants.countrySelectedKey);
+    cityName = await CasheHelper().read(AppConstants.citySelectedKey);
+    String countryId = await CasheHelper().read(AppConstants.countrySelectedId);
+    for (var element in countriesCitiesModel?.countries ?? []) {
+      if(element.id.toString() == countryId){
+        countrySelected = element;
+      }
+    }
     emit(LocationInitial());
   }
 
@@ -65,7 +70,7 @@ class LocationCubit extends Cubit<LocationState> {
 
   Future<bool> haveCityId() async {
     bool haveZoneId = false;
-    String cityId = await CasheHelper().read(AppConstants.zoneId) ?? '';
+    String cityId = await CasheHelper().read(AppConstants.zoneId);
     if (cityId != '') {
       haveZoneId = true;
     } else {

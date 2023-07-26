@@ -80,6 +80,7 @@ import 'package:get/get.dart';
 import 'package:warda/view/screens/wallet/wallet_screen.dart';
 
 import '../view/screens/auth/auth_onBoarding_screen.dart';
+import '../view/screens/favourite/favourite_screen.dart';
 import '../view/screens/location/cubit/location_cubit.dart';
 import 'cashe_helper.dart';
 
@@ -102,6 +103,7 @@ class RouteHelper {
   static const String store = '/store';
   static const String orderDetails = '/order-details';
   static const String profile = '/profile';
+  static const String favourite = '/favourite';
   static const String updateProfile = '/update-profile';
   static const String coupon = '/coupon';
   static const String notification = '/notification';
@@ -199,6 +201,7 @@ class RouteHelper {
   }
 
   static String getProfileRoute() => profile;
+  static String getFavouriteRoute() => favourite;
   static String getUpdateProfileRoute() => updateProfile;
   static String getCouponRoute() => coupon;
   static String getNotificationRoute({bool? fromNotification}) =>
@@ -499,6 +502,7 @@ class RouteHelper {
     GetPage(
         name: updateProfile, page: () => getRoute(const UpdateProfileScreen())),
     GetPage(name: coupon, page: () => getRoute(const CouponScreen())),
+    GetPage(name: favourite, page: () => getRoute(const FavouriteScreen())),
     GetPage(
         name: notification,
         page: () => getRoute(NotificationScreen(

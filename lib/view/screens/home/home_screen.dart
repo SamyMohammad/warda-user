@@ -33,6 +33,8 @@ import 'package:warda/view/screens/home/widget/module_view.dart';
 import 'package:warda/view/screens/location/cubit/location_cubit.dart';
 import 'package:warda/view/screens/parcel/parcel_category_screen.dart';
 
+import '../../../util/app_constants.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -47,7 +49,7 @@ class HomeScreen extends StatefulWidget {
       Get.find<BannerController>().getBannerList(reload);
       //Get.find<LocationController>().syncZoneData();
       Get.find<CategoryController>().getCategoryList(reload);
-      // Get.find<StoreController>().getPopularStoreList(reload, 'all', false);
+      Get.find<StoreController>().getPopularStoreList(reload, 'all', false);
       // Get.find<CampaignController>().getItemCampaignList(reload);
       // Get.find<StoreController>().getLatestStoreList(reload, 'all', false);
       // Get.find<ItemController>().getReviewedItemList(reload, 'all', false);
@@ -90,9 +92,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       HomeScreen.loadData(true);
-    if (!ResponsiveHelper.isWeb()) {
-      Get.find<LocationController>().getZone(false, updateInAddress: true);
-    }
+      if (!ResponsiveHelper.isWeb()) {
+        Get.find<LocationController>().getZone(false, updateInAddress: true);
+      }
     });
   }
 
@@ -133,8 +135,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       //await Get.find<LocationController>().syncZoneData();
                       await Get.find<CategoryController>()
                           .getCategoryList(true);
-                      // await Get.find<StoreController>()
-                      //     .getPopularStoreList(true, 'all', false);
+                      await Get.find<StoreController>()
+                          .getPopularStoreList(true, 'all', false);
                       // await Get.find<CampaignController>()
                       //     .getItemCampaignList(true);
                       await Get.find<ItemController>()
@@ -191,175 +193,171 @@ class _HomeScreenState extends State<HomeScreen> {
                                     color: Theme.of(context)
                                         .colorScheme
                                         .background,
-                                    child: Row(children: [
-                                      (splashController.module != null &&
-                                              splashController
-                                                      .configModel!.module ==
-                                                  null)
-                                          ? InkWell(
-                                              onTap: () => splashController
-                                                  .removeModule(),
-                                              child: Image.asset(
-                                                  Images.moduleIcon,
-                                                  height: 22,
-                                                  width: 22,
-                                                  color: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyLarge!
-                                                      .color),
-                                            )
-                                          : const SizedBox(),
-                                      SizedBox(
-                                          width: (splashController.module !=
-                                                      null &&
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          (splashController.module != null &&
                                                   splashController.configModel!
                                                           .module ==
                                                       null)
-                                              ? Dimensions.paddingSizeExtraSmall
-                                              : 0),
-                                      Expanded(
-                                          child: InkWell(
-                                        onTap: () =>
-                                            Get.find<LocationController>()
-                                                .navigateToLocationScreen(
-                                                    'home'),
-                                        child: Padding(
-                                            padding: EdgeInsets.symmetric(
-                                              vertical:
-                                                  Dimensions.paddingSizeSmall,
-                                              horizontal: ResponsiveHelper
-                                                      .isDesktop(context)
-                                                  ? Dimensions.paddingSizeSmall
-                                                  : 0,
-                                            ),
-                                            child: BlocBuilder<LocationCubit,
-                                                LocationState>(
-                                              bloc: BlocProvider.of<
-                                                  LocationCubit>(context)
-                                                ..readCountryAndCity(),
-                                              builder: (context, state) {
-                                                var cubit = BlocProvider.of<
-                                                    LocationCubit>(context);
-                                                return Container(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.7,
-                                                  child: Text(
-                                                    "${cubit.countryName ?? ''} - ${cubit.cityName ?? ''}",
-                                                    textAlign: TextAlign.center,
-                                                    style:
-                                                        robotoRegular.copyWith(
+                                              ? InkWell(
+                                                  onTap: () => splashController
+                                                      .removeModule(),
+                                                  child: Image.asset(
+                                                      Images.moduleIcon,
+                                                      height: 22,
+                                                      width: 22,
                                                       color: Theme.of(context)
                                                           .textTheme
                                                           .bodyLarge!
-                                                          .color,
-                                                      fontSize: Dimensions
-                                                          .fontSizeLarge,
-                                                    ),
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                );
-                                              },
-                                            )
-                                            // child: GetBuilder<LocationController>(
-                                            //     builder: (locationController) {
-                                            //   return
-                                            //    Row(
-                                            //     crossAxisAlignment:
-                                            //         CrossAxisAlignment.center,
-                                            //     mainAxisAlignment:
-                                            //         MainAxisAlignment.start,
-                                            //     children: [
-                                            //       Icon(
-                                            //         locationController
-                                            //                     .getUserAddress()
-                                            //                     ?.addressType ==
-                                            //                 'home'
-                                            //             ? Icons.home_filled
-                                            //             : locationController
-                                            //                         .getUserAddress()
-                                            //                         ?.addressType ==
-                                            //                     'office'
-                                            //                 ? Icons.work
-                                            //                 : Icons.location_on,
-                                            //         size: 20,
-                                            //         color: Theme.of(context)
-                                            //             .textTheme
-                                            //             .bodyLarge!
-                                            //             .color,
-                                            //       ),
-                                            //       const SizedBox(width: 10),
-                                            // Flexible(
-                                            //   child: Text(
-                                            //     locationController
-                                            //         .getUserAddress()!
-                                            //         .address!,
-                                            //     style:
-                                            //         robotoRegular.copyWith(
-                                            //       color: Theme.of(context)
-                                            //           .textTheme
-                                            //           .bodyLarge!
-                                            //           .color,
-                                            //       fontSize: Dimensions
-                                            //           .fontSizeSmall,
-                                            //     ),
-                                            //     maxLines: 1,
-                                            //     overflow:
-                                            //         TextOverflow.ellipsis,
-                                            //   ),
-                                            // ),
-                                            //       Icon(Icons.arrow_drop_down,
-                                            //           color: Theme.of(context)
-                                            //               .textTheme
-                                            //               .bodyLarge!
-                                            //               .color),
-                                            //     ],
-                                            //   );
-
-                                            // }),
-                                            ),
-                                      )),
-                                      InkWell(
-                                        child:
-                                            GetBuilder<NotificationController>(
-                                                builder:
-                                                    (notificationController) {
-                                          return Stack(children: [
-                                            Icon(Icons.notifications,
-                                                size: 25,
-                                                color: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyLarge!
-                                                    .color),
-                                            notificationController
-                                                    .hasNotification
-                                                ? Positioned(
-                                                    top: 0,
-                                                    right: 0,
-                                                    child: Container(
-                                                      height: 10,
-                                                      width: 10,
-                                                      decoration: BoxDecoration(
-                                                        color: Theme.of(context)
-                                                            .primaryColor,
-                                                        shape: BoxShape.circle,
-                                                        border: Border.all(
-                                                            width: 1,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .cardColor),
+                                                          .color),
+                                                )
+                                              : const SizedBox(),
+                                          SizedBox(
+                                              width: (splashController.module !=
+                                                          null &&
+                                                      splashController
+                                                              .configModel!
+                                                              .module ==
+                                                          null)
+                                                  ? Dimensions
+                                                      .paddingSizeExtraSmall
+                                                  : 0),
+                                          Expanded(
+                                              child: InkWell(
+                                            onTap: () =>
+                                                Get.find<LocationController>()
+                                                    .navigateToLocationScreen(
+                                                        'home'),
+                                            child: Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                  vertical: Dimensions
+                                                      .paddingSizeSmall,
+                                                  horizontal: ResponsiveHelper
+                                                          .isDesktop(context)
+                                                      ? Dimensions
+                                                          .paddingSizeSmall
+                                                      : 0,
+                                                ),
+                                                child: BlocBuilder<
+                                                    LocationCubit,
+                                                    LocationState>(
+                                                  bloc: BlocProvider.of<
+                                                      LocationCubit>(context)
+                                                    ..readCountryAndCity(),
+                                                  builder: (context, state) {
+                                                    var cubit = BlocProvider.of<
+                                                        LocationCubit>(context);
+                                                    return Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.7,
+                                                      child: Row(
+                                                        children: [
+                                                          Container(
+                                                            width: 30,
+                                                            height: 30,
+                                                            margin:
+                                                                const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        12),
+                                                            child:
+                                                                Image.network(
+                                                              cubit.countrySelected
+                                                                      ?.flagLink ??
+                                                                  '',
+                                                              errorBuilder:
+                                                                  ((context,
+                                                                      error,
+                                                                      stackTrace) {
+                                                                return Image
+                                                                    .asset(Images
+                                                                        .logoColor);
+                                                              }),
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            "${cubit.countryName ?? ''} - ${cubit.cityName ?? ''}",
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: robotoRegular
+                                                                .copyWith(
+                                                              color: Colors
+                                                                  .green
+                                                                  .shade800,
+                                                              fontSize: Dimensions
+                                                                  .fontSizeDefault,
+                                                            ),
+                                                            maxLines: 1,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          ),
+                                                          Icon(
+                                                            Icons
+                                                                .keyboard_arrow_down_outlined,
+                                                            color: Colors
+                                                                .green.shade800,
+                                                          )
+                                                        ],
                                                       ),
-                                                    ))
-                                                : const SizedBox(),
-                                          ]);
-                                        }),
-                                        onTap: () => Get.toNamed(
-                                            RouteHelper.getNotificationRoute()),
-                                      ),
-                                    ]),
+                                                    );
+                                                  },
+                                                )),
+                                          )),
+                                          // InkWell(
+                                          //   child:
+                                          //       GetBuilder<NotificationController>(
+                                          //           builder:
+                                          //               (notificationController) {
+                                          //     return Stack(children: [
+                                          //       Icon(Icons.notifications,
+                                          //           size: 25,
+                                          //           color: Theme.of(context)
+                                          //               .textTheme
+                                          //               .bodyLarge!
+                                          //               .color),
+                                          //       notificationController
+                                          //               .hasNotification
+                                          //           ? Positioned(
+                                          //               top: 0,
+                                          //               right: 0,
+                                          //               child: Container(
+                                          //                 height: 10,
+                                          //                 width: 10,
+                                          //                 decoration: BoxDecoration(
+                                          //                   color: Theme.of(context)
+                                          //                       .primaryColor,
+                                          //                   shape: BoxShape.circle,
+                                          //                   border: Border.all(
+                                          //                       width: 1,
+                                          //                       color: Theme.of(
+                                          //                               context)
+                                          //                           .cardColor),
+                                          //                 ),
+                                          //               ))
+                                          //           : const SizedBox(),
+                                          //     ]);
+                                          //   }),
+                                          //   onTap: () => Get.toNamed(
+                                          //       RouteHelper.getNotificationRoute()),
+                                          // ),
+                                          Image.asset(
+                                            Images.logoColor,
+                                            width: context.width * 0.25,
+                                            height: context.height * 0.03,
+                                            fit: BoxFit.fitHeight,
+                                          ),
+                                          IconButton(
+                                              onPressed: () {},
+                                              icon: const Icon(Icons.filter_alt,
+                                                  color: AppConstants
+                                                      .primaryColor))
+                                        ]),
                                   )),
                                   actions: const [SizedBox()],
                                 ),
@@ -403,35 +401,37 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       blurRadius: 5)
                                                 ],
                                               ),
-                                              child: Row(children: [
-                                                Icon(
-                                                  Icons.search,
-                                                  size: 25,
-                                                  color: Theme.of(context)
-                                                      .primaryColor,
-                                                ),
-                                                const SizedBox(
-                                                    width: Dimensions
-                                                        .paddingSizeExtraSmall),
-                                                Expanded(
-                                                    child: Text(
-                                                  Get.find<SplashController>()
-                                                          .configModel!
-                                                          .moduleConfig!
-                                                          .module!
-                                                          .showRestaurantText!
-                                                      ? 'search_food_or_restaurant'
-                                                          .tr
-                                                      : 'search_item_or_store'
-                                                          .tr,
-                                                  style: robotoRegular.copyWith(
-                                                    fontSize: Dimensions
-                                                        .fontSizeSmall,
-                                                    color: Theme.of(context)
-                                                        .hintColor,
-                                                  ),
-                                                )),
-                                              ]),
+                                              child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    Icon(
+                                                      Icons.search,
+                                                      size: 25,
+                                                      color: Colors.black,
+                                                    ),
+                                                    // const SizedBox(
+                                                    //     width: Dimensions
+                                                    //         .paddingSizeExtraSmall),
+                                                    // Expanded(
+                                                    //     child: Text(
+                                                    //   Get.find<SplashController>()
+                                                    //           .configModel!
+                                                    //           .moduleConfig!
+                                                    //           .module!
+                                                    //           .showRestaurantText!
+                                                    //       ? 'search_food_or_restaurant'
+                                                    //           .tr
+                                                    //       : 'search_item_or_store'
+                                                    //           .tr,
+                                                    //   style: robotoRegular.copyWith(
+                                                    //     fontSize: Dimensions
+                                                    //         .fontSizeSmall,
+                                                    //     color: Theme.of(context)
+                                                    //         .hintColor,
+                                                    //   ),
+                                                    // )),
+                                                  ]),
                                             ),
                                           ),
                                         ))),
@@ -446,16 +446,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ? Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
-                                            children: [
-                                                const BannerView(
+                                            children: const [
+                                                BannerView(isFeatured: false),
+                                                CategoryView(),
+                                                const PopularStoreView(
+                                                    isPopular: true,
                                                     isFeatured: false),
-                                                const CategoryView(),
-                                                // const PopularStoreView(
-                                                //     isPopular: true,
-                                                //     isFeatured: false),
-                                                // const ItemCampaignView(),
-                                                const PopularItemView(
-                                                    isPopular: true),
+                                                //const ItemCampaignView(),
+                                                // PopularItemView(
+                                                //     isPopular: true),
                                                 // const PopularStoreView(
                                                 //     isPopular: false,
                                                 //     isFeatured: false),

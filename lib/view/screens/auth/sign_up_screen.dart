@@ -441,7 +441,7 @@ class SocialMediaLogin extends StatelessWidget {
               width: context.width * 0.04,
             ),
             Image.asset(
-              Images.googleColor,
+              Images.facebookColor,
               width: context.height * 0.05,
               height: context.height * 0.05,
             ),

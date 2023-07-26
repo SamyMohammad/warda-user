@@ -64,16 +64,16 @@ class _ItemsViewState extends State<ItemsView> {
               ? GridView.builder(
                   key: UniqueKey(),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisSpacing: Dimensions.paddingSizeLarge,
+                    crossAxisSpacing: 5,
                     mainAxisSpacing: ResponsiveHelper.isDesktop(context)
                         ? Dimensions.paddingSizeLarge
-                        : 0.01,
+                        : 5,
                     childAspectRatio: ResponsiveHelper.isDesktop(context)
                         ? 4
                         : widget.showTheme1Store
                             ? 2
-                            : 3.5,
-                    crossAxisCount: ResponsiveHelper.isMobile(context) ? 1 : 2,
+                            : 0.7,
+                    crossAxisCount: ResponsiveHelper.isMobile(context) ? 2 : 2,
                   ),
                   physics: widget.isScrollable
                       ? const BouncingScrollPhysics()

@@ -28,7 +28,7 @@ class AuthRepo {
 
   Future<Response> login({String? username, String? password}) async {
     return await apiClient.postData(
-        AppConstants.loginUri, {"username": username, "password": password});
+        AppConstants.loginUri, {"user_name": username, "password": password});
   }
 
   Future<Response> loginWithSocialMedia(

@@ -60,10 +60,12 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('hell:: token saved ??????????  $_isLoggedIn');
     return Scaffold(
-      appBar:
-          CustomAppBar(title: 'set_location'.tr, backButton: widget.fromHome),
+      appBar: CustomAppBar(
+        title: 'set_location'.tr,
+        backButton: widget.fromHome,
+      
+      ),
       endDrawer: MenuDrawer(),
       endDrawerEnableOpenDragGesture: false,
       body: BlocBuilder<LocationCubit, LocationState>(
@@ -139,8 +141,7 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
                                           text: 'no_saved_address_found'.tr),
                                   // : Center(
                                   //     child: CircularProgressIndicator()),
-                                  SizedBox(
-                                      height: Dimensions.paddingSizeLarge),
+                                  SizedBox(height: Dimensions.paddingSizeLarge),
                                   // ResponsiveHelper.isDesktop(context)
                                   //     ? BottomButton(
                                   //         locationController:
@@ -326,7 +327,7 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
                                       isCoutry ? item.flagLink : item.name,
                                       errorBuilder:
                                           ((context, error, stackTrace) {
-                                        return Image.asset(Images.logo);
+                                        return Image.asset(Images.logoColor);
                                       }),
                                     ),
                                   ),

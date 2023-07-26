@@ -105,25 +105,10 @@ class PopularStoreView extends StatelessWidget {
                                 },
                                 child: Container(
                                   // height: 150,
-                                  width: 200,
+                                  width: context.width * 0.33,
+                                  height: context.height * 0.33,
                                   margin: const EdgeInsets.only(
                                       top: Dimensions.paddingSizeExtraSmall),
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).cardColor,
-                                    borderRadius: BorderRadius.circular(
-                                        Dimensions.radiusSmall),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey[
-                                            Get.find<ThemeController>()
-                                                    .darkTheme
-                                                ? 800
-                                                : 300]!,
-                                        blurRadius: 5,
-                                        spreadRadius: 1,
-                                      )
-                                    ],
-                                  ),
                                   child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -133,17 +118,14 @@ class PopularStoreView extends StatelessWidget {
                                         Stack(children: [
                                           ClipRRect(
                                             borderRadius:
-                                                const BorderRadius.vertical(
-                                                    top: Radius.circular(
-                                                        Dimensions
-                                                            .radiusSmall)),
+                                                BorderRadius.circular(15),
                                             child: CustomImage(
                                               image:
                                                   '${Get.find<SplashController>().configModel!.baseUrls!.storeCoverPhotoUrl}'
                                                   '/${storeList[index].coverPhoto}',
-                                              height: 90,
-                                              width: 200,
-                                              fit: BoxFit.cover,
+                                              height: context.width * 0.28,
+                                              width: context.width * 0.3,
+                                              fit: BoxFit.fitHeight,
                                             ),
                                           ),
                                           DiscountTag(
@@ -222,55 +204,56 @@ class PopularStoreView extends StatelessWidget {
                                             }),
                                           ),
                                         ]),
-                                        Expanded(
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: Dimensions
-                                                    .paddingSizeExtraSmall),
-                                            child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    storeList[index].name ?? '',
-                                                    style:
-                                                        robotoMedium.copyWith(
-                                                            fontSize: Dimensions
-                                                                .fontSizeSmall),
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                  const SizedBox(
-                                                      height: Dimensions
-                                                          .paddingSizeExtraSmall),
-                                                  Text(
-                                                    storeList[index].address ??
-                                                        '',
-                                                    style: robotoMedium.copyWith(
-                                                        fontSize: Dimensions
-                                                            .fontSizeExtraSmall,
-                                                        color: Theme.of(context)
-                                                            .disabledColor),
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                  const SizedBox(
-                                                      height: Dimensions
-                                                          .paddingSizeExtraSmall),
-                                                  RatingBar(
-                                                    rating: storeList[index]
-                                                        .avgRating,
-                                                    ratingCount:
-                                                        storeList[index]
-                                                            .ratingCount,
-                                                    size: 12,
-                                                  ),
-                                                ]),
-                                          ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              top:
+                                                  Dimensions.paddingSizeDefault,
+                                              left:
+                                                  Dimensions.paddingSizeSmall),
+                                          child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  storeList[index].name ?? '',
+                                                  style: robotoMedium.copyWith(
+                                                      fontSize: Dimensions
+                                                          .fontSizeDefault),
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                                // const SizedBox(
+                                                //     height: Dimensions
+                                                //         .paddingSizeExtraSmall),
+                                                // Text(
+                                                //   storeList[index].address ??
+                                                //       '',
+                                                //   style: robotoMedium.copyWith(
+                                                //       fontSize: Dimensions
+                                                //           .fontSizeExtraSmall,
+                                                //       color: Theme.of(context)
+                                                //           .disabledColor),
+                                                //   maxLines: 1,
+                                                //   overflow:
+                                                //       TextOverflow.ellipsis,
+                                                // ),
+
+                                                // const SizedBox(
+                                                //     height: Dimensions
+                                                //         .paddingSizeExtraSmall),
+
+                                                // RatingBar(
+                                                //   rating: storeList[index]
+                                                //       .avgRating,
+                                                //   ratingCount:
+                                                //       storeList[index]
+                                                //           .ratingCount,
+                                                //   size: 12,
+                                                // ),
+                                              ]),
                                         ),
                                       ]),
                                 ),

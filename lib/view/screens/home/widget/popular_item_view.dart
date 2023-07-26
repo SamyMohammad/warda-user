@@ -45,7 +45,7 @@ class PopularItemView extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 90,
+                  height: context.height * 0.25,
                   child: itemList != null
                       ? ListView.builder(
                           controller: ScrollController(),
@@ -64,248 +64,247 @@ class PopularItemView extends StatelessWidget {
                                   Get.find<ItemController>().navigateToItemPage(
                                       itemList[index], context);
                                 },
-                                child: Stack(
-                                  children: [
-                                    Container(
-                                      height: 90,
-                                      width: 250,
-                                      padding: const EdgeInsets.all(
-                                          Dimensions.paddingSizeExtraSmall),
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context).cardColor,
-                                        borderRadius: BorderRadius.circular(
-                                            Dimensions.radiusSmall),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.grey[
-                                                Get.find<ThemeController>()
-                                                        .darkTheme
-                                                    ? 800
-                                                    : 300]!,
-                                            blurRadius: 5,
-                                            spreadRadius: 1,
-                                          )
-                                        ],
-                                      ),
-                                      child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Stack(children: [
-                                              ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        Dimensions.radiusSmall),
-                                                child: CustomImage(
-                                                  image:
-                                                      '${Get.find<SplashController>().configModel!.baseUrls!.itemImageUrl}'
-                                                      '/${itemList[index].image}',
-                                                  height: 80,
-                                                  width: 80,
-                                                  fit: BoxFit.cover,
+                                child: Container(
+                                  height: context.height * 0.2,
+                                  alignment: Alignment.center,
+                                  padding: const EdgeInsets.all(
+                                      Dimensions.paddingSizeExtraSmall),
+                                  // decoration: BoxDecoration(
+                                  //   borderRadius: BorderRadius.circular(
+                                  //       Dimensions.radiusSmall),
+                                  //   boxShadow: [
+                                  //     BoxShadow(
+                                  //       color: Colors.grey[
+                                  //           Get.find<ThemeController>()
+                                  //                   .darkTheme
+                                  //               ? 800
+                                  //               : 300]!,
+                                  //       blurRadius: 5,
+                                  //       spreadRadius: 1,
+                                  //     )
+                                  //   ],
+                                  // ),
+
+                                  child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Stack(children: [
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                                Dimensions.radiusSmall),
+                                            child: CustomImage(
+                                              image:
+                                                  '${Get.find<SplashController>().configModel!.baseUrls!.itemImageUrl}'
+                                                  '/${itemList[index].image}',
+                                              height: context.height * 0.15,
+                                              width: context.height * 0.15,
+                                              fit: BoxFit.fitHeight,
+                                            ),
+                                          ),
+                                          Positioned(
+                                            right: Get.find<
+                                                        LocalizationController>()
+                                                    .isLtr
+                                                ? 0
+                                                : null,
+                                            left: Get.find<
+                                                        LocalizationController>()
+                                                    .isLtr
+                                                ? null
+                                                : 0,
+                                            child: CornerDiscountTag(
+                                              bannerPosition: Get.find<
+                                                          LocalizationController>()
+                                                      .isLtr
+                                                  ? CornerBannerPosition
+                                                      .topRight
+                                                  : CornerBannerPosition
+                                                      .topLeft,
+                                              elevation: 0,
+                                              discount: itemController
+                                                  .getDiscount(itemList[index]),
+                                              discountType: itemController
+                                                  .getDiscountType(
+                                                      itemList[index]),
+                                            ),
+                                          ),
+                                          OrganicTag(
+                                              item: itemList[index],
+                                              placeInImage: true),
+                                          itemController
+                                                  .isAvailable(itemList[index])
+                                              ? const SizedBox()
+                                              : const NotAvailableWidget(),
+                                        ]),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: Dimensions
+                                                  .paddingSizeExtraSmall),
+                                          child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Wrap(children: [
+                                                  Text(
+                                                    itemList[index].name!,
+                                                    style: robotoMedium.copyWith(
+                                                        fontSize: Dimensions
+                                                            .fontSizeDefault),
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  // const SizedBox(
+                                                  //     width: Dimensions
+                                                  //         .paddingSizeExtraSmall),
+                                                  // (Get.find<SplashController>()
+                                                  //             .configModel!
+                                                  //             .moduleConfig!
+                                                  //             .module!
+                                                  //             .vegNonVeg! &&
+                                                  //         Get.find<
+                                                  //                 SplashController>()
+                                                  //             .configModel!
+                                                  //             .toggleVegNonVeg!)
+                                                  //     ? Image.asset(
+                                                  //         itemList[index]
+                                                  //                     .veg ==
+                                                  //                 0
+                                                  //             ? Images
+                                                  //                 .nonVegImage
+                                                  //             : Images
+                                                  //                 .vegImage,
+                                                  //         height: 10,
+                                                  //         width: 10,
+                                                  //         fit: BoxFit.contain)
+                                                  //     : const SizedBox(),
+                                                ]),
+                                                // const SizedBox(
+                                                //     height: Dimensions
+                                                //         .paddingSizeExtraSmall),
+                                                // Text(
+                                                //   itemList[index]
+                                                //       .storeName!,
+                                                //   style: robotoMedium.copyWith(
+                                                //       fontSize: Dimensions
+                                                //           .fontSizeExtraSmall,
+                                                //       color: Theme.of(
+                                                //               context)
+                                                //           .disabledColor),
+                                                //   maxLines: 1,
+                                                //   overflow: TextOverflow
+                                                //       .ellipsis,
+                                                // ),
+
+                                                // RatingBar(
+                                                //   rating: itemList[index]
+                                                //       .avgRating,
+                                                //   size: 12,
+                                                //   ratingCount:
+                                                //       itemList[index]
+                                                //           .ratingCount,
+                                                // ),
+
+                                                // (Get.find<SplashController>()
+                                                //             .configModel!
+                                                //             .moduleConfig!
+                                                //             .module!
+                                                //             .unit! &&
+                                                //         itemList[index]
+                                                //                 .unitType !=
+                                                //             null)
+                                                //     ? Text(
+                                                //         '(${itemList[index].unitType ?? ''})',
+                                                //         style: robotoRegular.copyWith(
+                                                //             fontSize: Dimensions
+                                                //                 .fontSizeExtraSmall,
+                                                //             color: Theme.of(
+                                                //                     context)
+                                                //                 .hintColor),
+                                                //       )
+                                                //     : const SizedBox(),
+                                                SizedBox(
+                                                  height: 6,
                                                 ),
-                                              ),
-                                              OrganicTag(
-                                                  item: itemList[index],
-                                                  placeInImage: true),
-                                              itemController.isAvailable(
-                                                      itemList[index])
-                                                  ? const SizedBox()
-                                                  : const NotAvailableWidget(),
-                                            ]),
-                                            Expanded(
-                                              child: Padding(
-                                                padding: const EdgeInsets
-                                                        .symmetric(
-                                                    horizontal: Dimensions
-                                                        .paddingSizeExtraSmall),
-                                                child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
+
+                                                Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
-                                                            .center,
+                                                            .spaceBetween,
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
                                                     children: [
-                                                      Wrap(children: [
-                                                        Row(children: [
-                                                          Expanded(
-                                                            child: Text(
-                                                              itemList[index]
-                                                                  .name!,
-                                                              style: robotoMedium
+                                                      Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .end,
+                                                          children: [
+                                                            Text(
+                                                              PriceConverter
+                                                                  .convertPrice(
+                                                                itemController
+                                                                    .getStartingPrice(
+                                                                        itemList[
+                                                                            index]),
+                                                                discount: itemList[
+                                                                        index]
+                                                                    .discount,
+                                                                discountType:
+                                                                    itemList[
+                                                                            index]
+                                                                        .discountType,
+                                                              ),
+                                                              textDirection:
+                                                                  TextDirection
+                                                                      .ltr,
+                                                              style: robotoBold
                                                                   .copyWith(
                                                                       fontSize:
                                                                           Dimensions
                                                                               .fontSizeSmall),
-                                                              maxLines: 1,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
                                                             ),
-                                                          ),
-                                                          const SizedBox(
-                                                              width: 20)
-                                                        ]),
-                                                        const SizedBox(
-                                                            width: Dimensions
-                                                                .paddingSizeExtraSmall),
-                                                        (Get.find<SplashController>()
-                                                                    .configModel!
-                                                                    .moduleConfig!
-                                                                    .module!
-                                                                    .vegNonVeg! &&
-                                                                Get.find<
-                                                                        SplashController>()
-                                                                    .configModel!
-                                                                    .toggleVegNonVeg!)
-                                                            ? Image.asset(
-                                                                itemList[index]
-                                                                            .veg ==
-                                                                        0
-                                                                    ? Images
-                                                                        .nonVegImage
-                                                                    : Images
-                                                                        .vegImage,
-                                                                height: 10,
-                                                                width: 10,
-                                                                fit: BoxFit
-                                                                    .contain)
-                                                            : const SizedBox(),
-                                                      ]),
-                                                      const SizedBox(
-                                                          height: Dimensions
-                                                              .paddingSizeExtraSmall),
-                                                      Text(
-                                                        itemList[index]
-                                                            .storeName!,
-                                                        style: robotoMedium.copyWith(
-                                                            fontSize: Dimensions
-                                                                .fontSizeExtraSmall,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .disabledColor),
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                      ),
-                                                      RatingBar(
-                                                        rating: itemList[index]
-                                                            .avgRating,
-                                                        size: 12,
-                                                        ratingCount:
-                                                            itemList[index]
-                                                                .ratingCount,
-                                                      ),
-                                                      (Get.find<SplashController>()
-                                                                  .configModel!
-                                                                  .moduleConfig!
-                                                                  .module!
-                                                                  .unit! &&
-                                                              itemList[index]
-                                                                      .unitType !=
-                                                                  null)
-                                                          ? Text(
-                                                              '(${itemList[index].unitType ?? ''})',
-                                                              style: robotoRegular.copyWith(
-                                                                  fontSize:
-                                                                      Dimensions
-                                                                          .fontSizeExtraSmall,
-                                                                  color: Theme.of(
-                                                                          context)
-                                                                      .hintColor),
-                                                            )
-                                                          : const SizedBox(),
-                                                      Row(children: [
-                                                        Expanded(
-                                                          child: Row(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .end,
-                                                              children: [
-                                                                Text(
-                                                                  PriceConverter
-                                                                      .convertPrice(
-                                                                    itemController
-                                                                        .getStartingPrice(
-                                                                            itemList[index]),
-                                                                    discount: itemList[
-                                                                            index]
-                                                                        .discount,
-                                                                    discountType:
-                                                                        itemList[index]
-                                                                            .discountType,
-                                                                  ),
-                                                                  textDirection:
-                                                                      TextDirection
-                                                                          .ltr,
-                                                                  style: robotoBold
-                                                                      .copyWith(
-                                                                          fontSize:
-                                                                              Dimensions.fontSizeSmall),
-                                                                ),
-                                                                SizedBox(
-                                                                    width: itemList[index].discount! >
-                                                                            0
-                                                                        ? Dimensions
-                                                                            .paddingSizeExtraSmall
-                                                                        : 0),
-                                                                itemList[index]
+                                                            SizedBox(
+                                                                width: itemList[index]
                                                                             .discount! >
                                                                         0
-                                                                    ? Flexible(
-                                                                        child:
-                                                                            Text(
-                                                                        PriceConverter.convertPrice(
-                                                                            itemController.getStartingPrice(itemList[index])),
-                                                                        style: robotoMedium
-                                                                            .copyWith(
-                                                                          fontSize:
-                                                                              Dimensions.fontSizeExtraSmall,
-                                                                          color:
-                                                                              Theme.of(context).disabledColor,
-                                                                          decoration:
-                                                                              TextDecoration.lineThrough,
-                                                                        ),
-                                                                        textDirection:
-                                                                            TextDirection.ltr,
-                                                                      ))
-                                                                    : const SizedBox(),
-                                                              ]),
-                                                        ),
-                                                        const Icon(Icons.add,
-                                                            size: 20),
-                                                      ]),
+                                                                    ? Dimensions
+                                                                        .paddingSizeExtraSmall
+                                                                    : 0),
+                                                            itemList[index]
+                                                                        .discount! >
+                                                                    0
+                                                                ? Text(
+                                                                    PriceConverter.convertPrice(
+                                                                        itemController
+                                                                            .getStartingPrice(itemList[index])),
+                                                                    style: robotoMedium
+                                                                        .copyWith(
+                                                                      fontSize:
+                                                                          Dimensions
+                                                                              .fontSizeExtraSmall,
+                                                                      color: Theme.of(
+                                                                              context)
+                                                                          .disabledColor,
+                                                                      decoration:
+                                                                          TextDecoration
+                                                                              .lineThrough,
+                                                                    ),
+                                                                    textDirection:
+                                                                        TextDirection
+                                                                            .ltr,
+                                                                  )
+                                                                : const SizedBox(),
+                                                          ]),
                                                     ]),
-                                              ),
-                                            ),
-                                          ]),
-                                    ),
-                                    Positioned(
-                                      right: Get.find<LocalizationController>()
-                                              .isLtr
-                                          ? 0
-                                          : null,
-                                      left: Get.find<LocalizationController>()
-                                              .isLtr
-                                          ? null
-                                          : 0,
-                                      child: CornerDiscountTag(
-                                        bannerPosition:
-                                            Get.find<LocalizationController>()
-                                                    .isLtr
-                                                ? CornerBannerPosition.topRight
-                                                : CornerBannerPosition.topLeft,
-                                        elevation: 0,
-                                        discount: itemController
-                                            .getDiscount(itemList[index]),
-                                        discountType: itemController
-                                            .getDiscountType(itemList[index]),
-                                      ),
-                                    ),
-                                  ],
+                                              ]),
+                                        ),
+                                      ]),
                                 ),
                               ),
                             );

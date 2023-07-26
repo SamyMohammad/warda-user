@@ -17,7 +17,8 @@ class OrderScreen extends StatefulWidget {
   OrderScreenState createState() => OrderScreenState();
 }
 
-class OrderScreenState extends State<OrderScreen> with TickerProviderStateMixin {
+class OrderScreenState extends State<OrderScreen>
+    with TickerProviderStateMixin {
   TabController? _tabController;
   bool _isLoggedIn = Get.find<AuthController>().isLoggedIn();
 
@@ -29,8 +30,8 @@ class OrderScreenState extends State<OrderScreen> with TickerProviderStateMixin 
     initCall();
   }
 
-  void initCall(){
-    if(Get.find<AuthController>().isLoggedIn()) {
+  void initCall() {
+    if (Get.find<AuthController>().isLoggedIn()) {
       Get.find<OrderController>().getRunningOrders(1);
       Get.find<OrderController>().getHistoryOrders(1);
     }
@@ -40,46 +41,51 @@ class OrderScreenState extends State<OrderScreen> with TickerProviderStateMixin 
   Widget build(BuildContext context) {
     _isLoggedIn = Get.find<AuthController>().isLoggedIn();
     return Scaffold(
-      appBar: CustomAppBar(title: 'my_orders'.tr, backButton: ResponsiveHelper.isDesktop(context)),
-      endDrawer: const MenuDrawer(),endDrawerEnableOpenDragGesture: false,
-      body: _isLoggedIn ? GetBuilder<OrderController>(
-        builder: (orderController) {
-          return Column(children: [
-
-            Center(
-              child: Container(
-                width: Dimensions.webMaxWidth,
-                color: Theme.of(context).cardColor,
-                child: TabBar(
-                  controller: _tabController,
-                  indicatorColor: Theme.of(context).primaryColor,
-                  indicatorWeight: 3,
-                  labelColor: Theme.of(context).primaryColor,
-                  unselectedLabelColor: Theme.of(context).disabledColor,
-                  unselectedLabelStyle: robotoRegular.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeSmall),
-                  labelStyle: robotoBold.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor),
-                  tabs: [
-                    Tab(text: 'running'.tr),
-                    Tab(text: 'history'.tr),
-                  ],
-                ),
-              ),
-            ),
-
-            Expanded(child: TabBarView(
-              controller: _tabController,
-              children: const [
-                OrderView(isRunning: true),
-                OrderView(isRunning: false),
-              ],
-            )),
-
-          ]);
-        },
-      ) : NotLoggedInScreen(callBack: (value){
-        initCall();
-        setState(() {});
-      }),
+      appBar: CustomAppBar(title: 'my_orders'.tr, backButton: true),
+      endDrawer: const MenuDrawer(),
+      endDrawerEnableOpenDragGesture: false,
+      body: _isLoggedIn
+          ? GetBuilder<OrderController>(
+              builder: (orderController) {
+                return Column(children: [
+                  Center(
+                    child: Container(
+                      width: Dimensions.webMaxWidth,
+                      color: Theme.of(context).cardColor,
+                      child: TabBar(
+                        controller: _tabController,
+                        indicatorColor: Theme.of(context).primaryColor,
+                        indicatorWeight: 3,
+                        labelColor: Theme.of(context).primaryColor,
+                        unselectedLabelColor: Theme.of(context).disabledColor,
+                        unselectedLabelStyle: robotoRegular.copyWith(
+                            color: Theme.of(context).disabledColor,
+                            fontSize: Dimensions.fontSizeSmall),
+                        labelStyle: robotoBold.copyWith(
+                            fontSize: Dimensions.fontSizeSmall,
+                            color: Theme.of(context).primaryColor),
+                        tabs: [
+                          Tab(text: 'running'.tr),
+                          Tab(text: 'history'.tr),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                      child: TabBarView(
+                    controller: _tabController,
+                    children: const [
+                      OrderView(isRunning: true),
+                      OrderView(isRunning: false),
+                    ],
+                  )),
+                ]);
+              },
+            )
+          : NotLoggedInScreen(callBack: (value) {
+              initCall();
+              setState(() {});
+            }),
     );
   }
 }

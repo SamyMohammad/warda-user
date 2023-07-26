@@ -53,6 +53,7 @@ class Images {
   static const String noInternet = 'assets/image/no_internet.png';
   static const String google = 'assets/image/google.png';
   static const String googleColor = 'assets/image/google_color.png';
+  static const String facebookColor = 'assets/image/facebook_color.png';
   static const String facebook = 'assets/image/facebook.png';
   static const String restaurantJoin = 'assets/image/restaurant_join.png';
   static const String deliveryManJoin = 'assets/image/delivery_man_join.png';
@@ -225,4 +226,17 @@ class Images {
   static const String phoneOrderDetails =
       'assets/image/phone_order_details.png';
   static const String pendingFoodOrderDetails = 'assets/image/pending_food.gif';
+
+  //nav bar
+  static const String homeColor = 'assets/image/home_color.png';
+  static const String categoriesColor = 'assets/image/categories_color.png';
+  static const String couponColor = 'assets/image/coupon_color.png';
+  static const String profileColor = 'assets/image/profile_color.png';
+  static const String cartColor = 'assets/image/cart_color.png';
+
+  static const String homeBlack = 'assets/image/home_black.png';
+  static const String categoriesBlack = 'assets/image/categories_black.png';
+  static const String couponBlack = 'assets/image/coupon_black.png';
+  static const String profileBlack = 'assets/image/profile_black.png';
+  static const String cartBlack = 'assets/image/cart_black.png';
 }

@@ -1,4 +1,5 @@
 import 'package:warda/helper/responsive_helper.dart';
+import 'package:warda/util/app_constants.dart';
 import 'package:warda/util/dimensions.dart';
 import 'package:warda/util/styles.dart';
 import 'package:flutter/material.dart';
@@ -7,22 +8,31 @@ import 'package:get/utils.dart';
 class TitleWidget extends StatelessWidget {
   final String title;
   final Function? onTap;
-  const TitleWidget({Key? key, required this.title, this.onTap}) : super(key: key);
+  const TitleWidget({Key? key, required this.title, this.onTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      Text(title, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge)),
-      (onTap != null && !ResponsiveHelper.isDesktop(context)) ? InkWell(
-        onTap: onTap as void Function()?,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 5, 0, 5),
-          child: Text(
-            'view_all'.tr,
-            style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor),
-          ),
-        ),
-      ) : const SizedBox(),
+      Text(title,
+          style: robotoRegular.copyWith(
+              fontSize: Dimensions.fontSizeLarge,
+              color: AppConstants.primaryColor,
+              fontWeight: FontWeight.w300)),
+      (onTap != null && !ResponsiveHelper.isDesktop(context))
+          ? InkWell(
+              onTap: onTap as void Function()?,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(10, 5, 0, 5),
+                child: Text(
+                  'view_all'.tr,
+                  style: robotoMedium.copyWith(
+                      fontSize: Dimensions.fontSizeSmall,
+                      color: Colors.green.shade800),
+                ),
+              ),
+            )
+          : const SizedBox(),
     ]);
   }
 }
