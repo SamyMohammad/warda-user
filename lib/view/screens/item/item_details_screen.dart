@@ -8,6 +8,7 @@ import 'package:warda/data/model/response/item_model.dart';
 import 'package:warda/helper/price_converter.dart';
 import 'package:warda/helper/responsive_helper.dart';
 import 'package:warda/helper/route_helper.dart';
+import 'package:warda/util/app_constants.dart';
 import 'package:warda/util/dimensions.dart';
 import 'package:warda/util/images.dart';
 import 'package:warda/util/styles.dart';
@@ -24,6 +25,7 @@ import 'package:warda/view/screens/item/widget/item_title_view.dart';
 
 import '../../../controller/auth_controller.dart';
 import '../../../controller/wishlist_controller.dart';
+import '../../base/cart_widget.dart';
 
 class ItemDetailsScreen extends StatefulWidget {
   final Item? item;
@@ -151,41 +153,48 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
             preferredSize: Size(context.width, context.height * 0.10),
             child: ResponsiveHelper.isDesktop(context)
                 ? const CustomAppBar(title: '')
-                : CustomAppBar(
-                    title: '',
-                    showLogo: true,
-                    actions: [
-                        GetBuilder<WishListController>(
-                            builder: (wishController) {
-                          return InkWell(
-                            onTap: () {
-                              if (isLoggedIn) {
-                                if (wishController.wishItemIdList
-                                    .contains(itemController.item!.id)) {
-                                  wishController.removeFromWishList(
-                                      itemController.item!.id, false);
-                                } else {
-                                  wishController.addToWishList(
-                                      itemController.item, null, false);
-                                }
-                              } else {
-                                showCustomSnackBar('you_are_not_logged_in'.tr);
-                              }
-                            },
-                            child: Icon(
-                              wishController.wishItemIdList
-                                      .contains(itemController.item!.id)
-                                  ? Icons.favorite
-                                  : Icons.favorite_border,
-                              size: 25,
-                              color: wishController.wishItemIdList
-                                      .contains(itemController.item!.id)
-                                  ? Theme.of(context).primaryColor
-                                  : Theme.of(context).disabledColor,
-                            ),
-                          );
-                        }),
-                      ]),
+                : CustomAppBar(title: '', showLogo: true, actions: [
+                    GetBuilder<WishListController>(builder: (wishController) {
+                      return InkWell(
+                        onTap: () {
+                          if (isLoggedIn) {
+                            if (wishController.wishItemIdList
+                                .contains(itemController.item!.id)) {
+                              wishController.removeFromWishList(
+                                  itemController.item!.id, false);
+                            } else {
+                              wishController.addToWishList(
+                                  itemController.item, null, false);
+                            }
+                          } else {
+                            showCustomSnackBar('you_are_not_logged_in'.tr);
+                          }
+                        },
+                        child: Icon(
+                          wishController.wishItemIdList
+                                  .contains(itemController.item!.id)
+                              ? Icons.favorite
+                              : Icons.favorite_border,
+                          size: 25,
+                          color: wishController.wishItemIdList
+                                  .contains(itemController.item!.id)
+                              ? Theme.of(context).primaryColor
+                              : Theme.of(context).disabledColor,
+                        ),
+                      );
+                    }),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    InkWell(
+                      onTap: () => Get.toNamed(RouteHelper.getCartRoute()),
+                      child: CartWidget(
+                          color: AppConstants.primaryColor, size: 25),
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                  ]),
           ),
           body: (itemController.item != null)
               ? ResponsiveHelper.isDesktop(context)
@@ -568,52 +577,53 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                               cartList: [cartModel],
                                             ));
                                       } else {
-                                        if (Get.find<CartController>()
-                                            .existAnotherStoreItem(
-                                                cartModel!.item!.storeId,
-                                                Get.find<SplashController>()
-                                                            .module ==
-                                                        null
-                                                    ? Get.find<
-                                                            SplashController>()
-                                                        .cacheModule!
-                                                        .id
-                                                    : Get.find<
-                                                            SplashController>()
-                                                        .module!
-                                                        .id)) {
-                                          Get.dialog(
-                                              ConfirmationDialog(
-                                                icon: Images.warning,
-                                                title:
-                                                    'are_you_sure_to_reset'.tr,
-                                                description: Get.find<
-                                                            SplashController>()
-                                                        .configModel!
-                                                        .moduleConfig!
-                                                        .module!
-                                                        .showRestaurantText!
-                                                    ? 'if_you_continue'.tr
-                                                    : 'if_you_continue_without_another_store'
-                                                        .tr,
-                                                onYesPressed: () {
-                                                  Get.back();
-                                                  Get.find<CartController>()
-                                                      .removeAllAndAddToCart(
-                                                          cartModel!);
-                                                  showCartSnackBar();
-                                                },
-                                              ),
-                                              barrierDismissible: false);
-                                        } else {
-                                          if (itemController.cartIndex == -1) {
-                                            Get.find<CartController>()
-                                                .addToCart(cartModel,
-                                                    itemController.cartIndex);
-                                          }
-                                          _key.currentState!.shake();
-                                          showCartSnackBar();
+                                        // if (Get.find<CartController>()
+                                        //     .existAnotherStoreItem(
+                                        //         cartModel!.item!.storeId,
+                                        //         Get.find<SplashController>()
+                                        //                     .module ==
+                                        //                 null
+                                        //             ? Get.find<
+                                        //                     SplashController>()
+                                        //                 .cacheModule!
+                                        //                 .id
+                                        //             : Get.find<
+                                        //                     SplashController>()
+                                        //                 .module!
+                                        //                 .id)) {
+                                        //   Get.dialog(
+                                        //       ConfirmationDialog(
+                                        //         icon: Images.warning,
+                                        //         title:
+                                        //             'are_you_sure_to_reset'.tr,
+                                        //         description: Get.find<
+                                        //                     SplashController>()
+                                        //                 .configModel!
+                                        //                 .moduleConfig!
+                                        //                 .module!
+                                        //                 .showRestaurantText!
+                                        //             ? 'if_you_continue'.tr
+                                        //             : 'if_you_continue_without_another_store'
+                                        //                 .tr,
+                                        //         onYesPressed: () {
+                                        //           Get.back();
+                                        //           Get.find<CartController>()
+                                        //               .removeAllAndAddToCart(
+                                        //                   cartModel!);
+                                        //           showCartSnackBar();
+                                        //         },
+                                        //       ),
+                                        //       barrierDismissible: false);
+                                        // }
+                                        //  else {
+                                        if (itemController.cartIndex == -1) {
+                                          Get.find<CartController>().addToCart(
+                                              cartModel!,
+                                              itemController.cartIndex);
                                         }
+                                        _key.currentState!.shake();
+                                        showCartSnackBar();
+                                        // }
                                       }
                                     }
                                   }

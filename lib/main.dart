@@ -28,6 +28,7 @@ import 'package:warda/view/screens/location/cubit/location_cubit.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'data/api/api_client.dart';
 import 'helper/get_di.dart' as di;
+import 'view/screens/cart/cubit/cart_cubit.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -118,9 +119,10 @@ class _MyAppState extends State<MyApp> {
     return bloc.MultiBlocProvider(
         providers: [
           bloc.BlocProvider(
-            create: (context) =>
-                LocationCubit(apiClient: Get.find<ApiClient>())..getCountryData(),
+            create: (context) => LocationCubit(apiClient: Get.find<ApiClient>())
+              ..getCountryData(),
           ),
+          bloc.BlocProvider(create: (context) => CartCubit()),
         ],
         child: GetBuilder<ThemeController>(builder: (themeController) {
           return GetBuilder<LocalizationController>(

@@ -60,14 +60,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                   fit: BoxFit.fitHeight,
                                 )
                               : SizedBox(),
-                          showCart
-                              ? IconButton(
-                                  onPressed: () =>
-                                      Get.toNamed(RouteHelper.getCartRoute()),
-                                  icon: CartWidget(
-                                      color: foregroundColor, size: 25),
-                                )
-                              : const SizedBox(),
+                          
                           onVegFilterTap != null
                               ? VegFilterWidget(
                                   type: type,

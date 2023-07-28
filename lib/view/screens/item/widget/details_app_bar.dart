@@ -52,7 +52,8 @@ class DetailsAppBarState extends State<DetailsAppBar> with SingleTickerProviderS
         style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).textTheme.bodyLarge!.color),
       ),
       centerTitle: true,
-      actions: [AnimatedBuilder(
+      actions: [
+        AnimatedBuilder(
         animation: offsetAnimation,
         builder: (buildContext, child) {
           return Container(

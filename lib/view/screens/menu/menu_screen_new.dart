@@ -53,22 +53,45 @@ class _MenuScreenNewState extends State<MenuScreenNew> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
-                            shape: BoxShape.circle,
-                          ),
-                          padding: const EdgeInsets.all(1),
-                          child: ClipOval(
-                              child: CustomImage(
-                            placeholder: Images.guestIconLight,
-                            image:
-                                '${Get.find<SplashController>().configModel!.baseUrls!.customerImageUrl}'
-                                '/${(userController.userInfoModel != null && isLoggedIn) ? userController.userInfoModel!.image : ''}',
-                            height: 100,
-                            width: 100,
-                            fit: BoxFit.cover,
-                          )),
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).primaryColor,
+                                shape: BoxShape.circle,
+                              ),
+                              padding: const EdgeInsets.all(1),
+                              child: ClipOval(
+                                  child: CustomImage(
+                                placeholder: Images.guestIconLight,
+                                image:
+                                    '${Get.find<SplashController>().configModel!.baseUrls!.customerImageUrl}'
+                                    '/${(userController.userInfoModel != null && isLoggedIn) ? userController.userInfoModel!.image : ''}',
+                                height: 100,
+                                width: 100,
+                                fit: BoxFit.cover,
+                              )),
+                            ),
+                            Positioned(
+                                bottom: 5,
+                                right: 5,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Get.toNamed(
+                                        RouteHelper.getUpdateProfileRoute());
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.white70,
+                                        shape: BoxShape.circle),
+                                    padding: EdgeInsets.all(2),
+                                    child: Icon(
+                                      Icons.edit_note_outlined,
+                                    ),
+                                  ),
+                                ))
+                          ],
                         ),
                         const SizedBox(width: Dimensions.paddingSizeDefault),
                         Column(children: [
@@ -224,12 +247,12 @@ class _MenuScreenNewState extends State<MenuScreenNew> {
             ),
 
             Positioned(
-              bottom: 0,
-              right: -50,
+                bottom: 0,
+                right: -50,
                 child: Image.asset(
-              Images.logoWhite,
-              color: Colors.white.withOpacity(0.2),
-            ))
+                  Images.logoWhite,
+                  color: Colors.white.withOpacity(0.1),
+                ))
 
             // Expanded(
             //     child: SingleChildScrollView(

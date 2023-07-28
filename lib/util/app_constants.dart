@@ -8,6 +8,8 @@ class AppConstants {
   static const double appVersion = 1.0;
 
   static const Color primaryColor = Color(0xFFBA264A);
+  static const Color greenColor = Color(0xFF08756B);
+
   static const String fontFamily = "Philosopher";
   static const String fontFamilyCommon = "Poppins" ; //Roboto
 

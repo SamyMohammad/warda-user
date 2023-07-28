@@ -201,7 +201,6 @@ class ItemWidget extends StatelessWidget {
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
-                                    favWidget(context, desktop)
                                   ],
                                 ),
                                 const SizedBox(
@@ -282,47 +281,61 @@ class ItemWidget extends StatelessWidget {
                                 )
                               : const SizedBox(),
                           isStore
-                              ? RatingBar(
-                                  rating: isStore
-                                      ? store!.avgRating
-                                      : item!.avgRating,
-                                  size: desktop ? 15 : 12,
-                                  ratingCount: isStore
-                                      ? store!.ratingCount
-                                      : item!.ratingCount,
-                                )
-                              : Row(children: [
-                                  Text(
-                                    PriceConverter.convertPrice(item!.price,
-                                        discount: discount,
-                                        discountType: discountType),
-                                    style: robotoMedium.copyWith(
-                                        fontSize: Dimensions.fontSizeExtraLarge,
-                                        fontWeight: FontWeight.w400,
-                                        color: AppConstants.primaryColor),
-                                    textDirection: TextDirection.ltr,
-                                  ),
-                                  SizedBox(
-                                      width: discount! > 0
-                                          ? Dimensions.paddingSizeExtraSmall
-                                          : 0),
-                                  discount > 0
-                                      ? Text(
-                                          PriceConverter.convertPrice(
-                                              item!.price),
-                                          style: robotoMedium.copyWith(
-                                            fontSize:
-                                                Dimensions.fontSizeDefault,
-                                            fontWeight: FontWeight.w400,
-                                            color:
-                                                Theme.of(context).disabledColor,
-                                            decoration:
-                                                TextDecoration.lineThrough,
+                              ? SizedBox()
+                              // RatingBar(
+                              //     rating: isStore
+                              //         ? store!.avgRating
+                              //         : item!.avgRating,
+                              //     size: desktop ? 15 : 12,
+                              //     ratingCount: isStore
+                              //         ? store!.ratingCount
+                              //         : item!.ratingCount,
+                              //   )
+                              : Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            PriceConverter.convertPrice(
+                                                item!.price,
+                                                discount: discount,
+                                                discountType: discountType),
+                                            style: robotoMedium.copyWith(
+                                                fontSize: Dimensions
+                                                    .fontSizeExtraLarge,
+                                                fontWeight: FontWeight.w400,
+                                                color:
+                                                    AppConstants.primaryColor),
+                                            textDirection: TextDirection.ltr,
                                           ),
-                                          textDirection: TextDirection.ltr,
-                                        )
-                                      : const SizedBox(),
-                                ]),
+                                          SizedBox(
+                                              width: discount! > 0
+                                                  ? Dimensions
+                                                      .paddingSizeExtraSmall
+                                                  : 0),
+                                          discount > 0
+                                              ? Text(
+                                                  PriceConverter.convertPrice(
+                                                      item!.price),
+                                                  style: robotoMedium.copyWith(
+                                                    fontSize: Dimensions
+                                                        .fontSizeDefault,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Theme.of(context)
+                                                        .disabledColor,
+                                                    decoration: TextDecoration
+                                                        .lineThrough,
+                                                  ),
+                                                  textDirection:
+                                                      TextDirection.ltr,
+                                                )
+                                              : const SizedBox(),
+                                        ],
+                                      ),
+                                      favWidget(context, desktop)
+                                    ]),
                         ]),
                   ),
                 ]),

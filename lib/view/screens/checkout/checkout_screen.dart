@@ -82,11 +82,11 @@ class CheckoutScreenState extends State<CheckoutScreen> {
   double? _taxPercent = 0;
   bool? _isCashOnDeliveryActive = false;
   bool? _isDigitalPaymentActive = false;
+  bool firstTime = true;
   List<CartModel?>? _cartList;
   late bool _isWalletActive;
 
   List<AddressModel> address = [];
-  bool firstTime = true;
   final tooltipController1 = JustTheController();
   final tooltipController2 = JustTheController();
   final tooltipController3 = JustTheController();
@@ -283,6 +283,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                       storeController.store!.open);
                   _taxPercent = storeController.store!.tax;
                 }
+                
                 return GetBuilder<CouponController>(
                     builder: (couponController) {
                   return GetBuilder<OrderController>(

@@ -101,7 +101,7 @@ class CategoryView extends StatelessWidget {
                                                       : 0),
                                               child: Text(
                                                 categoryController
-                                                    .categoryList![index].name!,
+                                                    .categoryList?[index].name??'',
                                                 style: robotoRegular.copyWith(
                                                     fontSize: 12,
                                                     fontFamily: 'Poppins',

@@ -1,5 +1,7 @@
+import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:warda/controller/cart_controller.dart';
 import 'package:warda/controller/coupon_controller.dart';
 import 'package:warda/controller/splash_controller.dart';
@@ -21,11 +23,19 @@ import 'package:warda/view/base/item_widget.dart';
 import 'package:warda/view/base/menu_drawer.dart';
 import 'package:warda/view/base/no_data_screen.dart';
 import 'package:warda/view/base/web_constrained_box.dart';
+import 'package:warda/view/screens/cart/widget/cart_checkout_widget.dart';
+import 'package:warda/view/screens/cart/widget/cart_delivery_time_widget.dart';
 import 'package:warda/view/screens/cart/widget/cart_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:warda/view/screens/cart/widget/cart_items_list_widget.dart';
+import 'package:warda/view/screens/cart/widget/cart_message_widget.dart';
+import 'package:warda/view/screens/cart/widget/cart_recipient_details_widget.dart';
+import 'package:warda/view/screens/cart/widget/suggested_item_widget.dart';
 import 'package:warda/view/screens/store/store_screen.dart';
 
+import '../../../util/app_constants.dart';
+import 'cubit/cart_cubit.dart';
 import 'widget/not_available_bottom_sheet.dart';
 
 class CartScreen extends StatefulWidget {
@@ -37,7 +47,6 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  final ScrollController scrollController = ScrollController();
   @override
   void initState() {
     super.initState();
@@ -69,170 +78,143 @@ class _CartScreenState extends State<CartScreen> {
       body: GetBuilder<CartController>(
         builder: (cartController) {
           return cartController.cartList.isNotEmpty
-              ? Column(
-                  children: [
-                    Expanded(
-                      child: Scrollbar(
-                        child: SingleChildScrollView(
-                          controller: scrollController,
-                          padding: ResponsiveHelper.isDesktop(context)
-                              ? const EdgeInsets.only(
-                                  top: Dimensions.paddingSizeSmall,
-                                )
-                              : EdgeInsets.zero,
-                          physics: const BouncingScrollPhysics(),
-                          child: FooterView(
-                            child: SizedBox(
-                              width: Dimensions.webMaxWidth,
-                              child: Column(children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Expanded(
-                                      flex: 6,
-                                      child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            // Product
-                                            WebConstrainedBox(
-                                              dataLength: cartController
-                                                  .cartList.length,
-                                              minLength: 5,
-                                              minHeight: 0.6,
-                                              child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    ListView.builder(
-                                                      physics:
-                                                          const NeverScrollableScrollPhysics(),
-                                                      shrinkWrap: true,
-                                                      itemCount: cartController
-                                                          .cartList.length,
-                                                      padding: const EdgeInsets
-                                                              .all(
-                                                          Dimensions
-                                                              .paddingSizeDefault),
-                                                      itemBuilder:
-                                                          (context, index) {
-                                                        return CartItemWidget(
-                                                            cart: cartController
-                                                                    .cartList[
-                                                                index],
-                                                            cartIndex: index,
-                                                            addOns: cartController
-                                                                    .addOnsList[
-                                                                index],
-                                                            isAvailable:
-                                                                cartController
-                                                                        .availableList[
-                                                                    index]);
-                                                      },
-                                                    ),
-                                                    const Divider(
-                                                        thickness: 0.5,
-                                                        height: 5),
-                                                    Padding(
-                                                      padding: const EdgeInsets
-                                                              .only(
-                                                          left: Dimensions
-                                                              .paddingSizeExtraSmall),
-                                                      child: TextButton.icon(
-                                                        onPressed: () {
-                                                          cartController
-                                                              .forcefullySetModule(
-                                                                  cartController
-                                                                      .cartList[
-                                                                          0]
-                                                                      .item!
-                                                                      .moduleId!);
-                                                          Get.toNamed(
-                                                            RouteHelper
-                                                                .getStoreRoute(
-                                                                    cartController
-                                                                        .cartList[
-                                                                            0]
-                                                                        .item!
-                                                                        .storeId,
-                                                                    'item'),
-                                                            arguments: StoreScreen(
-                                                                store: Store(
-                                                                    id: cartController
-                                                                        .cartList[
-                                                                            0]
-                                                                        .item!
-                                                                        .storeId),
-                                                                fromModule:
-                                                                    false),
-                                                          );
-                                                        },
-                                                        icon: Icon(
-                                                            Icons
-                                                                .add_circle_outline_sharp,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .primaryColor),
-                                                        label: Text(
-                                                            'add_more_items'.tr,
-                                                            style: robotoMedium.copyWith(
-                                                                color: Theme.of(
-                                                                        context)
-                                                                    .primaryColor,
-                                                                fontSize: Dimensions
-                                                                    .fontSizeDefault)),
-                                                      ),
-                                                    ),
-                                                    !ResponsiveHelper.isDesktop(
-                                                            context)
-                                                        ? suggestedItemView(
-                                                            cartController
-                                                                .cartList)
-                                                        : const SizedBox(),
-                                                  ]),
-                                            ),
-                                            const SizedBox(
-                                                height: Dimensions
-                                                    .paddingSizeSmall),
-
-                                            !ResponsiveHelper.isDesktop(context)
-                                                ? pricingView(
-                                                    cartController,
-                                                    cartController
-                                                        .cartList[0].item!)
-                                                : const SizedBox(),
-                                          ]),
-                                    ),
-                                    ResponsiveHelper.isDesktop(context)
-                                        ? Expanded(
-                                            flex: 4,
-                                            child: pricingView(
-                                                cartController,
-                                                cartController
-                                                    .cartList[0].item!))
-                                        : const SizedBox(),
-                                  ],
-                                ),
-                                ResponsiveHelper.isDesktop(context)
-                                    ? suggestedItemView(cartController.cartList)
-                                    : const SizedBox(),
-                              ]),
-                            ),
-                          ),
+              ? BlocBuilder<CartCubit, CartState>(
+                  builder: (context, state) {
+                    var cubit = BlocProvider.of<CartCubit>(context);
+                    return Column(
+                      children: [
+                        SizedBox(
+                          child: cartHeader(cartController, cubit),
                         ),
-                      ),
-                    ),
-                    ResponsiveHelper.isDesktop(context)
-                        ? const SizedBox.shrink()
-                        : CheckoutButton(
-                            cartController: cartController,
-                            availableList: cartController.availableList),
-                  ],
+                        Expanded(
+                          child: SizedBox(
+                              child: SingleChildScrollView(
+                                  child: SizedBox(
+                                      child:
+                                          cartBody(cubit.activeStep, cubit)))),
+                        )
+                      ],
+                    );
+                  },
                 )
               : const NoDataScreen(isCart: true, text: '', showFooter: true);
         },
       ),
     );
+  }
+
+  Widget cartHeader(CartController cartController, CartCubit cubit) {
+    return Container(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 9,
+            child: Container(
+              width: context.width * 0.4,
+              child: EasyStepper(
+                activeStep: cubit.activeStep,
+                lineLength: 30,
+                fitWidth: true,
+                stepShape: StepShape.circle,
+                lineType: LineType.normal,
+                internalPadding: 15,
+                borderThickness: 1,
+                unreachedLineColor: AppConstants.primaryColor.withOpacity(0.2),
+                defaultStepBorderType: BorderType.normal,
+                activeStepBorderType: BorderType.normal,
+                finishedStepBorderType: BorderType.normal,
+                unreachedStepBackgroundColor:
+                    AppConstants.primaryColor.withOpacity(0.1),
+                unreachedStepBorderColor:
+                    AppConstants.primaryColor.withOpacity(0.1),
+                unreachedStepBorderType: BorderType.dotted,
+                unreachedStepIconColor:
+                    AppConstants.primaryColor.withOpacity(0.1),
+                unreachedStepTextColor:
+                    AppConstants.primaryColor.withOpacity(0.1),
+                activeStepBackgroundColor: AppConstants.primaryColor,
+                finishedStepBorderColor: AppConstants.primaryColor,
+                finishedStepTextColor:
+                    AppConstants.primaryColor.withOpacity(0.4),
+                finishedStepBackgroundColor: AppConstants.primaryColor,
+                activeStepIconColor: AppConstants.primaryColor,
+                showLoadingAnimation: false,
+                activeStepTextColor: AppConstants.primaryColor,
+                steps: [
+                  EasyStep(
+                      customStep: ClipRRect(
+                        child: Opacity(
+                          opacity: cubit.activeStep >= 0 ? 1 : 0.3,
+                          child: Image.asset(
+                            Images.cartBlack,
+                            color: Colors.white,
+                            width: 30,
+                            height: 30,
+                          ),
+                        ),
+                      ),
+                      title: 'cart'.tr),
+                  EasyStep(
+                    customStep: ClipRRect(
+                      child: Opacity(
+                        opacity: cubit.activeStep >= 0 ? 1 : 0.5,
+                        child: Icon(Icons.mail_outline_outlined,
+                            color: Colors.white, size: 30),
+                      ),
+                    ),
+                    title: 'card_message'.tr,
+                  ),
+                  EasyStep(
+                    customStep: ClipRRect(
+                      child: Opacity(
+                        opacity: cubit.activeStep >= 0 ? 1 : 0.5,
+                        child: Icon(Icons.place_outlined,
+                            color: Colors.white, size: 30),
+                      ),
+                    ),
+                    title: 'recipient_details'.tr,
+                  ),
+                  EasyStep(
+                      customStep: ClipRRect(
+                        child: Opacity(
+                          opacity: cubit.activeStep >= 0 ? 1 : 0.5,
+                          child: Icon(Icons.av_timer_outlined,
+                              color: Colors.white, size: 30),
+                        ),
+                      ),
+                      title: 'delivery_time'.tr),
+                  EasyStep(
+                    customStep: ClipRRect(
+                      child: Opacity(
+                        opacity: cubit.activeStep >= 0 ? 1 : 0.5,
+                        child: Icon(Icons.payment_outlined,
+                            color: Colors.white, size: 30),
+                      ),
+                    ),
+                    title: 'checkout'.tr,
+                  ),
+                ],
+                onStepReached: (index) {
+                  cubit.changeActiveStep(index);
+                },
+              ),
+            ),
+          ),
+          // ResponsiveHelper.isDesktop(context)
+          //     ? Expanded(
+          //         flex: 4,
+          //         child: pricingView(
+          //             cartController, cartController.cartList[0].item!))
+          //     : const SizedBox(),
+        ],
+      ),
+    );
+  }
+
+  Widget cartBody(int currentStep, CartCubit cubit) {
+    return SizedBox(
+        width: context.width * 0.9, child: cubit.cartBodyList[currentStep]);
   }
 
   Widget pricingView(CartController cartController, Item item) {
@@ -414,92 +396,6 @@ class _CartScreenState extends State<CartScreen> {
               : const SizedBox.shrink(),
         ]);
       }),
-    );
-  }
-
-  Widget suggestedItemView(List<CartModel> cartList) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        // boxShadow: [BoxShadow(color: Theme.of(context).primaryColor.withOpacity(0.1), blurRadius: 10)]
-      ),
-      width: double.infinity,
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        GetBuilder<StoreController>(builder: (storeController) {
-          List<Item>? suggestedItems;
-          if (storeController.cartSuggestItemModel != null) {
-            suggestedItems = [];
-            List<int> cartIds = [];
-            for (CartModel cartItem in cartList) {
-              cartIds.add(cartItem.item!.id!);
-            }
-            for (Item item in storeController.cartSuggestItemModel!.items!) {
-              if (cartIds.contains(item.id)) {
-                if (kDebugMode) {
-                  print(
-                      'it will not added -> ${storeController.cartSuggestItemModel!.items!.indexOf(item)}');
-                }
-              } else {
-                suggestedItems.add(item);
-              }
-            }
-          }
-          return storeController.cartSuggestItemModel != null &&
-                  suggestedItems!.isNotEmpty
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: Dimensions.paddingSizeSmall),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: Dimensions.paddingSizeDefault,
-                          vertical: Dimensions.paddingSizeExtraSmall),
-                      child: Text('you_may_also_like'.tr,
-                          style: robotoMedium.copyWith(
-                              fontSize: Dimensions.fontSizeDefault)),
-                    ),
-                    SizedBox(
-                      height: ResponsiveHelper.isDesktop(context) ? 150 : 125,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: suggestedItems.length,
-                        physics: const BouncingScrollPhysics(),
-                        padding: const EdgeInsets.only(
-                            left: Dimensions.paddingSizeDefault),
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: ResponsiveHelper.isDesktop(context)
-                                ? const EdgeInsets.symmetric(vertical: 20)
-                                : const EdgeInsets.symmetric(vertical: 10),
-                            child: Container(
-                              width: ResponsiveHelper.isDesktop(context)
-                                  ? 500
-                                  : 300,
-                              padding: const EdgeInsets.only(
-                                  right: Dimensions.paddingSizeSmall,
-                                  left: Dimensions.paddingSizeExtraSmall),
-                              margin: const EdgeInsets.only(
-                                  right: Dimensions.paddingSizeSmall),
-                              child: ItemWidget(
-                                isStore: false,
-                                item: suggestedItems![index],
-                                fromCartSuggestion: true,
-                                store: null,
-                                index: index,
-                                length: null,
-                                isCampaign: false,
-                                inStore: true,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                )
-              : const SizedBox();
-        }),
-      ]),
     );
   }
 }

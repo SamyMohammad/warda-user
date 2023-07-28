@@ -44,8 +44,8 @@ class CustomButton extends StatelessWidget {
           height != null ? height! : 50),
       padding: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(radius),
-      ),
+          borderRadius: BorderRadius.circular(radius),
+          side: BorderSide(color: textColor ?? Theme.of(context).primaryColor)),
     );
 
     return Center(

@@ -140,8 +140,8 @@ class AuthRepo {
   Future<bool> saveUserToken(String token, {bool alreadyInApp = false}) async {
     apiClient.token = token;
     if (alreadyInApp) {
-      AddressModel? addressModel = AddressModel.fromJson(
-          jsonDecode(sharedPreferences.getString(AppConstants.userAddress)!));
+      AddressModel? addressModel = AddressModel.fromJson(jsonDecode(
+          sharedPreferences.getString(AppConstants.userAddress) ?? ''));
       apiClient.updateHeader(
         token,
         addressModel.zoneIds,

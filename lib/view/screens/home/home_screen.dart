@@ -49,7 +49,7 @@ class HomeScreen extends StatefulWidget {
       Get.find<BannerController>().getBannerList(reload);
       //Get.find<LocationController>().syncZoneData();
       Get.find<CategoryController>().getCategoryList(reload);
-      Get.find<StoreController>().getPopularStoreList(reload, 'all', false);
+      //Get.find<StoreController>().getPopularStoreList(reload, 'all', false);
       // Get.find<CampaignController>().getItemCampaignList(reload);
       // Get.find<StoreController>().getLatestStoreList(reload, 'all', false);
       // Get.find<ItemController>().getReviewedItemList(reload, 'all', false);
@@ -135,8 +135,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       //await Get.find<LocationController>().syncZoneData();
                       await Get.find<CategoryController>()
                           .getCategoryList(true);
-                      await Get.find<StoreController>()
-                          .getPopularStoreList(true, 'all', false);
+                      // await Get.find<StoreController>()
+                      //     .getPopularStoreList(true, 'all', false);
                       // await Get.find<CampaignController>()
                       //     .getItemCampaignList(true);
                       await Get.find<ItemController>()
@@ -449,12 +449,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                             children: const [
                                                 BannerView(isFeatured: false),
                                                 CategoryView(),
-                                                const PopularStoreView(
-                                                    isPopular: true,
-                                                    isFeatured: false),
+                                                // const PopularStoreView(
+                                                //     isPopular: true,
+                                                //     isFeatured: false),
                                                 //const ItemCampaignView(),
-                                                // PopularItemView(
-                                                //     isPopular: true),
+                                                PopularItemView(
+                                                    isPopular: true),
                                                 // const PopularStoreView(
                                                 //     isPopular: false,
                                                 //     isFeatured: false),
