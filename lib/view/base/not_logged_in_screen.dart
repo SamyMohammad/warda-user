@@ -46,7 +46,7 @@ class NotLoggedInScreen extends StatelessWidget {
               child: CustomButton(buttonText: 'login'.tr, height: 40, onPressed: () async {
 
                 if(!ResponsiveHelper.isDesktop(context)) {
-                  await Get.toNamed(RouteHelper.getSignInRoute(Get.currentRoute));
+                  await Get.toNamed(RouteHelper.getAuthOnBoardingRoute(Get.currentRoute));
                 }else{
                   Get.dialog(const SignInScreen(exitFromApp: false, backFromThis: true)).then((value) => callBack(true));
                 }

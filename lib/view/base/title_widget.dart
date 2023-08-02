@@ -16,7 +16,7 @@ class TitleWidget extends StatelessWidget {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       Text(title,
           style: robotoRegular.copyWith(
-              fontSize: Dimensions.fontSizeLarge,
+              fontSize: Dimensions.fontSizeDefault,
               color: AppConstants.primaryColor,
               fontWeight: FontWeight.w300)),
       (onTap != null && !ResponsiveHelper.isDesktop(context))
@@ -27,7 +27,7 @@ class TitleWidget extends StatelessWidget {
                 child: Text(
                   'view_all'.tr,
                   style: robotoMedium.copyWith(
-                      fontSize: Dimensions.fontSizeSmall,
+                      fontSize: Dimensions.fontSizeExtraSmall,
                       color: Colors.green.shade800),
                 ),
               ),

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:warda/controller/location_controller.dart';
@@ -23,6 +25,9 @@ import 'package:warda/view/base/custom_snackbar.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:warda/data/model/response/payment_methods_model_dart';
+
+import '../data/model/response/questions_model.dart';
 
 class OrderController extends GetxController implements GetxService {
   final OrderRepo orderRepo;
@@ -57,6 +62,9 @@ class OrderController extends GetxController implements GetxService {
   double? _extraCharge;
   String? _cancelReason;
   List<CancellationData>? _orderCancelReasons;
+  List<PaymentMethod>? _paymentsMethod;
+  List<Question>? _questionsList;
+  String? _generatedMessage;
   bool _isDmTipSave = false;
   String _preferableTime = '';
   int _selectedInstruction = -1;
@@ -72,6 +80,10 @@ class OrderController extends GetxController implements GetxService {
   bool get showCancelled => _showCancelled;
   String? get orderType => _orderType;
   List<TimeSlotModel>? get timeSlots => _timeSlots;
+  List<PaymentMethod>? get paymentMethodList => _paymentsMethod;
+  List<Question>? get questionsList => _questionsList;
+  String? get generatedMessage => _generatedMessage;
+
   List<TimeSlotModel>? get allTimeSlots => _allTimeSlots;
   int get selectedDateSlot => _selectedDateSlot;
   int get selectedTimeSlot => _selectedTimeSlot;
@@ -96,46 +108,85 @@ class OrderController extends GetxController implements GetxService {
   bool get isExpanded => _isExpanded;
   bool get canShowTipsField => _canShowTipsField;
 
-  void showTipsField(){
+  void showTipsField() {
     _canShowTipsField = !_canShowTipsField;
     update();
   }
 
-  void setInstruction(int index){
-    if(_selectedInstruction == index){
+  void setInstruction(int index) {
+    if (_selectedInstruction == index) {
       _selectedInstruction = -1;
-    }else {
+    } else {
       _selectedInstruction = index;
     }
     update();
   }
 
-  void expandedUpdate(bool status){
+  void expandedUpdate(bool status) {
     _isExpanded = status;
     update();
   }
 
-  void setPreferenceTimeForView(String time){
+  void setPreferenceTimeForView(String time) {
     _preferableTime = time;
     update();
   }
 
-  Future<void> getOrderCancelReasons()async {
+  Future<void> getOrderCancelReasons() async {
     Response response = await orderRepo.getCancelReasons();
     if (response.statusCode == 200) {
-      OrderCancellationBody orderCancellationBody = OrderCancellationBody.fromJson(response.body);
+      OrderCancellationBody orderCancellationBody =
+          OrderCancellationBody.fromJson(response.body);
       _orderCancelReasons = [];
       for (var element in orderCancellationBody.reasons!) {
         _orderCancelReasons!.add(element);
       }
-
-    }else{
+    } else {
       ApiChecker.checkApi(response);
     }
     update();
   }
 
-  void setOrderCancelReason(String? reason){
+  Future<void> getPaymentMethods() async {
+    Response response = await orderRepo.getPaymentMethods();
+    if (response.statusCode == 200) {
+      PaymentMethodsModel paymentMethodsModel =
+          PaymentMethodsModel.fromJson(response.body);
+      _paymentsMethod = [];
+      _paymentsMethod!.addAll(paymentMethodsModel.paymentMethod);
+      // for (var element in paymentMethodsModel.paymentMethod) {
+      //   print('hello::paymentMethodsModel ${element.key}');
+      //   _paymentsMethod!.add(element);
+      // }
+    } else {
+      ApiChecker.checkApi(response);
+    }
+    update();
+  }
+
+  Future<void> getQuestions() async {
+    Response response = await orderRepo.getQuestions();
+    if (response.statusCode == 200) {
+      QuestionsModel questionsModel = QuestionsModel.fromJson(response.body);
+      _questionsList = [];
+      _questionsList!.addAll(questionsModel.questions);
+    } else {
+      ApiChecker.checkApi(response);
+    }
+    update();
+  }
+
+  Future<void> generateMessage(Map<String, dynamic> answers) async {
+    Response response = await orderRepo.getMessage(answers);
+    if (response.statusCode == 200) {
+      _generatedMessage = response.body['message'];
+    } else {
+      ApiChecker.checkApi(response);
+    }
+    update();
+  }
+
+  void setOrderCancelReason(String? reason) {
     _cancelReason = reason;
     update();
   }
@@ -156,27 +207,27 @@ class OrderController extends GetxController implements GetxService {
     update();
   }
 
-  void selectReason(int index,{bool isUpdate = true}){
+  void selectReason(int index, {bool isUpdate = true}) {
     _selectedReasonIndex = index;
-    if(isUpdate) {
+    if (isUpdate) {
       update();
     }
   }
 
-  void showOrders(){
+  void showOrders() {
     _showOneOrder = !_showOneOrder;
     update();
   }
 
-  void showRunningOrders(){
+  void showRunningOrders() {
     _showBottomSheet = !_showBottomSheet;
     update();
   }
 
   void pickRefundImage(bool isRemove) async {
-    if(isRemove) {
+    if (isRemove) {
       _refundImage = null;
-    }else {
+    } else {
       _refundImage = await ImagePicker().pickImage(source: ImageSource.gallery);
       update();
     }
@@ -191,7 +242,7 @@ class OrderController extends GetxController implements GetxService {
   //   update();
   // }
 
-  Future<void> getRefundReasons()async {
+  Future<void> getRefundReasons() async {
     _selectedReasonIndex = 0;
     Response response = await orderRepo.getRefundReasons();
     if (response.statusCode == 200) {
@@ -201,16 +252,16 @@ class OrderController extends GetxController implements GetxService {
       for (var element in refundModel.refundReasons!) {
         _refundReasons!.add(element.reason);
       }
-    }else{
+    } else {
       ApiChecker.checkApi(response);
     }
     update();
   }
 
-  Future<void> submitRefundRequest(String note, String? orderId)async {
-    if(_selectedReasonIndex == 0){
+  Future<void> submitRefundRequest(String note, String? orderId) async {
+    if (_selectedReasonIndex == 0) {
       showCustomSnackBar('please_select_reason'.tr);
-    }else{
+    } else {
       _isLoading = true;
       update();
       Map<String, String> body = {};
@@ -219,11 +270,12 @@ class OrderController extends GetxController implements GetxService {
         'order_id': orderId!,
         'customer_note': note,
       });
-      Response response = await orderRepo.submitRefundRequest(body, _refundImage);
+      Response response =
+          await orderRepo.submitRefundRequest(body, _refundImage);
       if (response.statusCode == 200) {
         showCustomSnackBar(response.body['message'], isError: false);
         Get.offAllNamed(RouteHelper.getInitialRoute());
-      }else {
+      } else {
         ApiChecker.checkApi(response);
       }
       _isLoading = false;
@@ -231,11 +283,10 @@ class OrderController extends GetxController implements GetxService {
     }
   }
 
-
   Future<void> getRunningOrders(int offset, {bool isUpdate = false}) async {
-    if(offset == 1) {
+    if (offset == 1) {
       _runningOrderModel = null;
-      if(isUpdate) {
+      if (isUpdate) {
         update();
       }
     }
@@ -243,10 +294,13 @@ class OrderController extends GetxController implements GetxService {
     if (response.statusCode == 200) {
       if (offset == 1) {
         _runningOrderModel = PaginatedOrderModel.fromJson(response.body);
-      }else {
-        _runningOrderModel!.orders!.addAll(PaginatedOrderModel.fromJson(response.body).orders!);
-        _runningOrderModel!.offset = PaginatedOrderModel.fromJson(response.body).offset;
-        _runningOrderModel!.totalSize = PaginatedOrderModel.fromJson(response.body).totalSize;
+      } else {
+        _runningOrderModel!.orders!
+            .addAll(PaginatedOrderModel.fromJson(response.body).orders!);
+        _runningOrderModel!.offset =
+            PaginatedOrderModel.fromJson(response.body).offset;
+        _runningOrderModel!.totalSize =
+            PaginatedOrderModel.fromJson(response.body).totalSize;
       }
       update();
     } else {
@@ -255,9 +309,9 @@ class OrderController extends GetxController implements GetxService {
   }
 
   Future<void> getHistoryOrders(int offset, {bool isUpdate = false}) async {
-    if(offset == 1) {
+    if (offset == 1) {
       _historyOrderModel = null;
-      if(isUpdate) {
+      if (isUpdate) {
         update();
       }
     }
@@ -265,10 +319,13 @@ class OrderController extends GetxController implements GetxService {
     if (response.statusCode == 200) {
       if (offset == 1) {
         _historyOrderModel = PaginatedOrderModel.fromJson(response.body);
-      }else {
-        _historyOrderModel!.orders!.addAll(PaginatedOrderModel.fromJson(response.body).orders!);
-        _historyOrderModel!.offset = PaginatedOrderModel.fromJson(response.body).offset;
-        _historyOrderModel!.totalSize = PaginatedOrderModel.fromJson(response.body).totalSize;
+      } else {
+        _historyOrderModel!.orders!
+            .addAll(PaginatedOrderModel.fromJson(response.body).orders!);
+        _historyOrderModel!.offset =
+            PaginatedOrderModel.fromJson(response.body).offset;
+        _historyOrderModel!.totalSize =
+            PaginatedOrderModel.fromJson(response.body).totalSize;
       }
       update();
     } else {
@@ -281,16 +338,19 @@ class OrderController extends GetxController implements GetxService {
     _isLoading = true;
     _showCancelled = false;
 
-    if(_trackModel == null || (_trackModel!.orderType != 'parcel' && !_trackModel!.prescriptionOrder!)) {
+    if (_trackModel == null ||
+        (_trackModel!.orderType != 'parcel' &&
+            !_trackModel!.prescriptionOrder!)) {
       Response response = await orderRepo.getOrderDetails(orderID);
       _isLoading = false;
       if (response.statusCode == 200) {
         _orderDetails = [];
-        response.body.forEach((orderDetail) => _orderDetails!.add(OrderDetailsModel.fromJson(orderDetail)));
+        response.body.forEach((orderDetail) =>
+            _orderDetails!.add(OrderDetailsModel.fromJson(orderDetail)));
       } else {
         ApiChecker.checkApi(response);
       }
-    }else {
+    } else {
       _isLoading = false;
       _orderDetails = [];
     }
@@ -300,24 +360,25 @@ class OrderController extends GetxController implements GetxService {
 
   void setPaymentMethod(int index, {bool isUpdate = true}) {
     _paymentMethodIndex = index;
-    if(isUpdate){
+    if (isUpdate) {
       update();
     }
   }
 
-  void addTips(double tips){
+  void addTips(double tips) {
     _tips = tips;
     update();
   }
 
-  Future<ResponseModel?> trackOrder(String? orderID, OrderModel? orderModel, bool fromTracking) async {
+  Future<ResponseModel?> trackOrder(
+      String? orderID, OrderModel? orderModel, bool fromTracking) async {
     _trackModel = null;
     _responseModel = null;
-    if(!fromTracking) {
+    if (!fromTracking) {
       _orderDetails = null;
     }
     _showCancelled = false;
-    if(orderModel == null) {
+    if (orderModel == null) {
       _isLoading = true;
       Response response = await orderRepo.trackOrder(orderID);
       if (response.statusCode == 200) {
@@ -329,7 +390,7 @@ class OrderController extends GetxController implements GetxService {
       }
       _isLoading = false;
       update();
-    }else {
+    } else {
       _trackModel = orderModel;
       _responseModel = ResponseModel(true, 'Successful');
     }
@@ -352,10 +413,18 @@ class OrderController extends GetxController implements GetxService {
     return _responseModel;
   }
 
-  Future<void> placeOrder(PlaceOrderBody placeOrderBody, int? zoneID, Function(bool isSuccess, String? message, String orderID, int? zoneID, double amount, double? maximumCodOrderAmount) callback, double amount, double? maximumCodOrderAmount) async {
+  Future<void> placeOrder(
+      PlaceOrderBody placeOrderBody,
+      int? zoneID,
+      Function(bool isSuccess, String? message, String orderID, int? zoneID,
+              double amount, double? maximumCodOrderAmount)
+          callback,
+      double amount,
+      double? maximumCodOrderAmount) async {
     _isLoading = true;
     update();
-    Response response = await orderRepo.placeOrder(placeOrderBody, _orderAttachment);
+    Response response =
+        await orderRepo.placeOrder(placeOrderBody, _orderAttachment);
     _isLoading = false;
     if (response.statusCode == 200) {
       String? message = response.body['message'];
@@ -367,22 +436,44 @@ class OrderController extends GetxController implements GetxService {
         print('-------- Order placed successfully $orderID ----------');
       }
     } else {
-      callback(false, response.statusText, '-1', zoneID, amount, maximumCodOrderAmount);
+      callback(false, response.statusText, '-1', zoneID, amount,
+          maximumCodOrderAmount);
     }
     update();
   }
 
-  Future<void> placePrescriptionOrder(int? storeId, int? zoneID, double? distance, String address, String longitude, String latitude, String note, List<XFile> orderAttachment,
-      String dmTips, String deliveryInstruction,
-      Function(bool isSuccess, String? message, String orderID, int? zoneID, double orderAmount, double maxCodAmount) callback,  double orderAmount, double maxCodAmount) async {
-
+  Future<void> placePrescriptionOrder(
+      int? storeId,
+      int? zoneID,
+      double? distance,
+      String address,
+      String longitude,
+      String latitude,
+      String note,
+      List<XFile> orderAttachment,
+      String dmTips,
+      String deliveryInstruction,
+      Function(bool isSuccess, String? message, String orderID, int? zoneID,
+              double orderAmount, double maxCodAmount)
+          callback,
+      double orderAmount,
+      double maxCodAmount) async {
     List<MultipartBody> multiParts = [];
-    for(XFile file in orderAttachment) {
+    for (XFile file in orderAttachment) {
       multiParts.add(MultipartBody('order_attachment[]', file));
     }
     _isLoading = true;
     update();
-    Response response = await orderRepo.placePrescriptionOrder(storeId, distance, address,longitude, latitude, note, multiParts, dmTips, deliveryInstruction);
+    Response response = await orderRepo.placePrescriptionOrder(
+        storeId,
+        distance,
+        address,
+        longitude,
+        latitude,
+        note,
+        multiParts,
+        dmTips,
+        deliveryInstruction);
     _isLoading = false;
     if (response.statusCode == 200) {
       String? message = response.body['message'];
@@ -394,7 +485,8 @@ class OrderController extends GetxController implements GetxService {
         print('-------- Order placed successfully $orderID ----------');
       }
     } else {
-      callback(false, response.statusText, '-1', zoneID, orderAmount, maxCodAmount);
+      callback(
+          false, response.statusText, '-1', zoneID, orderAmount, maxCodAmount);
     }
     update();
   }
@@ -408,13 +500,32 @@ class OrderController extends GetxController implements GetxService {
     _addressIndex = 0;
     _acceptTerms = true;
     try {
-      ZoneData zoneData = Get.find<LocationController>().getUserAddress()!.zoneData!.firstWhere((element) => element.id == zoneID);
-      _paymentMethodIndex = zoneData.cashOnDelivery! ? 0 : zoneData.digitalPayment! ? 1
-          : Get.find<SplashController>().configModel!.customerWalletStatus == 1 ? 2 : 0;
-    }catch(e) {
-      _paymentMethodIndex = Get.find<SplashController>().configModel!.cashOnDelivery! ? 0
-          : Get.find<SplashController>().configModel!.digitalPayment! ? 1
-          : Get.find<SplashController>().configModel!.customerWalletStatus == 1 ? 2 : 0;
+      ZoneData zoneData = Get.find<LocationController>()
+          .getUserAddress()!
+          .zoneData!
+          .firstWhere((element) => element.id == zoneID);
+      _paymentMethodIndex = zoneData.cashOnDelivery!
+          ? 0
+          : zoneData.digitalPayment!
+              ? 1
+              : Get.find<SplashController>()
+                          .configModel!
+                          .customerWalletStatus ==
+                      1
+                  ? 2
+                  : 0;
+    } catch (e) {
+      _paymentMethodIndex =
+          Get.find<SplashController>().configModel!.cashOnDelivery!
+              ? 0
+              : Get.find<SplashController>().configModel!.digitalPayment!
+                  ? 1
+                  : Get.find<SplashController>()
+                              .configModel!
+                              .customerWalletStatus ==
+                          1
+                      ? 2
+                      : 0;
     }
     _selectedDateSlot = 0;
     _selectedTimeSlot = 0;
@@ -432,14 +543,15 @@ class OrderController extends GetxController implements GetxService {
     bool success = false;
     _isLoading = true;
     update();
-    Response response = await orderRepo.cancelOrder(orderID.toString(), cancelReason);
+    Response response =
+        await orderRepo.cancelOrder(orderID.toString(), cancelReason);
     _isLoading = false;
     Get.back();
     if (response.statusCode == 200) {
       success = true;
       OrderModel? orderModel;
-      for(OrderModel order in _runningOrderModel!.orders!) {
-        if(order.id == orderID) {
+      for (OrderModel order in _runningOrderModel!.orders!) {
+        if (order.id == orderID) {
           orderModel = order;
           break;
         }
@@ -456,7 +568,7 @@ class OrderController extends GetxController implements GetxService {
 
   void setOrderType(String? type, {bool notify = true}) {
     _orderType = type;
-    if(notify) {
+    if (notify) {
       update();
     }
   }
@@ -466,42 +578,78 @@ class OrderController extends GetxController implements GetxService {
     _allTimeSlots = [];
     int minutes = 0;
     DateTime now = DateTime.now();
-    for(int index=0; index<store.schedules!.length; index++) {
+    for (int index = 0; index < store.schedules!.length; index++) {
       DateTime openTime = DateTime(
-        now.year, now.month, now.day, DateConverter.convertStringTimeToDate(store.schedules![index].openingTime!).hour,
-        DateConverter.convertStringTimeToDate(store.schedules![index].openingTime!).minute,
+        now.year,
+        now.month,
+        now.day,
+        DateConverter.convertStringTimeToDate(
+                store.schedules![index].openingTime!)
+            .hour,
+        DateConverter.convertStringTimeToDate(
+                store.schedules![index].openingTime!)
+            .minute,
       );
       DateTime closeTime = DateTime(
-        now.year, now.month, now.day, DateConverter.convertStringTimeToDate(store.schedules![index].closingTime!).hour,
-        DateConverter.convertStringTimeToDate(store.schedules![index].closingTime!).minute,
+        now.year,
+        now.month,
+        now.day,
+        DateConverter.convertStringTimeToDate(
+                store.schedules![index].closingTime!)
+            .hour,
+        DateConverter.convertStringTimeToDate(
+                store.schedules![index].closingTime!)
+            .minute,
       );
-      if(closeTime.difference(openTime).isNegative) {
+      if (closeTime.difference(openTime).isNegative) {
         minutes = openTime.difference(closeTime).inMinutes;
-      }else {
+      } else {
         minutes = closeTime.difference(openTime).inMinutes;
       }
-      if(minutes > Get.find<SplashController>().configModel!.scheduleOrderSlotDuration!) {
+      if (minutes >
+          Get.find<SplashController>()
+              .configModel!
+              .scheduleOrderSlotDuration!) {
         DateTime time = openTime;
-        for(;;) {
-          if(time.isBefore(closeTime)) {
+        for (;;) {
+          if (time.isBefore(closeTime)) {
             DateTime start = time;
-            DateTime end = start.add(Duration(minutes: Get.find<SplashController>().configModel!.scheduleOrderSlotDuration!));
-            if(end.isAfter(closeTime)) {
+            DateTime end = start.add(Duration(
+                minutes: Get.find<SplashController>()
+                    .configModel!
+                    .scheduleOrderSlotDuration!));
+            if (end.isAfter(closeTime)) {
               end = closeTime;
             }
-            _timeSlots!.add(TimeSlotModel(day: store.schedules![index].day, startTime: start, endTime: end));
-            _allTimeSlots!.add(TimeSlotModel(day: store.schedules![index].day, startTime: start, endTime: end));
-            time = time.add(Duration(minutes: Get.find<SplashController>().configModel!.scheduleOrderSlotDuration!));
-          }else {
+            _timeSlots!.add(TimeSlotModel(
+                day: store.schedules![index].day,
+                startTime: start,
+                endTime: end));
+            _allTimeSlots!.add(TimeSlotModel(
+                day: store.schedules![index].day,
+                startTime: start,
+                endTime: end));
+            time = time.add(Duration(
+                minutes: Get.find<SplashController>()
+                    .configModel!
+                    .scheduleOrderSlotDuration!));
+          } else {
             break;
           }
         }
-      }else {
-        _timeSlots!.add(TimeSlotModel(day: store.schedules![index].day, startTime: openTime, endTime: closeTime));
-        _allTimeSlots!.add(TimeSlotModel(day: store.schedules![index].day, startTime: openTime, endTime: closeTime));
+      } else {
+        _timeSlots!.add(TimeSlotModel(
+            day: store.schedules![index].day,
+            startTime: openTime,
+            endTime: closeTime));
+        _allTimeSlots!.add(TimeSlotModel(
+            day: store.schedules![index].day,
+            startTime: openTime,
+            endTime: closeTime));
       }
     }
-    validateSlot(_allTimeSlots!, 0, store.orderPlaceToScheduleInterval, notify: false);
+    validateSlot(_allTimeSlots!, 0, store.orderPlaceToScheduleInterval,
+        notify: false);
   }
 
   void updateTimeSlot(int index) {
@@ -511,33 +659,39 @@ class OrderController extends GetxController implements GetxService {
 
   void updateDateSlot(int index, int? interval) {
     _selectedDateSlot = index;
-    if(_allTimeSlots != null) {
+    if (_allTimeSlots != null) {
       validateSlot(_allTimeSlots!, index, interval);
     }
     update();
   }
 
-  void validateSlot(List<TimeSlotModel> slots, int dateIndex, int? interval, {bool notify = true}) {
+  void validateSlot(List<TimeSlotModel> slots, int dateIndex, int? interval,
+      {bool notify = true}) {
     _timeSlots = [];
     DateTime now = DateTime.now();
-    if(Get.find<SplashController>().configModel!.moduleConfig!.module!.orderPlaceToScheduleInterval!) {
+    if (Get.find<SplashController>()
+        .configModel!
+        .moduleConfig!
+        .module!
+        .orderPlaceToScheduleInterval!) {
       now = now.add(Duration(minutes: interval!));
     }
     int day = 0;
-    if(dateIndex == 0) {
+    if (dateIndex == 0) {
       day = DateTime.now().weekday;
-    }else {
+    } else {
       day = DateTime.now().add(const Duration(days: 1)).weekday;
     }
-    if(day == 7) {
+    if (day == 7) {
       day = 0;
     }
     for (var slot in slots) {
-      if (day == slot.day && (dateIndex == 0 ? slot.endTime!.isAfter(now) : true)) {
+      if (day == slot.day &&
+          (dateIndex == 0 ? slot.endTime!.isAfter(now) : true)) {
         _timeSlots!.add(slot);
       }
     }
-    if(notify) {
+    if (notify) {
       update();
     }
   }
@@ -560,30 +714,52 @@ class OrderController extends GetxController implements GetxService {
     return isSuccess;
   }
 
-  Future<double?> getDistanceInKM(LatLng originLatLng, LatLng destinationLatLng, {bool isDuration = false, bool isRiding = false, bool fromDashboard = false}) async {
+  Future<double?> getDistanceInKM(LatLng originLatLng, LatLng destinationLatLng,
+      {bool isDuration = false,
+      bool isRiding = false,
+      bool fromDashboard = false}) async {
     _distance = -1;
-    Response response = await orderRepo.getDistanceInMeter(originLatLng, destinationLatLng, isRiding);
+    Response response = await orderRepo.getDistanceInMeter(
+        originLatLng, destinationLatLng, isRiding);
     try {
       if (response.statusCode == 200 && response.body['status'] == 'OK') {
-        if(isDuration){
-          _distance = DistanceModel.fromJson(response.body).rows![0].elements![0].duration!.value! / 3600;
-        }else{
-          _distance = DistanceModel.fromJson(response.body).rows![0].elements![0].distance!.value! / 1000;
+        if (isDuration) {
+          _distance = DistanceModel.fromJson(response.body)
+                  .rows![0]
+                  .elements![0]
+                  .duration!
+                  .value! /
+              3600;
+        } else {
+          _distance = DistanceModel.fromJson(response.body)
+                  .rows![0]
+                  .elements![0]
+                  .distance!
+                  .value! /
+              1000;
         }
       } else {
-        if(!isDuration) {
+        if (!isDuration) {
           _distance = Geolocator.distanceBetween(
-            originLatLng.latitude, originLatLng.longitude, destinationLatLng.latitude, destinationLatLng.longitude,
-          ) / 1000;
+                originLatLng.latitude,
+                originLatLng.longitude,
+                destinationLatLng.latitude,
+                destinationLatLng.longitude,
+              ) /
+              1000;
         }
       }
     } catch (e) {
-      if(!isDuration) {
-        _distance = Geolocator.distanceBetween(originLatLng.latitude, originLatLng.longitude,
-          destinationLatLng.latitude, destinationLatLng.longitude) / 1000;
+      if (!isDuration) {
+        _distance = Geolocator.distanceBetween(
+                originLatLng.latitude,
+                originLatLng.longitude,
+                destinationLatLng.latitude,
+                destinationLatLng.longitude) /
+            1000;
       }
     }
-    if(!fromDashboard) {
+    if (!fromDashboard) {
       await getExtraCharge(_distance);
     }
 
@@ -592,8 +768,9 @@ class OrderController extends GetxController implements GetxService {
   }
 
   void pickImage() async {
-    _orderAttachment = await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 50);
-    if(_orderAttachment != null) {
+    _orderAttachment = await ImagePicker()
+        .pickImage(source: ImageSource.gallery, imageQuality: 50);
+    if (_orderAttachment != null) {
       _orderAttachment = await NetworkInfo.compressImage(_orderAttachment!);
       _rawAttachment = await _orderAttachment!.readAsBytes();
     }
@@ -602,12 +779,12 @@ class OrderController extends GetxController implements GetxService {
 
   void updateTips(int index, {bool notify = true}) {
     _selectedTips = index;
-    if(_selectedTips == 0 || _selectedTips == 5) {
+    if (_selectedTips == 0 || _selectedTips == 5) {
       _tips = 0;
-    }else{
+    } else {
       _tips = double.parse(AppConstants.tips[index]);
     }
-    if(notify) {
+    if (notify) {
       update();
     }
   }
@@ -616,5 +793,4 @@ class OrderController extends GetxController implements GetxService {
     _isDmTipSave = !_isDmTipSave;
     update();
   }
-
 }

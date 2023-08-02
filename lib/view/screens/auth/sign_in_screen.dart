@@ -279,7 +279,7 @@ class SignInScreenState extends State<SignInScreen> {
                                     color: Colors.black,
                                     decoration: TextDecoration.underline)),
                           ),
-                          const SocialMediaLogin(),
+                         // const SocialMediaLogin(),
 
                           const SizedBox(
                               height: Dimensions.paddingSizeExtraLarge),
@@ -354,7 +354,7 @@ class SignInScreenState extends State<SignInScreen> {
       showCustomSnackBar('password_should_be'.tr);
     } else {
       authController
-          .login(username, password, alreadyInApp: widget.backFromThis)
+          .login(username, password, alreadyInApp: false)
           .then((status) async {
         if (status.isSuccess) {
           if (authController.isActiveRememberMe) {

@@ -34,6 +34,7 @@ import 'package:warda/view/screens/cart/widget/cart_recipient_details_widget.dar
 import 'package:warda/view/screens/cart/widget/suggested_item_widget.dart';
 import 'package:warda/view/screens/store/store_screen.dart';
 
+import '../../../controller/order_controller.dart';
 import '../../../util/app_constants.dart';
 import 'cubit/cart_cubit.dart';
 import 'widget/not_available_bottom_sheet.dart';
@@ -50,11 +51,11 @@ class _CartScreenState extends State<CartScreen> {
   @override
   void initState() {
     super.initState();
-
     if (Get.find<CartController>().cartList.isNotEmpty) {
       if (Get.find<CartController>().addCutlery) {
         Get.find<CartController>().updateCutlery(isUpdate: false);
       }
+      Get.find<OrderController>().getQuestions();
       Get.find<CartController>().setAvailableIndex(-1, isUpdate: false);
       Get.find<StoreController>().getCartStoreSuggestedItemList(
           Get.find<CartController>().cartList[0].item!.storeId);
@@ -65,6 +66,7 @@ class _CartScreenState extends State<CartScreen> {
           false,
           fromCart: true);
     }
+    BlocProvider.of<CartCubit>(context).getQuestions();
   }
 
   @override
@@ -84,6 +86,9 @@ class _CartScreenState extends State<CartScreen> {
                     return Column(
                       children: [
                         SizedBox(
+                          height: context.height * 0.02,
+                        ),
+                        SizedBox(
                           child: cartHeader(cartController, cubit),
                         ),
                         Expanded(
@@ -92,7 +97,26 @@ class _CartScreenState extends State<CartScreen> {
                                   child: SizedBox(
                                       child:
                                           cartBody(cubit.activeStep, cubit)))),
-                        )
+                        ),
+                        cubit.activeStep == 4
+                            ? SizedBox()
+                            : CustomButton(
+                                buttonText: 'continue'.tr,
+                                width: context.width * 0.9,
+                                height: context.height * 0.07,
+                                onPressed: () {
+                                  String? message =
+                                      cubit.validator(cubit.activeStep);
+                                  if (message.runtimeType != Null) {
+                                    print('hello validator :: $message');
+                                    showCustomSnackBar(message, isError: true);
+                                  } else {
+                                    cubit.changeActiveStep(cubit.activeStep == 4
+                                        ? cubit.activeStep
+                                        : cubit.activeStep + 1);
+                                  }
+                                },
+                              ),
                       ],
                     );
                   },
@@ -106,101 +130,45 @@ class _CartScreenState extends State<CartScreen> {
   Widget cartHeader(CartController cartController, CartCubit cubit) {
     return Container(
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(
-            flex: 9,
-            child: Container(
-              width: context.width * 0.4,
-              child: EasyStepper(
-                activeStep: cubit.activeStep,
-                lineLength: 30,
-                fitWidth: true,
-                stepShape: StepShape.circle,
-                lineType: LineType.normal,
-                internalPadding: 15,
-                borderThickness: 1,
-                unreachedLineColor: AppConstants.primaryColor.withOpacity(0.2),
-                defaultStepBorderType: BorderType.normal,
-                activeStepBorderType: BorderType.normal,
-                finishedStepBorderType: BorderType.normal,
-                unreachedStepBackgroundColor:
-                    AppConstants.primaryColor.withOpacity(0.1),
-                unreachedStepBorderColor:
-                    AppConstants.primaryColor.withOpacity(0.1),
-                unreachedStepBorderType: BorderType.dotted,
-                unreachedStepIconColor:
-                    AppConstants.primaryColor.withOpacity(0.1),
-                unreachedStepTextColor:
-                    AppConstants.primaryColor.withOpacity(0.1),
-                activeStepBackgroundColor: AppConstants.primaryColor,
-                finishedStepBorderColor: AppConstants.primaryColor,
-                finishedStepTextColor:
-                    AppConstants.primaryColor.withOpacity(0.4),
-                finishedStepBackgroundColor: AppConstants.primaryColor,
-                activeStepIconColor: AppConstants.primaryColor,
-                showLoadingAnimation: false,
-                activeStepTextColor: AppConstants.primaryColor,
-                steps: [
-                  EasyStep(
-                      customStep: ClipRRect(
-                        child: Opacity(
-                          opacity: cubit.activeStep >= 0 ? 1 : 0.3,
-                          child: Image.asset(
-                            Images.cartBlack,
-                            color: Colors.white,
-                            width: 30,
-                            height: 30,
-                          ),
-                        ),
-                      ),
-                      title: 'cart'.tr),
-                  EasyStep(
-                    customStep: ClipRRect(
-                      child: Opacity(
-                        opacity: cubit.activeStep >= 0 ? 1 : 0.5,
-                        child: Icon(Icons.mail_outline_outlined,
-                            color: Colors.white, size: 30),
-                      ),
-                    ),
-                    title: 'card_message'.tr,
-                  ),
-                  EasyStep(
-                    customStep: ClipRRect(
-                      child: Opacity(
-                        opacity: cubit.activeStep >= 0 ? 1 : 0.5,
-                        child: Icon(Icons.place_outlined,
-                            color: Colors.white, size: 30),
-                      ),
-                    ),
-                    title: 'recipient_details'.tr,
-                  ),
-                  EasyStep(
-                      customStep: ClipRRect(
-                        child: Opacity(
-                          opacity: cubit.activeStep >= 0 ? 1 : 0.5,
-                          child: Icon(Icons.av_timer_outlined,
-                              color: Colors.white, size: 30),
-                        ),
-                      ),
-                      title: 'delivery_time'.tr),
-                  EasyStep(
-                    customStep: ClipRRect(
-                      child: Opacity(
-                        opacity: cubit.activeStep >= 0 ? 1 : 0.5,
-                        child: Icon(Icons.payment_outlined,
-                            color: Colors.white, size: 30),
-                      ),
-                    ),
-                    title: 'checkout'.tr,
-                  ),
-                ],
-                onStepReached: (index) {
-                  cubit.changeActiveStep(index);
-                },
+          stepperWidget(
+              context,
+              cubit,
+              Image.asset(
+                Images.cartBlack,
+                color: Colors.white,
+                width: 25,
+                height: 25,
               ),
-            ),
-          ),
+              'cart'.tr,
+              0),
+
+          stepperWidget(
+              context,
+              cubit,
+              Icon(Icons.place_outlined, color: Colors.white, size: 25),
+              'recipient_details'.tr,
+              1),
+          stepperWidget(
+              context,
+              cubit,
+              Icon(Icons.av_timer_outlined, color: Colors.white, size: 25),
+              'time'.tr,
+              2),
+          stepperWidget(
+              context,
+              cubit,
+              Icon(Icons.mail_outline_outlined, color: Colors.white, size: 25),
+              'message'.tr,
+              3),
+          stepperWidget(
+              context,
+              cubit,
+              Icon(Icons.payment_outlined, color: Colors.white, size: 25),
+              'checkout'.tr,
+              4),
           // ResponsiveHelper.isDesktop(context)
           //     ? Expanded(
           //         flex: 4,
@@ -208,6 +176,125 @@ class _CartScreenState extends State<CartScreen> {
           //             cartController, cartController.cartList[0].item!))
           //     : const SizedBox(),
         ],
+      ),
+    );
+  }
+
+  Widget stepperWidget(
+    BuildContext context,
+    CartCubit cubit,
+    Widget image,
+    String title,
+    int currentStep,
+  ) {
+    return GestureDetector(
+      onTap: () {
+        cubit.changeActiveStep(currentStep);
+      },
+      child: Container(
+        width: context.width * 0.18,
+        height: context.height * 0.1,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(
+                  height: context.height * 0.05,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      currentStep != 0
+                          ? Align(
+                              alignment: Alignment.centerRight,
+                              child: SizedBox(
+                                width: context.width * 0.01,
+                              ),
+                            )
+                          : SizedBox(
+                              width: 0,
+                            ),
+                      currentStep != 0
+                          ? Positioned(
+                              left: 0,
+                              child: Container(
+                                width: context.width * 0.1,
+                                height: 4,
+                                decoration: BoxDecoration(
+                                    border: Border(
+                                        bottom: BorderSide(
+                                            color: AppConstants.primaryColor))),
+                              ),
+                            )
+                          : SizedBox(
+                              width: 0,
+                            ),
+                      Container(
+                        width: context.width * 0.18,
+                        decoration: const BoxDecoration(
+                            color: AppConstants.primaryColor,
+                            shape: BoxShape.circle),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Opacity(
+                            opacity: cubit.activeStep >= currentStep ? 1 : 0.3,
+                            child: SizedBox(
+                                width: 25,
+                                height: 25,
+                                child: Center(child: image)),
+                          ),
+                        ),
+                      ),
+                      currentStep != 4
+                          ? Align(
+                              alignment: Alignment.centerRight,
+                              child: SizedBox(
+                                width: context.width * 0.01,
+                              ),
+                            )
+                          : SizedBox(
+                              width: 0,
+                            ),
+                      currentStep != 4
+                          ? Positioned(
+                              right: 0,
+                              child: Container(
+                                width: context.width * 0.1,
+                                height: 4,
+                                decoration: BoxDecoration(
+                                    border: Border(
+                                        bottom: BorderSide(
+                                            color: AppConstants.primaryColor))),
+                              ),
+                            )
+                          : SizedBox(
+                              width: 0,
+                            ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: context.width * 0.18,
+                  height: context.height * 0.05,
+                  alignment: Alignment.center,
+                  child: Text(title,
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      style: robotoRegular.copyWith(
+                          color: AppConstants.primaryColor,
+                          fontWeight: cubit.activeStep == currentStep
+                              ? FontWeight.w800
+                              : FontWeight.w400,
+                          fontSize: 10)),
+                )
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

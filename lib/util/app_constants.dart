@@ -8,16 +8,19 @@ class AppConstants {
   static const double appVersion = 1.0;
 
   static const Color primaryColor = Color(0xFFBA264A);
+  static const Color splashBackgroundColor = Color(0xFFbb264a);
   static const Color greenColor = Color(0xFF08756B);
+  static Color lightPinkColor = Color(0xFFCACACA).withOpacity(0.1);
 
   static const String fontFamily = "Philosopher";
-  static const String fontFamilyCommon = "Poppins" ; //Roboto
+  static const String fontFamilyCommon = "Poppins"; //Roboto
 
   static const String baseUrl = 'https://warda.spiromo.store';
   static const String categoryUri = '/api/v1/categories';
   static const String bannerUri = '/api/v1/banners';
   static const String storeItemUri = '/api/v1/items/latest';
   static const String popularItemUri = '/api/v1/items/popular';
+  static const String discountItemUri = '/api/v1/items/discounted';
   static const String reviewedItemUri = '/api/v1/items/most-reviewed';
   static const String searchItemUri = '/api/v1/items/details/';
   static const String subCategoryUri = '/api/v1/categories/childes/';
@@ -61,6 +64,8 @@ class AppConstants {
   static const String notificationUri = '/api/v1/customer/notifications';
   static const String updateProfileUri = '/api/v1/customer/update-profile';
   static const String searchUri = '/api/v1/';
+  static const String getSizesUri = '/api/v1/get-sizes';
+  static const String getOccasionsUri = '/api/v1/get-occasions';
   static const String reviewUri = '/api/v1/items/reviews/submit';
   static const String itemDetailsUri = '/api/v1/items/details/';
   static const String lastLocationUri =
@@ -77,6 +82,7 @@ class AppConstants {
       '/api/v1/campaigns/basic-campaign-details?basic_campaign_id=';
   static const String interestUri = '/api/v1/customer/update-interest';
   static const String suggestedItemUri = '/api/v1/customer/suggested-items';
+  static const String faqUri = '/api/v1/faq';
   static const String storeReviewUri = '/api/v1/stores/reviews';
   static const String distanceMatrixUri = '/api/v1/config/distance-api';
   static const String searchLocationUri =
@@ -123,6 +129,11 @@ class AppConstants {
   static const String storeRecommendedItemUri = '/api/v1/items/recommended';
   static const String orderCancellationUri =
       '/api/v1/customer/order/cancellation-reasons';
+  static const String getPaymentMethods = '/api/v1/customer/order/get-payments';
+  static const String getQuestionsUri = '/api/v1/customer/order/get-questions';
+  static const String generateMessageUri =
+      '/api/v1/customer/order/generate-message';
+
   static const String cartStoreSuggestedItemsUri = '/api/v1/items/suggested';
   static const String landingPageUri = '/api/v1/flutter-landing-page';
 

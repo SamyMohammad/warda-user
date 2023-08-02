@@ -283,7 +283,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                       storeController.store!.open);
                   _taxPercent = storeController.store!.tax;
                 }
-                
+
                 return GetBuilder<CouponController>(
                     builder: (couponController) {
                   return GetBuilder<OrderController>(
@@ -2215,6 +2215,13 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                       orderController.placeOrder(
                           PlaceOrderBody(
                             cart: carts,
+                            keepSecret: 1,
+                            deliveryDate: '',
+                            deliveryTime: '',
+                            cardMessage: '',
+                            attachmentLink: '',
+              cardMessageTo: '',
+              cardMessageFrom: '',
                             couponDiscountAmount:
                                 Get.find<CouponController>().discount,
                             distance: 0,

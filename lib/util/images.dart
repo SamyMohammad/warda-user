@@ -1,5 +1,12 @@
 class Images {
   static const String logo = 'assets/image/logo.png';
+  static const String splashLogo = 'assets/image/splsh_logo.gif';
+  static const String logoCircle = 'assets/image/logo_circle.png';
+
+  static const String couponRed = 'assets/image/coupon_red.png';
+  static const String couponGreen = 'assets/image/coupon_green.png';
+  static const String couponCoffee = 'assets/image/coupon_coffee.png';
+
   static const String placeholder = 'assets/image/placeholder.jpg';
   static const String notificationPlaceholder =
       'assets/image/notification_placeholder.jpg';

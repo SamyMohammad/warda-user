@@ -13,7 +13,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>6amMart</string>
+	<string>99 warda</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -23,12 +23,9 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.1000163153346-tmf9s0kpekc5mum4ubpga4a8gguk2592</string>
-				<string>fb380903914182154</string>
+				<string>whatsapp</string>
 			</array>
 		</dict>
 	</array>
@@ -83,39 +80,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-
-	<key>FacebookAppID</key>
-    <string>380903914182154</string>
-    <key>CFBundleURLTypes</key>
-    	<array>
-    		<dict>
-    			<key>CFBundleURLSchemes</key>
-    			<array>
-    				<string>fb-380903914182154</string>
-    			</array>
-    			<array>
-                		<string>fbauth2</string>
-                		<string>fbapi</string>
-                		<string>fbapi20130214</string>
-                		<string>fbapi20130410</string>
-                		<string>fbapi20130702</string>
-                		<string>fbapi20131010</string>
-                		<string>fbapi20131219</string>
-                		<string>fbapi20140410</string>
-                		<string>fbapi20140116</string>
-                		<string>fbapi20150313</string>
-                		<string>fbapi20150629</string>
-                		<string>fbapi20160328</string>
-                		<string>fbauth</string>
-                		<string>fb-messenger-share-api</string>
-                		<string>fbauth2</string>
-                		<string>fbshareextension</string>
-                		<string>tg</string>
-                	</array>
-                	 <array>
-                        <string>whatsapp</string>
-                    </array>
-    		</dict>
-    	</array>
 </dict>
 </plist>

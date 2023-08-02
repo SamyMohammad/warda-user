@@ -1,6 +1,8 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart'
     as staggeredGridview;
 import 'package:warda/controller/category_controller.dart';
+import 'package:warda/controller/search_controller.dart';
 import 'package:warda/controller/splash_controller.dart';
 import 'package:warda/helper/responsive_helper.dart';
 import 'package:warda/helper/route_helper.dart';
@@ -13,6 +15,9 @@ import 'package:warda/view/base/menu_drawer.dart';
 import 'package:warda/view/base/no_data_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../util/app_constants.dart';
+import '../search/cubit/filter_cubit.dart';
 
 class CategoryScreen extends StatefulWidget {
   const CategoryScreen({Key? key, this.fromNav = false}) : super(key: key);
@@ -34,6 +39,21 @@ class _CategoryScreenState extends State<CategoryScreen> {
           title: 'categories'.tr,
           showLogo: true,
           backButton: !widget.fromNav,
+          actions: [
+            GestureDetector(
+              onTap: () {
+                Get.toNamed(RouteHelper.getSearchRoute());
+                BlocProvider.of<FilterCubit>(context).filterBottomSheet(
+                    Get.find<SearchingController>(),
+                    Get.find<CategoryController>(),
+                    context);
+              },
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: Icon(Icons.filter_alt, color: AppConstants.primaryColor),
+              ),
+            ),
+          ],
         ),
       ),
       endDrawer: const MenuDrawer(),

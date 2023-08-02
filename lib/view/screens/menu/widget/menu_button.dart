@@ -36,11 +36,11 @@ class MenuButton extends StatelessWidget {
               Get.find<AuthController>().socialLogout();
               Get.find<CartController>().clearCartList();
               Get.find<WishListController>().removeWishes();
-              Get.offAllNamed(RouteHelper.getSignInRoute(RouteHelper.splash));
+              Get.offAllNamed(RouteHelper.getAuthOnBoardingRoute(RouteHelper.splash));
             }), useSafeArea: false);
           }else {
             Get.find<WishListController>().removeWishes();
-            Get.toNamed(RouteHelper.getSignInRoute(RouteHelper.main));
+            Get.toNamed(RouteHelper.getAuthOnBoardingRoute(RouteHelper.main));
           }
         }else if(menu.route.startsWith('http')) {
           if(await canLaunchUrlString(menu.route)) {

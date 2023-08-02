@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:expandable_bottom_sheet/expandable_bottom_sheet.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:warda/controller/auth_controller.dart';
 import 'package:warda/controller/location_controller.dart';
 import 'package:warda/controller/order_controller.dart';
@@ -83,8 +84,12 @@ class DashboardScreenState extends State<DashboardScreen> {
     _screens = [
       const HomeScreen(),
       const CartScreen(fromNav: true),
-      const CategoryScreen(fromNav: true,),
-      const CouponScreen(fromNav: true,),
+      const CategoryScreen(
+        fromNav: true,
+      ),
+      const CouponScreen(
+        fromNav: true,
+      ),
       const MenuScreenNew()
       // const ProfileScreen()
     ];
@@ -118,7 +123,7 @@ class DashboardScreenState extends State<DashboardScreen> {
     return WillPopScope(
       onWillPop: () async {
         if (_pageIndex != 0) {
-          _setPage(0);
+          setPage(0);
           return false;
         } else {
           if (!ResponsiveHelper.isDesktop(context) &&
@@ -176,7 +181,7 @@ class DashboardScreenState extends State<DashboardScreen> {
           //                     ? Theme.of(context).primaryColor
           //                     : Theme.of(context).cardColor,
           //                 onPressed: () {
-          //                   // _setPage(2);
+          //                   // setPage(2);
           //                   Get.toNamed(RouteHelper.getCartRoute());
           //                 },
           //                 child: CartWidget(
@@ -194,119 +199,129 @@ class DashboardScreenState extends State<DashboardScreen> {
                       Get.find<LocationController>().showLocationSuggestion &&
                       active)
                   ? const SizedBox()
-                  : (orderController.showBottomSheet &&
-                          orderController.runningOrderModel != null &&
-                          orderController.runningOrderModel!.orders!.isNotEmpty)
-                      ? const SizedBox()
-                      : BottomAppBar(
-                          elevation: 5,
-                          notchMargin: 5,
-                          clipBehavior: Clip.antiAlias,
-                          shape: const CircularNotchedRectangle(),
-                          child: Padding(
-                            padding: const EdgeInsets.all(
-                                Dimensions.paddingSizeExtraSmall),
-                            child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  BottomNavItem(
-                                      selectedImg: Images.homeColor,
-                                      unselectedImg: Images.homeBlack,
-                                      title: 'home',
-                                      isSelected: _pageIndex == 0,
-                                      onTap: () => _setPage(0)),
-                                  BottomNavItem(
-                                      selectedImg: Images.cartColor,
-                                      unselectedImg: Images.cartBlack,
-                                      title: 'cart',
-                                      isSelected: _pageIndex == 1,
-                                      onTap: () => _setPage(1)),
+                  :
+                  // (orderController.showBottomSheet
+                  //     //  &&
+                  //     //         orderController.runningOrderModel != null &&
+                  //     //         orderController.runningOrderModel!.orders!.isNotEmpty
 
-                                  BottomNavItem(
-                                      selectedImg: Images.categoriesColor,
-                                      unselectedImg: Images.categoriesBlack,
-                                      title: 'categories',
-                                      isSelected: _pageIndex == 2,
-                                      isCategoryItem: true,
-                                      onTap: () => _setPage(2)),
+                  //     )
+                  //     ? const SizedBox()
+                  //     :
+                  BottomAppBar(
+                      elevation: 5,
+                      notchMargin: 5,
+                      clipBehavior: Clip.antiAlias,
+                      shape: const CircularNotchedRectangle(),
+                      child: Padding(
+                        padding: const EdgeInsets.all(
+                            Dimensions.paddingSizeExtraSmall),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              BottomNavItem(
+                                  selectedImg: Images.homeColor,
+                                  unselectedImg: Images.homeBlack,
+                                  title: 'home',
+                                  isSelected: _pageIndex == 0,
+                                  onTap: () => setPage(0)),
+                              BottomNavItem(
+                                  selectedImg: Images.cartColor,
+                                  unselectedImg: Images.cartBlack,
+                                  title: 'cart',
+                                  isSelected: _pageIndex == 1,
+                                  onTap: () => setPage(1)),
 
-                                  const Expanded(child: SizedBox()),
-                                  BottomNavItem(
-                                      selectedImg: Images.couponColor,
-                                      unselectedImg: Images.couponBlack,
-                                      title: 'Coupon',
-                                      isSelected: _pageIndex == 3,
-                                      onTap: () => _setPage(3)),
-                                  BottomNavItem(
-                                      selectedImg: Images.profileColor,
-                                      unselectedImg: Images.profileBlack,
-                                      title: 'profile',
-                                      isSelected: _pageIndex == 4,
-                                      onTap: () => _setPage(4)),
-                                  // BottomNavItem(iconData: Icons.menu, isSelected: _pageIndex == 4, onTap: () => _openEndDrawer()),
-                                  // BottomNavItem(iconData: Icons.menu, isSelected: _pageIndex == 4, onTap: () {
-                                  //   Get.bottomSheet(const MenuScreen(), backgroundColor: Colors.transparent, isScrollControlled: true);
-                                  // }),
-                                ]),
-                          ),
-                        ),
-          body: ExpandableBottomSheet(
-            background: PageView.builder(
-              controller: _pageController,
-              itemCount: _screens.length,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return _screens[index];
-              },
-            ),
-            persistentContentHeight: (widget.fromSplash &&
-                    Get.find<LocationController>().showLocationSuggestion &&
-                    active)
-                ? 0
-                : 100,
-            onIsContractedCallback: () {
-              if (!orderController.showOneOrder) {
-                orderController.showOrders();
-              }
-            },
-            onIsExtendedCallback: () {
-              if (orderController.showOneOrder) {
-                orderController.showOrders();
-              }
-            },
-            enableToggle: true,
-            expandableContent: (widget.fromSplash &&
-                    Get.find<LocationController>().showLocationSuggestion &&
-                    active &&
-                    !ResponsiveHelper.isDesktop(context))
-                ? const SizedBox()
-                : (ResponsiveHelper.isDesktop(context) ||
-                        !_isLogin ||
-                        orderController.runningOrderModel == null ||
-                        orderController.runningOrderModel!.orders!.isEmpty ||
-                        !orderController.showBottomSheet)
-                    ? const SizedBox()
-                    : Dismissible(
-                        key: UniqueKey(),
-                        onDismissed: (direction) {
-                          if (orderController.showBottomSheet) {
-                            orderController.showRunningOrders();
-                          }
-                        },
-                        child: RunningOrderViewWidget(reversOrder: reversOrder),
+                              BottomNavItem(
+                                  selectedImg: Images.categoriesColor,
+                                  unselectedImg: Images.categoriesBlack,
+                                  title: 'categories',
+                                  isSelected: _pageIndex == 2,
+                                  isCategoryItem: true,
+                                  onTap: () => setPage(2)),
+
+                              const Expanded(child: SizedBox()),
+                              BottomNavItem(
+                                  selectedImg: Images.couponColor,
+                                  unselectedImg: Images.couponBlack,
+                                  title: 'Coupon',
+                                  isSelected: _pageIndex == 3,
+                                  onTap: () => setPage(3)),
+                              BottomNavItem(
+                                  selectedImg: Images.profileColor,
+                                  unselectedImg: Images.profileBlack,
+                                  title: 'profile',
+                                  isSelected: _pageIndex == 4,
+                                  onTap: () => setPage(4)),
+                              // BottomNavItem(iconData: Icons.menu, isSelected: _pageIndex == 4, onTap: () => _openEndDrawer()),
+                              // BottomNavItem(iconData: Icons.menu, isSelected: _pageIndex == 4, onTap: () {
+                              //   Get.bottomSheet(const MenuScreen(), backgroundColor: Colors.transparent, isScrollControlled: true);
+                              // }),
+                            ]),
                       ),
-          ),
+                    ),
+          body: ExpandableBottomSheet(
+              background: PageView.builder(
+                controller: _pageController,
+                itemCount: _screens.length,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return _screens[index];
+                },
+              ),
+              persistentContentHeight: (widget.fromSplash &&
+                      Get.find<LocationController>().showLocationSuggestion &&
+                      active)
+                  ? 0
+                  : 100,
+              onIsContractedCallback: () {
+                if (!orderController.showOneOrder) {
+                  orderController.showOrders();
+                }
+              },
+              onIsExtendedCallback: () {
+                if (orderController.showOneOrder) {
+                  orderController.showOrders();
+                }
+              },
+              enableToggle: true,
+              expandableContent: (widget.fromSplash &&
+                      Get.find<LocationController>().showLocationSuggestion &&
+                      active &&
+                      !ResponsiveHelper.isDesktop(context))
+                  ? const SizedBox()
+                  : (ResponsiveHelper.isDesktop(context) ||
+                          !_isLogin ||
+                          orderController.runningOrderModel == null ||
+                          orderController.runningOrderModel!.orders!.isEmpty ||
+                          !orderController.showBottomSheet)
+                      ? const SizedBox()
+                      : const SizedBox()
+              // : Dismissible(
+              //     key: UniqueKey(),
+              //     onDismissed: (direction) {
+              //       if (orderController.showBottomSheet) {
+              //         orderController.showRunningOrders();
+              //       }
+              //     },
+              //     child: RunningOrderViewWidget(reversOrder: reversOrder),
+              //   ),
+              ),
         );
       }),
     );
   }
 
-  void _setPage(int pageIndex) {
+  void setPage(int pageIndex) {
     setState(() {
       _pageController!.jumpToPage(pageIndex);
       _pageIndex = pageIndex;
     });
+//     WidgetsBinding.instance.addPostFrameCallback((_) {
+//       if (mounted) {
+
+// }
+//     });
   }
 
   Widget trackView(BuildContext context, {required bool status}) {

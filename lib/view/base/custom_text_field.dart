@@ -93,7 +93,7 @@ class CustomTextFieldState extends State<CustomTextField> {
           controller: widget.controller,
           focusNode: widget.focusNode,
           textAlign: widget.textAlign,
-          style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge),
+          style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault),
           textInputAction: widget.inputAction,
           keyboardType:
               widget.isAmount ? TextInputType.number : widget.inputType,
@@ -113,7 +113,7 @@ class CustomTextFieldState extends State<CustomTextField> {
                       : null,
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+              borderRadius: BorderRadius.circular(15),
               borderSide: BorderSide(
                   style:
                       widget.showBorder ? BorderStyle.solid : BorderStyle.none,
@@ -143,7 +143,7 @@ class CustomTextFieldState extends State<CustomTextField> {
                     : widget.hintText,
             fillColor: Theme.of(context).cardColor,
             hintStyle: robotoRegular.copyWith(
-                fontSize: Dimensions.fontSizeLarge,
+                fontSize: Dimensions.fontSizeSmall,
                 color: Theme.of(context).hintColor),
             filled: true,
             prefixIcon: widget.isPhone

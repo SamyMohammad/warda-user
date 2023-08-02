@@ -91,10 +91,10 @@ class ItemTitleView extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: Dimensions.paddingSizeSmall),
-                RatingBar(
-                    rating: item!.avgRating,
-                    ratingCount: item!.ratingCount,
-                    size: 21),
+                // RatingBar(
+                //     rating: item!.avgRating,
+                //     ratingCount: item!.ratingCount,
+                //     size: 21),
                 const SizedBox(height: Dimensions.paddingSizeSmall),
                 Row(children: [
                   Text(
@@ -185,8 +185,9 @@ class ItemTitleView extends StatelessWidget {
             );
           })
         : Container(
-            color: Theme.of(context).cardColor,
-            padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
+            // decoration: BoxDecoration(gradient: commonGradient),
+            padding: const EdgeInsets.symmetric(
+                horizontal: Dimensions.paddingSizeSmall),
             child: GetBuilder<ItemController>(
               builder: (itemController) {
                 return Column(
@@ -240,7 +241,6 @@ class ItemTitleView extends StatelessWidget {
                               // ]) : const SizedBox(),
                             ])),
                       ]),
-                      const SizedBox(height: 5),
 
                       // InkWell(
                       //   onTap: () {
@@ -259,84 +259,61 @@ class ItemTitleView extends StatelessWidget {
                       //   ),
                       // ),
 
-                      const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                      // const SizedBox(height: Dimensions.paddingSizeExtraSmall),
 
-                      Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Column(children: [
-                              ((Get.find<SplashController>()
-                                              .configModel!
-                                              .moduleConfig!
-                                              .module!
-                                              .unit! &&
-                                          item!.unitType != null) ||
-                                      (Get.find<SplashController>()
-                                              .configModel!
-                                              .moduleConfig!
-                                              .module!
-                                              .vegNonVeg! &&
-                                          Get.find<SplashController>()
-                                              .configModel!
-                                              .toggleVegNonVeg!))
-                                  ? Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical:
-                                              Dimensions.paddingSizeExtraSmall,
-                                          horizontal:
-                                              Dimensions.paddingSizeSmall),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(
-                                            Dimensions.radiusSmall),
-                                        color: Theme.of(context)
-                                            .primaryColor
-                                            .withOpacity(0.1),
-                                      ),
-                                      child: Text(
-                                        Get.find<SplashController>()
-                                                .configModel!
-                                                .moduleConfig!
-                                                .module!
-                                                .unit!
-                                            ? item!.unitType ?? ''
-                                            : item!.veg == 0
-                                                ? 'non_veg'.tr
-                                                : 'veg'.tr,
-                                        style: robotoRegular.copyWith(
-                                            fontSize:
-                                                Dimensions.fontSizeExtraSmall,
-                                            color:
-                                                Theme.of(context).primaryColor),
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                              const SizedBox(
-                                  height: Dimensions.paddingSizeDefault),
-                              !inStock
-                                  ? SizedBox()
-                                  : Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal:
-                                              Dimensions.paddingSizeSmall,
-                                          vertical:
-                                              Dimensions.paddingSizeExtraSmall),
-                                      decoration: BoxDecoration(
-                                        color:
-                                            inStock ? Colors.red : Colors.green,
-                                        borderRadius: BorderRadius.circular(
-                                            Dimensions.radiusSmall),
-                                      ),
-                                      child: Text(
-                                          inStock
-                                              ? 'out_of_stock'.tr
-                                              : 'in_stock'.tr,
-                                          style: robotoRegular.copyWith(
-                                            color: Colors.white,
-                                            fontSize: Dimensions.fontSizeSmall,
-                                          )),
-                                    ),
-                            ]),
-                          ]),
+                      // Row(
+                      //     crossAxisAlignment: CrossAxisAlignment.end,
+                      //     children: [
+                      //       Column(children: [
+                      //         ((Get.find<SplashController>()
+                      //                         .configModel!
+                      //                         .moduleConfig!
+                      //                         .module!
+                      //                         .unit! &&
+                      //                     item!.unitType != null) ||
+                      //                 (Get.find<SplashController>()
+                      //                         .configModel!
+                      //                         .moduleConfig!
+                      //                         .module!
+                      //                         .vegNonVeg! &&
+                      //                     Get.find<SplashController>()
+                      //                         .configModel!
+                      //                         .toggleVegNonVeg!))
+                      //             ? Container(
+                      //                 padding: const EdgeInsets.symmetric(
+                      //                     vertical:
+                      //                         Dimensions.paddingSizeExtraSmall,
+                      //                     horizontal:
+                      //                         Dimensions.paddingSizeSmall),
+                      //                 decoration: BoxDecoration(
+                      //                   borderRadius: BorderRadius.circular(
+                      //                       Dimensions.radiusSmall),
+                      //                   color: Theme.of(context)
+                      //                       .primaryColor
+                      //                       .withOpacity(0.1),
+                      //                 ),
+                      //                 child: Text(
+                      //                   Get.find<SplashController>()
+                      //                           .configModel!
+                      //                           .moduleConfig!
+                      //                           .module!
+                      //                           .unit!
+                      //                       ? item!.unitType ?? ''
+                      //                       : item!.veg == 0
+                      //                           ? 'non_veg'.tr
+                      //                           : 'veg'.tr,
+                      //                   style: robotoRegular.copyWith(
+                      //                       fontSize:
+                      //                           Dimensions.fontSizeExtraSmall,
+                      //                       color:
+                      //                           Theme.of(context).primaryColor),
+                      //                 ),
+                      //               )
+                      //             : const SizedBox(),
+                      //         // const SizedBox(
+                      //         //     height: Dimensions.paddingSizeDefault),
+                      //        ]),
+                      //     ]),
                     ]);
               },
             ),

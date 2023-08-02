@@ -14,6 +14,7 @@ import '../../util/images.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
+  final Widget? titleWidget;
   final bool backButton;
   final Function? onBackPressed;
   final bool showCart;
@@ -30,6 +31,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       this.onBackPressed,
       this.showCart = false,
       this.showLogo = false,
+      this.titleWidget,
       this.foregroundColor = AppConstants.primaryColor,
       this.leadingIcon,
       this.actions,
@@ -43,94 +45,98 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ? const WebMenuBar()
         : PreferredSize(
             preferredSize: Size(context.width, context.height * 0.32),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: showCart || showLogo || onVegFilterTap != null
-                      ? [
-                          showLogo
-                              ? Image.asset(
-                                  Images.logoColor,
+            child: Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: showCart || showLogo || onVegFilterTap != null
+                        ? [
+                            showLogo
+                                ? Image.asset(
+                                    Images.logoColor,
+                                    color: foregroundColor,
+                                    width: context.width * 0.25,
+                                    height: context.height * 0.03,
+                                    fit: BoxFit.fitHeight,
+                                  )
+                                : SizedBox(),
+                            onVegFilterTap != null
+                                ? VegFilterWidget(
+                                    type: type,
+                                    onSelected: onVegFilterTap,
+                                    fromAppBar: true,
+                                  )
+                                : const SizedBox(),
+                          ]
+                        : [const SizedBox()],
+                  ),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      backButton
+                          ? Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: IconButton(
+                                  icon: Center(
+                                    child: leadingIcon != null
+                                        ? Image.asset(leadingIcon!,
+                                            height: 22, width: 22)
+                                        : const Icon(Icons.arrow_back_ios),
+                                  ),
                                   color: foregroundColor,
-                                  width: context.width * 0.25,
-                                  height: context.height * 0.03,
-                                  fit: BoxFit.fitHeight,
-                                )
-                              : SizedBox(),
-                          
-                          onVegFilterTap != null
-                              ? VegFilterWidget(
-                                  type: type,
-                                  onSelected: onVegFilterTap,
-                                  fromAppBar: true,
-                                )
-                              : const SizedBox(),
-                        ]
-                      : [const SizedBox()],
-                ),
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    backButton
-                        ? Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
-                              child: IconButton(
-                                icon: Center(
-                                  child: leadingIcon != null
-                                      ? Image.asset(leadingIcon!,
-                                          height: 22, width: 22)
-                                      : const Icon(Icons.arrow_back_ios),
+                                  onPressed: () => onBackPressed != null
+                                      ? onBackPressed!()
+                                      : Navigator.pop(context),
                                 ),
-                                color: foregroundColor,
-                                onPressed: () => onBackPressed != null
-                                    ? onBackPressed!()
-                                    : Navigator.pop(context),
+                              ),
+                            )
+                          : Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 8.0),
+                                child: Container(
+                                  width: 22,
+                                  height: 22,
+                                ),
                               ),
                             ),
-                          )
-                        : Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 8.0),
-                              child: Container(
-                                width: 22,
-                                height: 22,
-                              ),
-                            ),
-                          ),
-                    Container(
-                        width: context.width * 0.6,
-                        alignment: Alignment.center,
-                        child: Text(title,
-                            style: wardaRegular.copyWith(
-                              fontSize: Dimensions.fontSizeOverLarge,
-                              color: foregroundColor,
-                            ))),
-                    actions.runtimeType != Null
-                        ? Container(
-                            alignment: Alignment.centerRight,
-                            height: context.height * 0.02,
-                            margin: EdgeInsets.symmetric(horizontal: 8),
-                            width: context.width,
-                            child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: actions!.length,
-                                itemBuilder: (context, index) => Container(
-                                      alignment: Alignment.centerRight,
-                                      child: actions?[index],
-                                    )),
-                          )
-                        : const SizedBox(),
-                  ],
-                )
-              ],
+                      titleWidget.runtimeType != Null
+                          ? Container(
+                              width: context.width * 0.8, child: titleWidget!)
+                          : Container(
+                              width: context.width * 0.6,
+                              alignment: Alignment.center,
+                              child: Text(title,
+                                  style: wardaRegular.copyWith(
+                                    fontSize: Dimensions.fontSizeOverLarge,
+                                    color: foregroundColor,
+                                  ))),
+                      actions.runtimeType != Null
+                          ? Container(
+                              alignment: Alignment.centerRight,
+                              height: context.height * 0.02,
+                              margin: EdgeInsets.symmetric(horizontal: 8),
+                              width: context.width,
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemCount: actions!.length,
+                                  itemBuilder: (context, index) => Container(
+                                        alignment: Alignment.centerRight,
+                                        child: actions?[index],
+                                      )),
+                            )
+                          : const SizedBox(),
+                    ],
+                  )
+                ],
+              ),
             ),
           );
   }

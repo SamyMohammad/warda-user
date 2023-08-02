@@ -302,7 +302,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                               ),
                             ),
                           ]),
-                      const SocialMediaLogin()
+                      // const SocialMediaLogin()
                     ]),
               );
             }),

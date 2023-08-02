@@ -42,7 +42,7 @@ class _ChooseLanguageScreenState extends State<ChooseLanguageScreen> {
                       width: Dimensions.webMaxWidth,
                       child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
 
-                        Center(child: Image.asset(Images.logo, width: 200)),
+                        Center(child: Image.asset(Images.logoColor, width: 200)),
                         // Center(child: Text(AppConstants.APP_NAME, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge))),
                         SizedBox(height: Get.find<LocalizationController>().isLtr ? 30 : 25),
 

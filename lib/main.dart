@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart' as bloc;
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+// import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:warda/controller/auth_controller.dart';
 import 'package:warda/controller/cart_controller.dart';
 import 'package:warda/controller/localization_controller.dart';
@@ -23,9 +23,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:warda/view/screens/f_q/cubit/fq_cubit.dart';
 import 'package:warda/view/screens/home/widget/cookies_view.dart';
 import 'package:warda/view/screens/location/cubit/location_cubit.dart';
 import 'package:url_strategy/url_strategy.dart';
+import 'package:warda/view/screens/search/cubit/filter_cubit.dart';
 import 'data/api/api_client.dart';
 import 'helper/get_di.dart' as di;
 import 'view/screens/cart/cubit/cart_cubit.dart';
@@ -65,12 +67,12 @@ Future<void> main() async {
   } catch (_) {}
 
   if (ResponsiveHelper.isWeb()) {
-    await FacebookAuth.instance.webAndDesktopInitialize(
-      appId: "380903914182154",
-      cookie: true,
-      xfbml: true,
-      version: "v15.0",
-    );
+    // await FacebookAuth.instance.webAndDesktopInitialize(
+    //   appId: "380903914182154",
+    //   cookie: true,
+    //   xfbml: true,
+    //   version: "v15.0",
+    // );
   }
   runApp(MyApp(languages: languages, body: body));
 }
@@ -123,6 +125,8 @@ class _MyAppState extends State<MyApp> {
               ..getCountryData(),
           ),
           bloc.BlocProvider(create: (context) => CartCubit()),
+          bloc.BlocProvider(create: (context) => FilterCubit()),
+          bloc.BlocProvider(create: (context) => FqCubit()..getFAQ()),
         ],
         child: GetBuilder<ThemeController>(builder: (themeController) {
           return GetBuilder<LocalizationController>(

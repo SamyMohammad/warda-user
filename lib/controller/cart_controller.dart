@@ -24,7 +24,13 @@ class CartController extends GetxController implements GetxService {
   double _addOns = 0;
   List<List<AddOns>> _addOnsList = [];
   List<bool> _availableList = [];
-  List<String> notAvailableList = ['Remove it from my cart', 'I’ll wait until it’s restocked', 'Please cancel the order', 'Call me ASAP', 'Notify me when it’s back'];
+  List<String> notAvailableList = [
+    'Remove it from my cart',
+    'I’ll wait until it’s restocked',
+    'Please cancel the order',
+    'Call me ASAP',
+    'Notify me when it’s back'
+  ];
   bool _addCutlery = false;
   int _notAvailableIndex = -1;
 
@@ -37,30 +43,29 @@ class CartController extends GetxController implements GetxService {
   bool get addCutlery => _addCutlery;
   int get notAvailableIndex => _notAvailableIndex;
 
-
-  void setAvailableIndex(int index, {bool isUpdate = true}){
-    if(_notAvailableIndex == index){
+  void setAvailableIndex(int index, {bool isUpdate = true}) {
+    if (_notAvailableIndex == index) {
       _notAvailableIndex = -1;
-    }else {
+    } else {
       _notAvailableIndex = index;
     }
-    if(isUpdate) {
+    if (isUpdate) {
       update();
     }
   }
 
-  void updateCutlery({bool isUpdate = true}){
+  void updateCutlery({bool isUpdate = true}) {
     _addCutlery = !_addCutlery;
-    if(isUpdate) {
+    if (isUpdate) {
       update();
     }
   }
 
-  void forcefullySetModule(int moduleId){
-    if(Get.find<SplashController>().module == null){
-      if(Get.find<SplashController>().moduleList != null) {
-        for(ModuleModel module in Get.find<SplashController>().moduleList!) {
-          if(module.id == moduleId) {
+  void forcefullySetModule(int moduleId) {
+    if (Get.find<SplashController>().module == null) {
+      if (Get.find<SplashController>().moduleList != null) {
+        for (ModuleModel module in Get.find<SplashController>().moduleList!) {
+          if (module.id == moduleId) {
             Get.find<SplashController>().setModule(module);
             break;
           }
@@ -76,11 +81,10 @@ class CartController extends GetxController implements GetxService {
     _itemDiscountPrice = 0;
     _addOns = 0;
     for (var cartModel in cartList) {
-
       List<AddOns> addOnList = [];
       for (var addOnId in cartModel.addOnIds!) {
-        for(AddOns addOns in cartModel.item!.addOns!) {
-          if(addOns.id == addOnId.id) {
+        for (AddOns addOns in cartModel.item!.addOns!) {
+          if (addOns.id == addOnId.id) {
             addOnList.add(addOns);
             break;
           }
@@ -88,13 +92,18 @@ class CartController extends GetxController implements GetxService {
       }
       _addOnsList.add(addOnList);
 
-      _availableList.add(DateConverter.isAvailable(cartModel.item!.availableTimeStarts, cartModel.item!.availableTimeEnds));
+      _availableList.add(DateConverter.isAvailable(
+          cartModel.item!.availableTimeStarts,
+          cartModel.item!.availableTimeEnds));
 
-      for(int index=0; index<addOnList.length; index++) {
-        _addOns = _addOns + (addOnList[index].price! * cartModel.addOnIds![index].quantity!);
+      for (int index = 0; index < addOnList.length; index++) {
+        _addOns = _addOns +
+            (addOnList[index].price! * cartModel.addOnIds![index].quantity!);
       }
       _itemPrice = _itemPrice + (cartModel.price! * cartModel.quantity!);
-      _itemDiscountPrice = _itemDiscountPrice + ((cartModel.price! - cartModel.discountedPrice!) * cartModel.quantity!);
+      _itemDiscountPrice = _itemDiscountPrice +
+          ((cartModel.price! - cartModel.discountedPrice!) *
+              cartModel.quantity!);
     }
     _subTotal = (_itemPrice - _itemDiscountPrice) + _addOns;
 
@@ -107,18 +116,20 @@ class CartController extends GetxController implements GetxService {
 
     _allCartList.addAll(cartRepo.getCartList());
 
-    if(Get.find<SplashController>().module != null) {
+    if (Get.find<SplashController>().module != null) {
       _cartList = [];
-      for(CartModel cartItem in cartRepo.getCartList()){
-        if(cartItem.item!.moduleId == Get.find<SplashController>().module!.id){
+      for (CartModel cartItem in cartRepo.getCartList()) {
+        if (cartItem.item!.moduleId ==
+            Get.find<SplashController>().module!.id) {
           _cartList.add(cartItem);
         }
       }
-    }else{
-      if(Get.find<SplashController>().cacheModule != null){
+    } else {
+      if (Get.find<SplashController>().cacheModule != null) {
         _cartList = [];
-        for(CartModel cartItem in cartRepo.getCartList()){
-          if(cartItem.item!.moduleId == Get.find<SplashController>().cacheModule!.id){
+        for (CartModel cartItem in cartRepo.getCartList()) {
+          if (cartItem.item!.moduleId ==
+              Get.find<SplashController>().cacheModule!.id) {
             _cartList.add(cartItem);
           }
         }
@@ -129,9 +140,11 @@ class CartController extends GetxController implements GetxService {
   }
 
   void addToCart(CartModel cartModel, int? index) {
-    if(index != null && index != -1) {
-      _cartList.replaceRange(index, index+1, [cartModel]);
-    }else {
+    if (index != null && index != -1) {
+      _cartList.replaceRange(index, index + 1, [cartModel]);
+    } else {
+      print('hellll:: ${cartModel.item!.name},,,,${index}');
+
       _cartList.add(cartModel);
     }
     Get.find<ItemController>().setExistInCart(cartModel.item, notify: true);
@@ -144,9 +157,14 @@ class CartController extends GetxController implements GetxService {
 
   void setQuantity(bool isIncrement, int cartIndex, int? stock) {
     if (isIncrement) {
-      if(Get.find<SplashController>().configModel!.moduleConfig!.module!.stock! && cartList[cartIndex].quantity! >= stock!) {
+      if (Get.find<SplashController>()
+              .configModel!
+              .moduleConfig!
+              .module!
+              .stock! &&
+          cartList[cartIndex].quantity! >= stock!) {
         showCustomSnackBar('out_of_stock'.tr);
-      }else {
+      } else {
         _cartList[cartIndex].quantity = _cartList[cartIndex].quantity! + 1;
       }
     } else {
@@ -162,8 +180,9 @@ class CartController extends GetxController implements GetxService {
   void removeFromCart(int index) {
     _cartList.removeAt(index);
     cartRepo.addToCartList(_cartList);
-    if(Get.find<ItemController>().item != null) {
-      Get.find<ItemController>().setExistInCart(Get.find<ItemController>().item, notify: true);
+    if (Get.find<ItemController>().item != null) {
+      Get.find<ItemController>()
+          .setExistInCart(Get.find<ItemController>().item, notify: true);
     }
     calculationCart();
     update();
@@ -183,16 +202,19 @@ class CartController extends GetxController implements GetxService {
     update();
   }
 
-  int isExistInCart(int? itemID, String variationType, bool isUpdate, int? cartIndex) {
-    for(int index=0; index<_cartList.length; index++) {
+  int isExistInCart(
+      int? itemID, String variationType, bool isUpdate, int? cartIndex) {
+    for (int index = 0; index < _cartList.length; index++) {
       if (kDebugMode) {
         print('======${_cartList[index].toJson()}');
       }
-      if(_cartList[index].item!.id == itemID && (_cartList[index].variation!.isNotEmpty ? _cartList[index].variation![0].type
-          == variationType : true)) {
-        if((isUpdate && index == cartIndex)) {
+      if (_cartList[index].item!.id == itemID &&
+          (_cartList[index].variation!.isNotEmpty
+              ? _cartList[index].variation![0].type == variationType
+              : true)) {
+        if ((isUpdate && index == cartIndex)) {
           return -1;
-        }else {
+        } else {
           return index;
         }
       }
@@ -201,8 +223,9 @@ class CartController extends GetxController implements GetxService {
   }
 
   bool existAnotherStoreItem(int? storeID, int? moduleId) {
-    for(CartModel cartModel in _cartList) {
-      if(cartModel.item!.storeId != storeID && cartModel.item!.moduleId == moduleId) {
+    for (CartModel cartModel in _cartList) {
+      if (cartModel.item!.storeId != storeID &&
+          cartModel.item!.moduleId == moduleId) {
         return true;
       }
     }
@@ -211,8 +234,8 @@ class CartController extends GetxController implements GetxService {
 
   void removeAllAndAddToCart(CartModel cartModel) async {
     _cartList = [];
-    for(CartModel cartItem in cartRepo.getCartList()) {
-      if(cartItem.item!.moduleId != cartModel.item!.moduleId) {
+    for (CartModel cartItem in cartRepo.getCartList()) {
+      if (cartItem.item!.moduleId != cartModel.item!.moduleId) {
         _cartList.add(cartItem);
       }
     }
@@ -223,6 +246,4 @@ class CartController extends GetxController implements GetxService {
     Get.find<ItemController>().setExistInCart(cartModel.item, notify: true);
     update();
   }
-
-
 }

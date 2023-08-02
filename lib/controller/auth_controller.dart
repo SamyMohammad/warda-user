@@ -1,4 +1,4 @@
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+// import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
@@ -432,7 +432,7 @@ class AuthController extends GetxController implements GetxService {
   Future<void> socialLogout() async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
     googleSignIn.disconnect();
-    await FacebookAuth.instance.logOut();
+   // await FacebookAuth.instance.logOut();
   }
 
   bool clearSharedAddress() {

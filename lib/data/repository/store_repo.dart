@@ -93,7 +93,8 @@ class StoreRepo {
       setHeader: false,
     );
     return await apiClient.getData(
-        '${AppConstants.cartStoreSuggestedItemsUri}?recommended=1&store_id=$storeId&offset=1&limit=50',
+        //?recommended=1&store_id=$storeId&offset=1&limit=50
+        '${AppConstants.cartStoreSuggestedItemsUri}',
         headers: header);
   }
 }

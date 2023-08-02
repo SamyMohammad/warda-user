@@ -5,6 +5,7 @@ import 'package:warda/util/styles.dart';
 
 class PortionWidget extends StatelessWidget {
   final String icon;
+  final IconData? iconData;
   final String title;
   final bool hideDivider;
   final String route;
@@ -14,6 +15,7 @@ class PortionWidget extends StatelessWidget {
   const PortionWidget(
       {Key? key,
       required this.icon,
+      this.iconData,
       required this.title,
       required this.route,
       this.foregroundColor = Colors.black,
@@ -31,7 +33,14 @@ class PortionWidget extends StatelessWidget {
             const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeSmall),
         child: Column(children: [
           Row(children: [
-            Image.asset(icon, color: foregroundColor, height: 16, width: 16),
+            iconData.runtimeType != Null
+                ? Icon(
+                    iconData,
+                    color: foregroundColor,
+                    size: 16,
+                  )
+                : Image.asset(icon,
+                    color: foregroundColor, height: 16, width: 16),
             const SizedBox(width: Dimensions.paddingSizeSmall),
             Expanded(
                 child: Text(title,

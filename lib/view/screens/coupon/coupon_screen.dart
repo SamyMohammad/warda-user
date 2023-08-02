@@ -13,6 +13,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:warda/view/screens/coupon/widget/coupon_card.dart';
 
+import '../../../util/images.dart';
+
 class CouponScreen extends StatefulWidget {
   const CouponScreen({Key? key, this.fromNav = false}) : super(key: key);
   final bool fromNav;
@@ -53,56 +55,41 @@ class _CouponScreenState extends State<CouponScreen> {
                           onRefresh: () async {
                             await couponController.getCouponList();
                           },
-                          child: Scrollbar(
-                              child: SingleChildScrollView(
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            child: Center(
-                                child: FooterView(
+                          child: Center(
                               child: SizedBox(
                                   width: Dimensions.webMaxWidth,
-                                  child: GridView.builder(
-                                    gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount:
-                                          ResponsiveHelper.isDesktop(context)
-                                              ? 3
-                                              : ResponsiveHelper.isTab(context)
-                                                  ? 2
-                                                  : 1,
-                                      mainAxisSpacing:
-                                          Dimensions.paddingSizeSmall,
-                                      crossAxisSpacing:
-                                          Dimensions.paddingSizeSmall,
-                                      childAspectRatio:
-                                          ResponsiveHelper.isMobile(context)
-                                              ? 3
-                                              : 3,
-                                    ),
+                                  height: context.height * 0.55,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
                                     itemCount:
                                         couponController.couponList!.length,
                                     shrinkWrap: true,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
                                     padding: const EdgeInsets.all(
                                         Dimensions.paddingSizeLarge),
                                     itemBuilder: (context, index) {
+                                      int currentIndex = index;
+                                      // index = 0;
                                       return InkWell(
                                         onTap: () {
                                           Clipboard.setData(ClipboardData(
                                               text: couponController
-                                                  .couponList![index].code!));
+                                                  .couponList![currentIndex]
+                                                  .code!));
                                           showCustomSnackBar(
                                               'coupon_code_copied'.tr,
                                               isError: false);
                                         },
                                         child: CouponCard(
                                             couponController: couponController,
-                                            index: index),
+                                            couponImg: (index + 1) % 3 == 0
+                                                ? Images.couponCoffee
+                                                : (index + 1) % 2 == 0
+                                                    ? Images.couponGreen
+                                                    : Images.couponRed,
+                                            index: currentIndex),
                                       );
                                     },
-                                  )),
-                            )),
-                          )),
+                                  ))),
                         )
                       : NoDataScreen(
                           text: 'no_coupon_found'.tr, showFooter: true)

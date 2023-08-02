@@ -98,7 +98,7 @@ class CartItemWidget extends StatelessWidget {
                 : SlidableAction(
                     onPressed: (context) =>
                         Get.find<CartController>().removeFromCart(cartIndex),
-                    backgroundColor: Theme.of(context).primaryColor,
+                    backgroundColor: AppConstants.lightPinkColor,
                     borderRadius: BorderRadius.horizontal(
                         right: Radius.circular(
                             Get.find<LocalizationController>().isLtr
@@ -119,10 +119,10 @@ class CartItemWidget extends StatelessWidget {
               horizontal: Dimensions.paddingSizeSmall),
           decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
-            borderRadius: BorderRadius.circular(forReview ? 5 : 15),
+            borderRadius: BorderRadius.circular(forReview ? 5 : 20),
             boxShadow: [
               BoxShadow(
-                color: Theme.of(context).primaryColor.withOpacity(0.2),
+                color: AppConstants.lightPinkColor,
                 blurRadius: 5,
                 spreadRadius: 1,
               )
@@ -184,7 +184,7 @@ class CartItemWidget extends StatelessWidget {
                                   ? robotoRegular.copyWith(
                                       fontWeight: FontWeight.w500)
                                   : robotoMedium.copyWith(
-                                      fontSize: Dimensions.fontSizeLarge,
+                                      fontSize: Dimensions.fontSizeDefault,
                                       fontWeight: FontWeight.bold),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
@@ -316,8 +316,20 @@ class CartItemWidget extends StatelessWidget {
 
   Widget bodyCartItemChange(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: context.height * 0.03),
+        SizedBox(height: context.height * 0.01),
+        Text(
+          cart.item!.description!,
+          style: forReview
+              ? robotoRegular.copyWith(fontWeight: FontWeight.w500)
+              : robotoMedium.copyWith(
+                  fontSize: Dimensions.fontSizeSmall,
+                  color: Theme.of(context).hintColor),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
+        SizedBox(height: context.height * 0.02),
         Row(
           children: [
             Text(

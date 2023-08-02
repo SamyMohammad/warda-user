@@ -8,6 +8,7 @@ import '../../../../helper/price_converter.dart';
 import '../../../../helper/responsive_helper.dart';
 import '../../../../util/dimensions.dart';
 import '../../../base/custom_button.dart';
+import '../../../base/custom_snackbar.dart';
 import '../../../base/web_constrained_box.dart';
 import '../cubit/cart_cubit.dart';
 import 'cart_item_widget.dart';
@@ -117,26 +118,36 @@ class _CartItemsListWidgetState extends State<CartItemsListWidget> {
                           CustomButton(
                             buttonText:
                                 '${'total_amount'.tr}   ${PriceConverter.convertPrice(cartController.subTotal)}',
-                            width: context.width * 0.8,
+                            width: context.width * 0.9,
                             color: Theme.of(context).cardColor,
                             textColor: Theme.of(context).primaryColor,
                             radius: 30,
                             height: context.height * 0.07,
-                            onPressed: (){},
+                            onPressed: () {},
                           ),
                           SizedBox(
                             height: context.height * 0.01,
                           ),
-                          CustomButton(
-                            buttonText: 'continue'.tr,
-                            width: context.width * 0.8,
-                            radius: 30,
-                            height: context.height * 0.07,
-                            onPressed: () {
-                              BlocProvider.of<CartCubit>(context)
-                                  .changeActiveStep(1);
-                            },
-                          )
+                          // CustomButton(
+                          //   buttonText: 'continue'.tr,
+                          //   width: context.width * 0.8,
+                          //   radius: 30,
+                          //   height: context.height * 0.07,
+                          //   onPressed: () {
+                          //     String? message =
+                          //         BlocProvider.of<CartCubit>(context)
+                          //             .validator(1);
+                          //     if (message.runtimeType != Null) {
+                          //       showCustomSnackBar(message, isError: true);
+                          //     } else {
+                          //       BlocProvider.of<CartCubit>(context)
+                          //           .changeActiveStep(1);
+                          //     }
+                          //   },
+                          // ),
+                          SizedBox(
+                            height: context.height * 0.04,
+                          ),
                         ],
                       )
                 // : CheckoutButton(

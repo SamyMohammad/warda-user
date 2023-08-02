@@ -121,15 +121,19 @@ class SplashScreenState extends State<SplashScreen> {
                       .navigateToLocationScreen('splash', offNamed: true);
                 }
               } else {
-                if (Get.find<SplashController>().showIntro()!) {
-                  if (AppConstants.languages.length > 1) {
-                    Get.offNamed(RouteHelper.getLanguageRoute('splash'));
-                  } else {
-                    Get.offNamed(RouteHelper.getOnBoardingRoute());
-                  }
-                } else {
-                  Get.offNamed(RouteHelper.getSignInRoute(RouteHelper.splash));
-                }
+                // if (Get.find<SplashController>().showIntro()!) {
+                //   if (AppConstants.languages.length > 1) {
+                //     Get.offNamed(RouteHelper.getLanguageRoute('splash'));
+                //   } else {
+                //     Get.offNamed(RouteHelper.getOnBoardingRoute());
+                //   }
+                // }
+                // else {
+
+                Get.offNamed(
+                    RouteHelper.getAuthOnBoardingRoute(RouteHelper.onBoarding));
+                // Get.offNamed(RouteHelper.getSignInRoute(RouteHelper.onBoarding));
+                // }
 
                 //  Get.offNamed(RouteHelper.getOnBoardingRoute());
               }
@@ -150,13 +154,14 @@ class SplashScreenState extends State<SplashScreen> {
 
     return Scaffold(
       key: _globalKey,
+      backgroundColor: AppConstants.splashBackgroundColor,
       body: GetBuilder<SplashController>(builder: (splashController) {
         return Center(
           child: splashController.hasConnection
               ? Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Image.asset(Images.logo, width: 200),
+                    Image.asset(Images.splashLogo, width: context.width * 0.9),
                     const SizedBox(height: Dimensions.paddingSizeSmall),
                     // Text(AppConstants.APP_NAME, style: robotoMedium.copyWith(fontSize: 25)),
                   ],

@@ -13,11 +13,13 @@ class OrderRepo {
   OrderRepo({required this.apiClient, required this.sharedPreferences});
 
   Future<Response> getRunningOrderList(int offset) async {
-    return await apiClient.getData('${AppConstants.runningOrderListUri}?offset=$offset&limit=${50}');
+    return await apiClient.getData(
+        '${AppConstants.runningOrderListUri}?offset=$offset&limit=${50}');
   }
 
   Future<Response> getHistoryOrderList(int offset) async {
-    return await apiClient.getData('${AppConstants.historyOrderListUri}?offset=$offset&limit=10');
+    return await apiClient
+        .getData('${AppConstants.historyOrderListUri}?offset=$offset&limit=10');
   }
 
   Future<Response> getOrderDetails(String orderID) async {
@@ -25,23 +27,33 @@ class OrderRepo {
   }
 
   Future<Response> cancelOrder(String orderID, String? reason) async {
-    return await apiClient.postData(AppConstants.orderCancelUri, {'_method': 'put', 'order_id': orderID, 'reason': reason});
+    return await apiClient.postData(AppConstants.orderCancelUri,
+        {'_method': 'put', 'order_id': orderID, 'reason': reason});
   }
 
   Future<Response> trackOrder(String? orderID) async {
     return await apiClient.getData('${AppConstants.trackUri}$orderID');
   }
 
-  Future<Response> placeOrder(PlaceOrderBody orderBody, XFile? orderAttachment) async {
+  Future<Response> placeOrder(
+      PlaceOrderBody orderBody, XFile? orderAttachment) async {
     return await apiClient.postMultipartData(
-      AppConstants.placeOrderUri, orderBody.toJson(),
+      AppConstants.placeOrderUri,
+      orderBody.toJson(),
       [MultipartBody('order_attachment', orderAttachment)],
     );
   }
 
-  Future<Response> placePrescriptionOrder(int? storeId, double? distance, String address, String longitude,
-      String latitude, String note, List<MultipartBody> orderAttachment, String dmTips, String deliveryInstruction) async {
-
+  Future<Response> placePrescriptionOrder(
+      int? storeId,
+      double? distance,
+      String address,
+      String longitude,
+      String latitude,
+      String note,
+      List<MultipartBody> orderAttachment,
+      String dmTips,
+      String deliveryInstruction) async {
     Map<String, String> body = {
       'store_id': storeId.toString(),
       'distance': distance.toString(),
@@ -52,7 +64,8 @@ class OrderRepo {
       'dm_tips': dmTips,
       'delivery_instruction': deliveryInstruction,
     };
-    return await apiClient.postMultipartData(AppConstants.placePrescriptionOrderUri, body, orderAttachment);
+    return await apiClient.postMultipartData(
+        AppConstants.placePrescriptionOrderUri, body, orderAttachment);
   }
 
   Future<Response> getDeliveryManData(String orderID) async {
@@ -60,10 +73,12 @@ class OrderRepo {
   }
 
   Future<Response> switchToCOD(String? orderID) async {
-    return await apiClient.postData(AppConstants.codSwitchUri, {'_method': 'put', 'order_id': orderID});
+    return await apiClient.postData(
+        AppConstants.codSwitchUri, {'_method': 'put', 'order_id': orderID});
   }
 
-  Future<Response> getDistanceInMeter(LatLng originLatLng, LatLng destinationLatLng, bool isRiding) async {
+  Future<Response> getDistanceInMeter(
+      LatLng originLatLng, LatLng destinationLatLng, bool isRiding) async {
     return await apiClient.getData('${AppConstants.distanceMatrixUri}'
         '?origin_lat=${originLatLng.latitude}&origin_lng=${originLatLng.longitude}'
         '&destination_lat=${destinationLatLng.latitude}&destination_lng=${destinationLatLng.longitude}&mode=${isRiding ? 'driving' : 'walking'}');
@@ -73,17 +88,31 @@ class OrderRepo {
     return await apiClient.getData(AppConstants.refundReasonUri);
   }
 
-  Future<Response> submitRefundRequest(Map<String, String> body, XFile? data) async {
-    return apiClient.postMultipartData(AppConstants.refundRequestUri, body,  [MultipartBody('image[]', data)]);
+  Future<Response> submitRefundRequest(
+      Map<String, String> body, XFile? data) async {
+    return apiClient.postMultipartData(
+        AppConstants.refundRequestUri, body, [MultipartBody('image[]', data)]);
   }
 
   Future<Response> getExtraCharge(double? distance) async {
-    return await apiClient.getData('${AppConstants.vehicleChargeUri}?distance=$distance');
+    return await apiClient
+        .getData('${AppConstants.vehicleChargeUri}?distance=$distance');
   }
 
   Future<Response> getCancelReasons() async {
-    return await apiClient.getData('${AppConstants.orderCancellationUri}?offset=1&limit=30&type=customer');
+    return await apiClient.getData(
+        '${AppConstants.orderCancellationUri}?offset=1&limit=30&type=customer');
   }
 
+  Future<Response> getPaymentMethods() async {
+    return await apiClient.getData(AppConstants.getPaymentMethods);
+  }
 
+  Future<Response> getQuestions() async {
+    return await apiClient.getData(AppConstants.getQuestionsUri);
+  }
+
+  Future<Response> getMessage(Map<String, dynamic> body) async {
+    return await apiClient.postData(AppConstants.generateMessageUri, body);
+  }
 }

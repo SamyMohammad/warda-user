@@ -25,7 +25,7 @@ class CustomButton extends StatelessWidget {
       this.width,
       this.height,
       this.fontSize,
-      this.radius = 10,
+      this.radius = 30,
       this.icon,
       this.color,
       this.textColor,
@@ -45,7 +45,7 @@ class CustomButton extends StatelessWidget {
       padding: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radius),
-          side: BorderSide(color: textColor ?? Theme.of(context).primaryColor)),
+          side: BorderSide(color: textColor ?? Theme.of(context).primaryColor,width: 0.6)),
     );
 
     return Center(

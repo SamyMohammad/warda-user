@@ -6,7 +6,7 @@ import 'package:warda/util/dimensions.dart';
 import 'package:warda/util/images.dart';
 import 'package:warda/util/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+// import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -49,13 +49,13 @@ class SocialLoginWidget extends StatelessWidget {
 
         Get.find<SplashController>().configModel!.socialLogin![1].status! ? InkWell(
           onTap: () async{
-            LoginResult result = await FacebookAuth.instance.login();
-            if (result.status == LoginStatus.success) {
-              Map userData = await FacebookAuth.instance.getUserData();
-              Get.find<AuthController>().loginWithSocialMedia(SocialLogInBody(
-                email: userData['email'], token: result.accessToken!.token, uniqueId: result.accessToken!.userId, medium: 'facebook',
-              ));
-            }
+            // LoginResult result = await FacebookAuth.instance.login();
+            // if (result.status == LoginStatus.success) {
+            //   Map userData = await FacebookAuth.instance.getUserData();
+            //   Get.find<AuthController>().loginWithSocialMedia(SocialLogInBody(
+            //     email: userData['email'], token: result.accessToken!.token, uniqueId: result.accessToken!.userId, medium: 'facebook',
+            //   ));
+            // }
           },
           child: Container(
             height: 40, width: 40,

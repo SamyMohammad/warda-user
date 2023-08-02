@@ -1,3 +1,4 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:warda/helper/route_helper.dart';
 import 'package:warda/util/dimensions.dart';
 import 'package:warda/util/images.dart';
@@ -5,6 +6,8 @@ import 'package:warda/util/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:warda/view/base/footer_view.dart';
+import 'package:warda/view/screens/dashboard/dashboard_screen.dart';
+import 'package:warda/view/screens/home/cubit/home_cubit.dart';
 
 class NoDataScreen extends StatelessWidget {
   final bool isCart;
@@ -85,30 +88,33 @@ class NoDataScreen extends StatelessWidget {
                         ),
                       ),
                     )
-                  : isCart
-                      ? InkWell(
-                          onTap: () => Get.toNamed(
-                              RouteHelper.getInitialRoute()),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            width: context.width * 0.75,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 15, horizontal: 20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text('start_shopping'.tr,
-                                    style: robotoMedium.copyWith(
-                                        color: Theme.of(context).cardColor)),
-                              ],
-                            ),
-                          ),
-                        )
-                      : const SizedBox(),
+                  // : isCart
+                  //     ? InkWell(
+                  //         onTap: () {
+                  //           //  Get.toNamed(
+                  //           //   RouteHelper.getInitialRoute(fromSplash: true))
+                  //           DashboardScreenState().setPage(1);
+                  //         },
+                  //         child: Container(
+                  //           decoration: BoxDecoration(
+                  //             borderRadius: BorderRadius.circular(30),
+                  //             color: Theme.of(context).primaryColor,
+                  //           ),
+                  //           width: context.width * 0.75,
+                  //           padding: const EdgeInsets.symmetric(
+                  //               vertical: 15, horizontal: 20),
+                  //           child: Row(
+                  //             mainAxisAlignment: MainAxisAlignment.center,
+                  //             mainAxisSize: MainAxisSize.min,
+                  //             children: [
+                  //               Text('start_shopping'.tr,
+                  //                   style: robotoMedium.copyWith(
+                  //                       color: Theme.of(context).cardColor)),
+                  //             ],
+                  //           ),
+                  //         ),
+                  //       )
+                  : const SizedBox(),
             ]),
       ),
     );

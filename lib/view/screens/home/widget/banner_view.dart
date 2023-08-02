@@ -38,15 +38,15 @@ class BannerView extends StatelessWidget {
               height: GetPlatform.isDesktop ? 500 : context.height * 0.25,
               // color: Colors.red,
               padding:
-                  const EdgeInsets.only(top: Dimensions.paddingSizeDefault),
+                  const EdgeInsets.only(top: Dimensions.paddingSizeExtraSmall),
               child: bannerList != null
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Container(
                             alignment: Alignment.center,
-                            width: context.width * 0.9,
-                            height: context.height * 0.22,
+                            width: context.width * 0.99,
+                            height: context.height * 0.23,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
                             ),

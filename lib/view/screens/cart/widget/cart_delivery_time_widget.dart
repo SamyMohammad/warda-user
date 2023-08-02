@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import '../../../../util/app_constants.dart';
 import '../../../../util/styles.dart';
 import '../../../base/custom_button.dart';
+import '../../../base/custom_snackbar.dart';
 import '../../../base/custom_text_field.dart';
 import '../cubit/cart_cubit.dart';
 
@@ -38,11 +39,8 @@ class _CartDeliveryTimeWidgetState extends State<CartDeliveryTimeWidget>
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Row(
               children: [
-                const Icon(
-                  Icons.calendar_today_outlined,
-                  color: AppConstants.primaryColor,
-                  size :20
-                ),
+                const Icon(Icons.calendar_today_outlined,
+                    color: AppConstants.primaryColor, size: 20),
                 SizedBox(
                   width: context.width * 0.04,
                 ),
@@ -161,11 +159,19 @@ class _CartDeliveryTimeWidgetState extends State<CartDeliveryTimeWidget>
         SizedBox(
           height: context.height * 0.03,
         ),
-        CustomButton(
-          onPressed: () {},
-          radius: 30,
-          buttonText: 'continue'.tr,
-        ),
+        // CustomButton(
+        //   onPressed: () async {
+        //     String? message = cubit.validator(4);
+        //     if (message.runtimeType != Null) {
+        //       print('hello validator :: $message');
+        //       showCustomSnackBar(message, isError: true);
+        //     } else {
+        //       cubit.changeActiveStep(4);
+        //     }
+        //   },
+        //   radius: 30,
+        //   buttonText: 'continue'.tr,
+        // ),
       ],
     );
   }
@@ -255,7 +261,12 @@ class _CartDeliveryTimeWidgetState extends State<CartDeliveryTimeWidget>
           ),
           CustomButton(
             onPressed: () {
-              cubit.changeActiveStep(4);
+              String? message = cubit.validator(4);
+              if (message.runtimeType != Null) {
+                showCustomSnackBar(message, isError: true);
+              } else {
+                cubit.changeActiveStep(4);
+              }
             },
             radius: 30,
             buttonText: 'continue'.tr,

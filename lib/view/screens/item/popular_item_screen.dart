@@ -37,7 +37,7 @@ class _PopularItemScreenState extends State<PopularItemScreen> {
         return Scaffold(
           appBar: CustomAppBar(
             key: scaffoldKey,
-            title: widget.isPopular ? 'popular_items_nearby'.tr : 'best_reviewed_item'.tr, showCart: true,
+            title: widget.isPopular ? 'popular_items'.tr : 'best_reviewed_item'.tr, showCart: true,
             type: widget.isPopular ? itemController.popularType : itemController.reviewType,
             onVegFilterTap: (String type) {
               if(widget.isPopular) {

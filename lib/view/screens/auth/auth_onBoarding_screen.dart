@@ -39,93 +39,87 @@ class AuthOnBoardingScreen extends StatelessWidget {
             SizedBox(
               height: context.height * 0.15,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                buttubAuthOnboarding(
-                    context.width * 0.35,
-                    context.height * 0.08,
-                    Text(
-                      'Login'.toUpperCase(),
-                      style: robotoRegular.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ), () {
-                  Get.toNamed(
-                      RouteHelper.getSignInRoute(RouteHelper.authOnboarding));
-                }),
-                SizedBox(
-                  width: context.width * 0.05,
-                ),
-                buttubAuthOnboarding(
-                    context.width * 0.35,
-                    context.height * 0.08,
-                    Text(
-                      'Sing up'.toUpperCase(),
-                      style: robotoRegular.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ), () {
-                  Get.toNamed(RouteHelper.getSignUpRoute());
-                }),
-              ],
-            ),
+            buttubAuthOnboarding(
+                context.width * 0.75,
+                context.height * 0.08,
+                // context.width * 0.35,
+                // context.height * 0.08,
+                Text(
+                  'Login'.toUpperCase(),
+                  style: robotoRegular.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ), () {
+              Get.toNamed(
+                  RouteHelper.getSignInRoute(RouteHelper.authOnboarding));
+            }),
             SizedBox(
               height: context.height * 0.015,
             ),
             buttubAuthOnboarding(
                 context.width * 0.75,
                 context.height * 0.08,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      Images.facebook,
-                      width: context.height * 0.045,
-                      height: context.height * 0.04,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                      child: Text(
-                        'Connect with facebook'.toUpperCase(),
-                        style: robotoRegular.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                            fontSize: context.width * 0.04),
-                      ),
-                    ),
-                  ],
-                ),
-                null),
-            SizedBox(
-              height: context.height * 0.015,
-            ),
-            buttubAuthOnboarding(
-                context.width * 0.75,
-                context.height * 0.08,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      Images.google,
-                      width: context.height * 0.045,
-                      height: context.height * 0.04,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(
-                        'Connect with google'.toUpperCase(),
-                        style: robotoRegular.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                            fontSize: context.width * 0.04),
-                      ),
-                    ),
-                  ],
-                ),
-                null),
+                Text(
+                  'Sing up'.toUpperCase(),
+                  style: robotoRegular.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ), () {
+              Get.toNamed(RouteHelper.getSignUpRoute());
+            }),
+            // buttubAuthOnboarding(
+            //     context.width * 0.75,
+            //     context.height * 0.08,
+            //     Row(
+            //       mainAxisAlignment: MainAxisAlignment.center,
+            //       children: [
+            //         Image.asset(
+            //           Images.facebook,
+            //           width: context.height * 0.045,
+            //           height: context.height * 0.04,
+            //         ),
+            //         Padding(
+            //           padding: const EdgeInsets.symmetric(horizontal: 0.0),
+            //           child: Text(
+            //             'Connect with facebook'.toUpperCase(),
+            //             style: robotoRegular.copyWith(
+            //                 color: Colors.white,
+            //                 fontWeight: FontWeight.w500,
+            //                 fontSize: context.width * 0.04),
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //     null),
+            // SizedBox(
+            //   height: context.height * 0.015,
+            // ),
+            // buttubAuthOnboarding(
+            //     context.width * 0.75,
+            //     context.height * 0.08,
+            //     Row(
+            //       mainAxisAlignment: MainAxisAlignment.center,
+            //       children: [
+            //         Image.asset(
+            //           Images.google,
+            //           width: context.height * 0.045,
+            //           height: context.height * 0.04,
+            //         ),
+            //         Padding(
+            //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            //           child: Text(
+            //             'Connect with google'.toUpperCase(),
+            //             style: robotoRegular.copyWith(
+            //                 color: Colors.white,
+            //                 fontWeight: FontWeight.w500,
+            //                 fontSize: context.width * 0.04),
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //     null),
           ],
         ),
       ),

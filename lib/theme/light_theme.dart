@@ -5,6 +5,8 @@ import '../util/app_constants.dart';
 ThemeData light({Color color = AppConstants.primaryColor}) => ThemeData(
       fontFamily: 'Roboto',
       primaryColor: color,
+      backgroundColor: Colors.white,
+      scaffoldBackgroundColor: Colors.white,
       secondaryHeaderColor: AppConstants.primaryColor,
       disabledColor: const Color(0xFFBABFC4),
       brightness: Brightness.light,

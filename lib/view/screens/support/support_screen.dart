@@ -34,7 +34,7 @@ class _SupportScreenState extends State<SupportScreen> {
             Image.asset(Images.supportImage, height: 120),
             const SizedBox(height: 30),
 
-            Image.asset(Images.logo, width: 200),
+            Image.asset(Images.logoColor, width: 200),
             const SizedBox(height: Dimensions.paddingSizeSmall),
             /*Text(AppConstants.APP_NAME, style: robotoBold.copyWith(
               fontSize: 20, color: Theme.of(context).primaryColor,

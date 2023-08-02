@@ -18,6 +18,7 @@ import 'package:warda/view/screens/auth/sign_in_screen.dart';
 import 'package:warda/view/screens/menu/widget/portion_widget.dart';
 
 import '../../base/custom_app_bar.dart';
+import '../dashboard/dashboard_screen.dart';
 
 class MenuScreenNew extends StatefulWidget {
   const MenuScreenNew({Key? key}) : super(key: key);
@@ -34,6 +35,14 @@ class _MenuScreenNewState extends State<MenuScreenNew> {
       appBar: CustomAppBar(
         title: 'Profile',
         foregroundColor: Colors.white,
+        onBackPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => const DashboardScreen(pageIndex: 0)));
+          //DashboardScreen(pageIndex: 0);
+          // DashboardScreenState().setPage(0);
+        },
       ),
       body: GetBuilder<UserController>(builder: (userController) {
         final bool isLoggedIn = Get.find<AuthController>().isLoggedIn();
@@ -82,11 +91,11 @@ class _MenuScreenNewState extends State<MenuScreenNew> {
                                         RouteHelper.getUpdateProfileRoute());
                                   },
                                   child: Container(
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                         color: Colors.white70,
                                         shape: BoxShape.circle),
-                                    padding: EdgeInsets.all(2),
-                                    child: Icon(
+                                    padding: const EdgeInsets.all(2),
+                                    child: const Icon(
                                       Icons.edit_note_outlined,
                                     ),
                                   ),
@@ -108,7 +117,7 @@ class _MenuScreenNewState extends State<MenuScreenNew> {
                           const SizedBox(
                               height: Dimensions.paddingSizeExtraSmall),
                           isLoggedIn
-                              ? SizedBox()
+                              ? const SizedBox()
                               // Text(
                               //     userController.userInfoModel != null
                               //         ? DateConverter.containTAndZToUTCFormat(
@@ -123,7 +132,7 @@ class _MenuScreenNewState extends State<MenuScreenNew> {
                                   onTap: () async {
                                     if (!ResponsiveHelper.isDesktop(context)) {
                                       await Get.toNamed(
-                                          RouteHelper.getSignInRoute(
+                                          RouteHelper.getAuthOnBoardingRoute(
                                               Get.currentRoute));
                                     } else {
                                       Get.dialog(const SignInScreen(
@@ -175,16 +184,22 @@ class _MenuScreenNewState extends State<MenuScreenNew> {
                             foregroundColor: Colors.white,
                             route: RouteHelper.getAddressRoute()),
 
-                        PortionWidget(
-                            icon: Images.update,
-                            title: 'upcoming_occasions'.tr,
-                            foregroundColor: Colors.white,
-                            route: '/'),
+                        // PortionWidget(
+                        //     icon: Images.update,
+                        //     title: 'upcoming_occasions'.tr,
+                        //     foregroundColor: Colors.white,
+                        //     route: '/'),
                         PortionWidget(
                             icon: Images.privacyIcon,
                             title: 'privacy_policy'.tr,
                             foregroundColor: Colors.white,
                             route: RouteHelper.getHtmlRoute('privacy-policy')),
+                        PortionWidget(
+                            icon: Images.privacyIcon,
+                            iconData: Icons.help,
+                            title: 'FAQ'.tr,
+                            foregroundColor: Colors.white,
+                            route: RouteHelper.getFAQRoute()),
 
                         // PortionWidget(
                         //     icon: Images.update,
@@ -228,16 +243,16 @@ class _MenuScreenNewState extends State<MenuScreenNew> {
                                           Get.offAllNamed(
                                               RouteHelper.getInitialRoute());
                                         } else {
-                                          Get.offAllNamed(
-                                              RouteHelper.getSignInRoute(
+                                          Get.offAllNamed(RouteHelper
+                                              .getAuthOnBoardingRoute(
                                                   RouteHelper.splash));
                                         }
                                       }),
                                   useSafeArea: false);
                             } else {
                               Get.find<WishListController>().removeWishes();
-                              Get.toNamed(
-                                  RouteHelper.getSignInRoute(Get.currentRoute));
+                              Get.toNamed(RouteHelper.getAuthOnBoardingRoute(
+                                  Get.currentRoute));
                             }
                           },
                         ),

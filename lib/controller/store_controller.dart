@@ -118,7 +118,8 @@ class StoreController extends GetxController implements GetxService {
   Future<void> getCartStoreSuggestedItemList(int? storeId) async {
     Response response = await storeRepo.getCartStoreSuggestedItemList(storeId);
     if (response.statusCode == 200) {
-      _cartSuggestItemModel = CartSuggestItemModel.fromJson(response.body);
+      _cartSuggestItemModel = 
+      CartSuggestItemModel.fromJson(response.body);
     } else {
       ApiChecker.checkApi(response);
     }

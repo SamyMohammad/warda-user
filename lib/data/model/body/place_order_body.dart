@@ -32,37 +32,50 @@ class PlaceOrderBody {
   String? _unavailableItemNote;
   String? _deliveryInstruction;
   int? _cutlery;
+  int? _keepSecret;
+  String? _deliveryDate;
+  String? _deliveryTime;
+  String? _cardMessage;
+  String? _cardMessageTo;
+  String? _cardMessageFrom;
+  String? _attachmentLink;
 
   PlaceOrderBody(
       {required List<Cart> cart,
-        required double? couponDiscountAmount,
-        required String? couponCode,
-        required double orderAmount,
-        required String? orderType,
-        required String paymentMethod,
-        required int? storeId,
-        required double? distance,
-        required String? scheduleAt,
-        required double? discountAmount,
-        required double taxAmount,
-        required String orderNote,
-        required String? address,
-        required AddressModel? receiverDetails,
-        required String? latitude,
-        required String? longitude,
-        required String contactPersonName,
-        required String? contactPersonNumber,
-        required String? addressType,
-        required String? parcelCategoryId,
-        required String? chargePayer,
-        required String streetNumber,
-        required String house,
-        required String floor,
-        required String dmTips,
-        required String unavailableItemNote,
-        required String deliveryInstruction,
-        required int cutlery,
-      }) {
+      required double? couponDiscountAmount,
+      required String? couponCode,
+      required double orderAmount,
+      required String? orderType,
+      required String paymentMethod,
+      required int? storeId,
+      required double? distance,
+      required String? scheduleAt,
+      required double? discountAmount,
+      required double taxAmount,
+      required String orderNote,
+      required String? address,
+      required AddressModel? receiverDetails,
+      required String? latitude,
+      required String? longitude,
+      required String contactPersonName,
+      required String? contactPersonNumber,
+      required String? addressType,
+      required String? parcelCategoryId,
+      required String? chargePayer,
+      required String streetNumber,
+      required String house,
+      required String floor,
+      required String dmTips,
+      required String unavailableItemNote,
+      required String deliveryInstruction,
+      required int cutlery,
+      required int keepSecret,
+      required String deliveryDate,
+      required String deliveryTime,
+      required String cardMessage,
+       String? cardMessageTo,
+       String? cardMessageFrom,
+      required String attachmentLink}) {
     _cart = cart;
     _couponDiscountAmount = couponDiscountAmount;
     _orderAmount = orderAmount;
@@ -91,6 +104,13 @@ class PlaceOrderBody {
     _unavailableItemNote = unavailableItemNote;
     _deliveryInstruction = deliveryInstruction;
     _cutlery = cutlery;
+    _keepSecret = keepSecret;
+    _deliveryDate = deliveryDate;
+    _deliveryTime = deliveryTime;
+    _cardMessage = cardMessage;
+    _cardMessageTo = cardMessageTo;
+    _cardMessageFrom = cardMessageFrom;
+    _attachmentLink = attachmentLink;
   }
 
   List<Cart>? get cart => _cart;
@@ -119,7 +139,15 @@ class PlaceOrderBody {
   String? get dmTips => _dmTips;
   String? get unavailableItemNote => _unavailableItemNote;
   String? get deliveryInstruction => _deliveryInstruction;
+
+  String? get deliveryDate => _deliveryDate;
+  String? get deliveryTime => _deliveryTime;
+  String? get cardMessage => _cardMessage;
+  String? get cardMessageTo => _cardMessageTo;
+  String? get cardMessageFrom => _cardMessageFrom;
+  String? get attachmentLink => _attachmentLink;
   int? get cutlery => _cutlery;
+  int? get keepSecret => _keepSecret;
 
   PlaceOrderBody.fromJson(Map<String, dynamic> json) {
     if (json['cart'] != null) {
@@ -140,7 +168,9 @@ class PlaceOrderBody {
     _discountAmount = json['discount_amount'].toDouble();
     _taxAmount = json['tax_amount'].toDouble();
     _address = json['address'];
-    _receiverDetails = json['receiver_details'] != null ? AddressModel.fromJson(json['receiver_details']) : null;
+    _receiverDetails = json['receiver_details'] != null
+        ? AddressModel.fromJson(json['receiver_details'])
+        : null;
     _latitude = json['latitude'];
     _longitude = json['longitude'];
     _contactPersonName = json['contact_person_name'];
@@ -155,6 +185,13 @@ class PlaceOrderBody {
     _unavailableItemNote = json['unavailable_item_note'];
     _deliveryInstruction = json['delivery_instruction'];
     _cutlery = json['cutlery'];
+    _keepSecret = json['keep_secret'];
+    _deliveryDate = json['delivery_date'];
+    _deliveryTime = json['delivery_time'];
+    _cardMessage = json['card_message'];
+    _cardMessageTo = json['card_message_to'];
+    _cardMessageFrom = json['card_message_from'];
+    _attachmentLink = json['attachment_link'];
   }
 
   Map<String, String> toJson() {
@@ -162,23 +199,23 @@ class PlaceOrderBody {
     if (_cart != null) {
       data['cart'] = jsonEncode(_cart!.map((v) => v.toJson()).toList());
     }
-    if(_couponDiscountAmount != null) {
+    if (_couponDiscountAmount != null) {
       data['coupon_discount_amount'] = _couponDiscountAmount.toString();
     }
     data['order_amount'] = _orderAmount.toString();
     data['order_type'] = _orderType!;
     data['payment_method'] = _paymentMethod!;
-    if(_orderNote != null && _orderNote!.isNotEmpty) {
+    if (_orderNote != null && _orderNote!.isNotEmpty) {
       data['order_note'] = _orderNote!;
     }
-    if(_couponCode != null) {
+    if (_couponCode != null) {
       data['coupon_code'] = _couponCode!;
     }
-    if(_storeId != null) {
+    if (_storeId != null) {
       data['store_id'] = _storeId.toString();
     }
     data['distance'] = _distance.toString();
-    if(_scheduleAt != null) {
+    if (_scheduleAt != null) {
       data['schedule_at'] = _scheduleAt!;
     }
     data['discount_amount'] = _discountAmount.toString();
@@ -204,9 +241,17 @@ class PlaceOrderBody {
     data['dm_tips'] = _dmTips!;
     data['unavailable_item_note'] = _unavailableItemNote!;
     data['delivery_instruction'] = _deliveryInstruction!;
-    if(_cutlery != null){
+    if (_cutlery != null) {
       data['cutlery'] = _cutlery.toString();
     }
+    data['keep_secret'] = _keepSecret.toString();
+    data['delivery_date'] = _deliveryDate.toString();
+    data['delivery_time'] = _deliveryTime.toString();
+    data['card_message'] = _cardMessage.toString();
+    data['card_message_to'] = _cardMessageTo.toString();
+    data['card_message_from'] = _cardMessageFrom.toString();
+    data['attachment_link'] = _attachmentLink.toString();
+
     return data;
   }
 }
@@ -226,14 +271,14 @@ class Cart {
   Cart(
       int? itemId,
       int? itemCampaignId,
-        String price,
-        String variant,
-        List<Variation>? variation,
-        List<OrderVariation>? variations,
-        int? quantity,
-        List<int?> addOnIds,
-        List<AddOns>? addOns,
-        List<int?> addOnQtys) {
+      String price,
+      String variant,
+      List<Variation>? variation,
+      List<OrderVariation>? variations,
+      int? quantity,
+      List<int?> addOnIds,
+      List<AddOns>? addOns,
+      List<int?> addOnQtys) {
     _itemId = itemId;
     _itemCampaignId = itemCampaignId;
     _price = price;
@@ -261,12 +306,14 @@ class Cart {
     _itemCampaignId = json['item_campaign_id'];
     _price = json['price'];
     _variant = json['variant'];
-    if (json['variation'] != null && json['variation'].isNotEmpty && json['variation'][0]['price'] != null) {
+    if (json['variation'] != null &&
+        json['variation'].isNotEmpty &&
+        json['variation'][0]['price'] != null) {
       _variation = [];
       json['variation'].forEach((v) {
         _variation!.add(Variation.fromJson(v));
       });
-    }else if (json['variation'] != null) {
+    } else if (json['variation'] != null) {
       _variations = [];
       json['variation'].forEach((v) {
         _variations!.add(OrderVariation.fromJson(v));
@@ -291,7 +338,7 @@ class Cart {
     data['variant'] = _variant;
     if (_variation != null) {
       data['variation'] = _variation!.map((v) => v.toJson()).toList();
-    }else if(_variations != null) {
+    } else if (_variations != null) {
       data['variation'] = _variations!.map((v) => v.toJson()).toList();
     }
     data['quantity'] = _quantity;
@@ -312,8 +359,9 @@ class OrderVariation {
 
   OrderVariation.fromJson(Map<String, dynamic> json) {
     name = json['name'];
-    values =
-    json['values'] != null ? OrderVariationValue.fromJson(json['values']) : null;
+    values = json['values'] != null
+        ? OrderVariationValue.fromJson(json['values'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {

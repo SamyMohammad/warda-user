@@ -11,21 +11,26 @@ class ItemRepo extends GetxService {
     return await apiClient.getData('${AppConstants.popularItemUri}?type=$type');
   }
 
+  Future<Response> getDiscountItemList(String type) async {
+    return await apiClient.getData(AppConstants.discountItemUri);
+  }
+
   Future<Response> getReviewedItemList(String type) async {
-    return await apiClient.getData('${AppConstants.reviewedItemUri}?type=$type');
+    return await apiClient
+        .getData('${AppConstants.reviewedItemUri}?type=$type');
   }
 
   Future<Response> submitReview(ReviewBody reviewBody) async {
-    return await apiClient.postData(AppConstants.reviewUri, reviewBody.toJson());
+    return await apiClient.postData(
+        AppConstants.reviewUri, reviewBody.toJson());
   }
 
   Future<Response> submitDeliveryManReview(ReviewBody reviewBody) async {
-    return await apiClient.postData(AppConstants.deliveryManReviewUri, reviewBody.toJson());
+    return await apiClient.postData(
+        AppConstants.deliveryManReviewUri, reviewBody.toJson());
   }
 
   Future<Response> getItemDetails(int? itemID) async {
     return apiClient.getData('${AppConstants.itemDetailsUri}$itemID');
   }
-
-  
 }

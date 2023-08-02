@@ -21,14 +21,19 @@ import 'package:get/get.dart';
 
 class PopularItemView extends StatelessWidget {
   final bool isPopular;
-  const PopularItemView({Key? key, required this.isPopular}) : super(key: key);
+  final bool discount;
+  const PopularItemView(
+      {Key? key, required this.isPopular, this.discount = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ItemController>(builder: (itemController) {
-      List<Item>? itemList = isPopular
-          ? itemController.popularItemList
-          : itemController.reviewedItemList;
+      List<Item>? itemList = discount
+          ? itemController.discountItemList
+          : isPopular
+              ? itemController.popularItemList
+              : itemController.reviewedItemList;
 
       return (itemList != null && itemList.isEmpty)
           ? const SizedBox()

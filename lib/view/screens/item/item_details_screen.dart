@@ -148,53 +148,55 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
         final bool isLoggedIn = Get.find<AuthController>().isLoggedIn();
         return Scaffold(
           key: _globalKey,
-          backgroundColor: Theme.of(context).cardColor,
+          backgroundColor: AppConstants.lightPinkColor,
           appBar: PreferredSize(
             preferredSize: Size(context.width, context.height * 0.10),
-            child: ResponsiveHelper.isDesktop(context)
-                ? const CustomAppBar(title: '')
-                : CustomAppBar(title: '', showLogo: true, actions: [
-                    GetBuilder<WishListController>(builder: (wishController) {
-                      return InkWell(
-                        onTap: () {
-                          if (isLoggedIn) {
-                            if (wishController.wishItemIdList
-                                .contains(itemController.item!.id)) {
-                              wishController.removeFromWishList(
-                                  itemController.item!.id, false);
+            child: Container(
+              child: ResponsiveHelper.isDesktop(context)
+                  ? const CustomAppBar(title: '')
+                  : CustomAppBar(title: '', showLogo: true, actions: [
+                      GetBuilder<WishListController>(builder: (wishController) {
+                        return InkWell(
+                          onTap: () {
+                            if (isLoggedIn) {
+                              if (wishController.wishItemIdList
+                                  .contains(itemController.item!.id)) {
+                                wishController.removeFromWishList(
+                                    itemController.item!.id, false);
+                              } else {
+                                wishController.addToWishList(
+                                    itemController.item, null, false);
+                              }
                             } else {
-                              wishController.addToWishList(
-                                  itemController.item, null, false);
+                              showCustomSnackBar('you_are_not_logged_in'.tr);
                             }
-                          } else {
-                            showCustomSnackBar('you_are_not_logged_in'.tr);
-                          }
-                        },
-                        child: Icon(
-                          wishController.wishItemIdList
-                                  .contains(itemController.item!.id)
-                              ? Icons.favorite
-                              : Icons.favorite_border,
-                          size: 25,
-                          color: wishController.wishItemIdList
-                                  .contains(itemController.item!.id)
-                              ? Theme.of(context).primaryColor
-                              : Theme.of(context).disabledColor,
-                        ),
-                      );
-                    }),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    InkWell(
-                      onTap: () => Get.toNamed(RouteHelper.getCartRoute()),
-                      child: CartWidget(
-                          color: AppConstants.primaryColor, size: 25),
-                    ),
-                    SizedBox(
-                      width: 8,
-                    ),
-                  ]),
+                          },
+                          child: Icon(
+                            wishController.wishItemIdList
+                                    .contains(itemController.item!.id)
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            size: 25,
+                            color: wishController.wishItemIdList
+                                    .contains(itemController.item!.id)
+                                ? Theme.of(context).primaryColor
+                                : Theme.of(context).disabledColor,
+                          ),
+                        );
+                      }),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      InkWell(
+                        onTap: () => Get.toNamed(RouteHelper.getCartRoute()),
+                        child: const CartWidget(
+                            color: AppConstants.primaryColor, size: 25),
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                    ]),
+            ),
           ),
           body: (itemController.item != null)
               ? ResponsiveHelper.isDesktop(context)
@@ -203,22 +205,19 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                       stock: stock,
                       priceWithAddOns: priceWithAddons,
                     )
-                  : Column(children: [
-                      Expanded(
-                          child: Scrollbar(
-                        child: SingleChildScrollView(
-                            padding: const EdgeInsets.all(
-                                Dimensions.paddingSizeSmall),
-                            physics: const BouncingScrollPhysics(),
-                            child: Center(
-                                child: SizedBox(
-                                    width: Dimensions.webMaxWidth,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Builder(builder: (context) {
-                                          return ItemTitleView(
+                  : Container(
+                      child: SingleChildScrollView(
+                        child: Column(children: [
+                          Center(
+                              child: Container(
+                                  width: Dimensions.webMaxWidth,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Builder(builder: (context) {
+                                        return Container(
+                                          child: ItemTitleView(
                                             item: itemController.item,
                                             inStorePage: widget.inStorePage,
                                             isCampaign: itemController.item!
@@ -231,407 +230,516 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                                         .module!
                                                         .stock! &&
                                                     stock! <= 0),
-                                          );
-                                        }),
-                                        const SizedBox(height: 20),
-                                        ItemImageView(
-                                            item: itemController.item),
+                                          ),
+                                        );
+                                      }),
+                                      Container(height: 12),
+                                      ItemImageView(item: itemController.item),
 
-                                        const Divider(height: 20, thickness: 2),
+                                      // // Variation
+                                      // ListView.builder(
+                                      //   shrinkWrap: true,
+                                      //   itemCount: itemController
+                                      //       .item!.choiceOptions!.length,
+                                      //   physics:
+                                      //       const NeverScrollableScrollPhysics(),
+                                      //   itemBuilder: (context, index) {
+                                      //     return Column(
+                                      //         crossAxisAlignment:
+                                      //             CrossAxisAlignment.start,
+                                      //         children: [
+                                      //           Text(
+                                      //               itemController
+                                      //                   .item!
+                                      //                   .choiceOptions![index]
+                                      //                   .title!,
+                                      //               style: robotoMedium.copyWith(
+                                      //                   fontSize: Dimensions
+                                      //                       .fontSizeLarge)),
+                                      //           Container(
+                                      //               height: Dimensions
+                                      //                   .paddingSizeExtraSmall),
+                                      //           GridView.builder(
+                                      //             gridDelegate:
+                                      //                 const SliverGridDelegateWithFixedCrossAxisCount(
+                                      //               crossAxisCount: 3,
+                                      //               crossAxisSpacing: 20,
+                                      //               mainAxisSpacing: 10,
+                                      //               childAspectRatio: (1 / 0.25),
+                                      //             ),
+                                      //             shrinkWrap: true,
+                                      //             physics:
+                                      //                 const NeverScrollableScrollPhysics(),
+                                      //             itemCount: itemController
+                                      //                 .item!
+                                      //                 .choiceOptions![index]
+                                      //                 .options!
+                                      //                 .length,
+                                      //             itemBuilder: (context, i) {
+                                      //               return InkWell(
+                                      //                 onTap: () {
+                                      //                   itemController
+                                      //                       .setCartVariationIndex(
+                                      //                           index,
+                                      //                           i,
+                                      //                           itemController
+                                      //                               .item);
+                                      //                 },
+                                      //                 child: Container(
+                                      //                   alignment:
+                                      //                       Alignment.center,
+                                      //                   padding: const EdgeInsets
+                                      //                           .symmetric(
+                                      //                       horizontal: Dimensions
+                                      //                           .paddingSizeExtraSmall),
+                                      //                   decoration: BoxDecoration(
+                                      //                     color: itemController
+                                      //                                     .variationIndex![
+                                      //                                 index] !=
+                                      //                             i
+                                      //                         ? Theme.of(context)
+                                      //                             .disabledColor
+                                      //                         : Theme.of(context)
+                                      //                             .primaryColor,
+                                      //                     borderRadius:
+                                      //                         BorderRadius
+                                      //                             .circular(5),
+                                      //                     border: itemController
+                                      //                                     .variationIndex![
+                                      //                                 index] !=
+                                      //                             i
+                                      //                         ? Border.all(
+                                      //                             color: Theme.of(
+                                      //                                     context)
+                                      //                                 .disabledColor,
+                                      //                             width: 2)
+                                      //                         : null,
+                                      //                   ),
+                                      //                   child: Text(
+                                      //                     itemController
+                                      //                         .item!
+                                      //                         .choiceOptions![
+                                      //                             index]
+                                      //                         .options![i]
+                                      //                         .trim(),
+                                      //                     maxLines: 1,
+                                      //                     overflow: TextOverflow
+                                      //                         .ellipsis,
+                                      //                     style: robotoRegular
+                                      //                         .copyWith(
+                                      //                       color: itemController
+                                      //                                       .variationIndex![
+                                      //                                   index] !=
+                                      //                               i
+                                      //                           ? Colors.black
+                                      //                           : Colors.white,
+                                      //                     ),
+                                      //                   ),
+                                      //                 ),
+                                      //               );
+                                      //             },
+                                      //           ),
+                                      //           SizedBox(
+                                      //               height: index !=
+                                      //                       itemController
+                                      //                               .item!
+                                      //                               .choiceOptions!
+                                      //                               .length -
+                                      //                           1
+                                      //                   ? Dimensions
+                                      //                       .paddingSizeLarge
+                                      //                   : 0),
+                                      //         ]);
+                                      //   },
+                                      // ),
+                                      // itemController
+                                      //         .item!.choiceOptions!.isNotEmpty
+                                      //     ? Container(
+                                      //         height: Dimensions.paddingSizeLarge)
+                                      //     : const SizedBox(),
 
-                                        // Variation
-                                        ListView.builder(
-                                          shrinkWrap: true,
-                                          itemCount: itemController
-                                              .item!.choiceOptions!.length,
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          itemBuilder: (context, index) {
-                                            return Column(
+                                      Container(
+                                        height: context.height * 0.5143,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(30),
+                                                    topRight:
+                                                        Radius.circular(30)),
+                                            color: Theme.of(context).cardColor),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 15),
+                                          child: Stack(
+                                            alignment: Alignment.bottomCenter,
+                                            // mainAxisAlignment:
+                                            //     MainAxisAlignment.end,
+                                            // mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  Text(
-                                                      itemController
-                                                          .item!
-                                                          .choiceOptions![index]
-                                                          .title!,
-                                                      style: robotoMedium.copyWith(
-                                                          fontSize: Dimensions
-                                                              .fontSizeLarge)),
-                                                  const SizedBox(
-                                                      height: Dimensions
-                                                          .paddingSizeExtraSmall),
-                                                  GridView.builder(
-                                                    gridDelegate:
-                                                        const SliverGridDelegateWithFixedCrossAxisCount(
-                                                      crossAxisCount: 3,
-                                                      crossAxisSpacing: 20,
-                                                      mainAxisSpacing: 10,
-                                                      childAspectRatio:
-                                                          (1 / 0.25),
-                                                    ),
-                                                    shrinkWrap: true,
-                                                    physics:
-                                                        const NeverScrollableScrollPhysics(),
-                                                    itemCount: itemController
-                                                        .item!
-                                                        .choiceOptions![index]
-                                                        .options!
-                                                        .length,
-                                                    itemBuilder: (context, i) {
-                                                      return InkWell(
-                                                        onTap: () {
-                                                          itemController
-                                                              .setCartVariationIndex(
-                                                                  index,
-                                                                  i,
-                                                                  itemController
-                                                                      .item);
-                                                        },
-                                                        child: Container(
-                                                          alignment:
-                                                              Alignment.center,
-                                                          padding: const EdgeInsets
-                                                                  .symmetric(
-                                                              horizontal: Dimensions
-                                                                  .paddingSizeExtraSmall),
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: itemController
-                                                                            .variationIndex![
-                                                                        index] !=
-                                                                    i
-                                                                ? Theme.of(
-                                                                        context)
-                                                                    .disabledColor
-                                                                : Theme.of(
-                                                                        context)
-                                                                    .primaryColor,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        5),
-                                                            border: itemController.variationIndex![
-                                                                        index] !=
-                                                                    i
-                                                                ? Border.all(
-                                                                    color: Theme.of(
-                                                                            context)
-                                                                        .disabledColor,
-                                                                    width: 2)
-                                                                : null,
-                                                          ),
-                                                          child: Text(
-                                                            itemController
-                                                                .item!
-                                                                .choiceOptions![
-                                                                    index]
-                                                                .options![i]
-                                                                .trim(),
-                                                            maxLines: 1,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            style: robotoRegular
-                                                                .copyWith(
-                                                              color: itemController
-                                                                              .variationIndex![
-                                                                          index] !=
-                                                                      i
-                                                                  ? Colors.black
-                                                                  : Colors
-                                                                      .white,
+                                                  // Quantity
+                                                  Row(children: [
+                                                    Text('quantity'.tr,
+                                                        style: robotoMedium.copyWith(
+                                                            fontSize: Dimensions
+                                                                .fontSizeLarge)),
+                                                    const Expanded(
+                                                        child: SizedBox()),
+                                                    Container(
+                                                      child: Row(children: [
+                                                        InkWell(
+                                                          onTap: () {
+                                                            if (itemController
+                                                                    .cartIndex !=
+                                                                -1) {
+                                                              if (Get.find<
+                                                                          CartController>()
+                                                                      .cartList[
+                                                                          itemController
+                                                                              .cartIndex]
+                                                                      .quantity! >
+                                                                  1) {
+                                                                Get.find<
+                                                                        CartController>()
+                                                                    .setQuantity(
+                                                                        false,
+                                                                        itemController
+                                                                            .cartIndex,
+                                                                        stock);
+                                                              }
+                                                            } else {
+                                                              if (itemController
+                                                                      .quantity! >
+                                                                  1) {
+                                                                itemController
+                                                                    .setQuantity(
+                                                                        false,
+                                                                        stock);
+                                                              }
+                                                            }
+                                                          },
+                                                          child: Container(
+                                                            decoration: BoxDecoration(
+                                                                gradient:
+                                                                    commonGradient,
+                                                                shape: BoxShape
+                                                                    .circle),
+                                                            child: Padding(
+                                                              padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      Dimensions
+                                                                          .paddingSizeSmall,
+                                                                  vertical:
+                                                                      Dimensions
+                                                                          .paddingSizeExtraSmall),
+                                                              child: Icon(
+                                                                  Icons.remove,
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .hintColor,
+                                                                  size: 20),
                                                             ),
                                                           ),
                                                         ),
-                                                      );
-                                                    },
-                                                  ),
-                                                  SizedBox(
-                                                      height: index !=
+                                                        GetBuilder<
+                                                                CartController>(
+                                                            builder:
+                                                                (cartController) {
+                                                          return Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        12),
+                                                            child: Text(
                                                               itemController
-                                                                      .item!
-                                                                      .choiceOptions!
-                                                                      .length -
-                                                                  1
-                                                          ? Dimensions
-                                                              .paddingSizeLarge
-                                                          : 0),
-                                                ]);
-                                          },
-                                        ),
-                                        itemController
-                                                .item!.choiceOptions!.isNotEmpty
-                                            ? const SizedBox(
-                                                height:
-                                                    Dimensions.paddingSizeLarge)
-                                            : const SizedBox(),
-
-                                        // Quantity
-                                        Row(children: [
-                                          Text('quantity'.tr,
-                                              style: robotoMedium.copyWith(
-                                                  fontSize: Dimensions
-                                                      .fontSizeLarge)),
-                                          const Expanded(child: SizedBox()),
-                                          Container(
-                                            decoration: BoxDecoration(
-                                                color: Theme.of(context)
-                                                    .disabledColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(5)),
-                                            child: Row(children: [
-                                              InkWell(
-                                                onTap: () {
-                                                  if (itemController
-                                                          .cartIndex !=
-                                                      -1) {
-                                                    if (Get.find<
-                                                                CartController>()
-                                                            .cartList[
-                                                                itemController
-                                                                    .cartIndex]
-                                                            .quantity! >
-                                                        1) {
-                                                      Get.find<CartController>()
-                                                          .setQuantity(
-                                                              false,
-                                                              itemController
-                                                                  .cartIndex,
-                                                              stock);
-                                                    }
-                                                  } else {
-                                                    if (itemController
-                                                            .quantity! >
-                                                        1) {
-                                                      itemController
-                                                          .setQuantity(
-                                                              false, stock);
-                                                    }
-                                                  }
-                                                },
-                                                child: const Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: Dimensions
-                                                          .paddingSizeSmall,
-                                                      vertical: Dimensions
-                                                          .paddingSizeExtraSmall),
-                                                  child: Icon(Icons.remove,
-                                                      size: 20),
-                                                ),
-                                              ),
-                                              GetBuilder<CartController>(
-                                                  builder: (cartController) {
-                                                return Text(
-                                                  itemController.cartIndex != -1
-                                                      ? cartController
-                                                          .cartList[
-                                                              itemController
-                                                                  .cartIndex]
-                                                          .quantity
-                                                          .toString()
-                                                      : itemController.quantity
-                                                          .toString(),
-                                                  style: robotoMedium.copyWith(
-                                                      fontSize: Dimensions
-                                                          .fontSizeExtraLarge),
-                                                );
-                                              }),
-                                              InkWell(
-                                                onTap: () => itemController
-                                                            .cartIndex !=
-                                                        -1
-                                                    ? Get.find<CartController>()
-                                                        .setQuantity(
-                                                            true,
-                                                            itemController
-                                                                .cartIndex,
-                                                            stock)
-                                                    : itemController
-                                                        .setQuantity(
-                                                            true, stock),
-                                                child: const Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: Dimensions
-                                                          .paddingSizeSmall,
-                                                      vertical: Dimensions
-                                                          .paddingSizeExtraSmall),
-                                                  child:
-                                                      Icon(Icons.add, size: 20),
-                                                ),
-                                              ),
-                                            ]),
-                                          ),
-                                        ]),
-                                        const SizedBox(
-                                            height:
-                                                Dimensions.paddingSizeLarge),
-
-                                        GetBuilder<CartController>(
-                                            builder: (cartController) {
-                                          return Row(children: [
-                                            Text('${'total_amount'.tr}:',
-                                                style: robotoMedium.copyWith(
-                                                    fontSize: Dimensions
-                                                        .fontSizeLarge)),
-                                            const SizedBox(
-                                                width: Dimensions
-                                                    .paddingSizeExtraSmall),
-                                            Text(
-                                                PriceConverter.convertPrice(itemController
-                                                            .cartIndex !=
-                                                        -1
-                                                    ? (cartController
-                                                            .cartList[
-                                                                itemController
-                                                                    .cartIndex]
-                                                            .discountedPrice! *
-                                                        cartController
-                                                            .cartList[
-                                                                itemController
-                                                                    .cartIndex]
-                                                            .quantity!)
-                                                    : priceWithAddons),
-                                                textDirection:
-                                                    TextDirection.ltr,
-                                                style: robotoBold.copyWith(
-                                                  color: Theme.of(context)
-                                                      .primaryColor,
-                                                  fontSize:
-                                                      Dimensions.fontSizeLarge,
-                                                )),
-                                          ]);
-                                        }),
-                                        const SizedBox(
-                                            height: Dimensions
-                                                .paddingSizeExtraLarge),
-
-                                        (itemController.item!.description !=
-                                                    null &&
-                                                itemController.item!
-                                                    .description!.isNotEmpty)
-                                            ? Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text('description'.tr,
-                                                      style: robotoMedium),
-                                                  const SizedBox(
-                                                      height: Dimensions
-                                                          .paddingSizeExtraSmall),
-                                                  Text(
-                                                      itemController
-                                                          .item!.description!,
-                                                      style: robotoRegular),
-                                                  const SizedBox(
+                                                                          .cartIndex !=
+                                                                      -1
+                                                                  ? cartController
+                                                                      .cartList[
+                                                                          itemController
+                                                                              .cartIndex]
+                                                                      .quantity
+                                                                      .toString()
+                                                                  : itemController
+                                                                      .quantity
+                                                                      .toString(),
+                                                              style: robotoMedium
+                                                                  .copyWith(
+                                                                      fontSize:
+                                                                          Dimensions
+                                                                              .fontSizeExtraLarge),
+                                                            ),
+                                                          );
+                                                        }),
+                                                        InkWell(
+                                                          onTap: () => itemController
+                                                                      .cartIndex !=
+                                                                  -1
+                                                              ? Get.find<
+                                                                      CartController>()
+                                                                  .setQuantity(
+                                                                      true,
+                                                                      itemController
+                                                                          .cartIndex,
+                                                                      stock)
+                                                              : itemController
+                                                                  .setQuantity(
+                                                                      true,
+                                                                      stock),
+                                                          child: Container(
+                                                            decoration: BoxDecoration(
+                                                                gradient:
+                                                                    commonGradient,
+                                                                shape: BoxShape
+                                                                    .circle),
+                                                            child: Padding(
+                                                              padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      Dimensions
+                                                                          .paddingSizeSmall,
+                                                                  vertical:
+                                                                      Dimensions
+                                                                          .paddingSizeExtraSmall),
+                                                              child: Icon(
+                                                                  Icons.add,
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .hintColor,
+                                                                  size: 20),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ]),
+                                                    ),
+                                                  ]),
+                                                  Container(
                                                       height: Dimensions
                                                           .paddingSizeLarge),
+
+                                                  GetBuilder<CartController>(
+                                                      builder:
+                                                          (cartController) {
+                                                    return Row(children: [
+                                                      Text(
+                                                          '${'total_amount'.tr}:',
+                                                          style: robotoMedium
+                                                              .copyWith(
+                                                                  fontSize:
+                                                                      Dimensions
+                                                                          .fontSizeLarge)),
+                                                      const SizedBox(
+                                                          width: Dimensions
+                                                              .paddingSizeExtraSmall),
+                                                      Text(
+                                                          PriceConverter.convertPrice(itemController
+                                                                      .cartIndex !=
+                                                                  -1
+                                                              ? (cartController
+                                                                      .cartList[
+                                                                          itemController
+                                                                              .cartIndex]
+                                                                      .discountedPrice! *
+                                                                  cartController
+                                                                      .cartList[
+                                                                          itemController
+                                                                              .cartIndex]
+                                                                      .quantity!)
+                                                              : priceWithAddons),
+                                                          textDirection:
+                                                              TextDirection.ltr,
+                                                          style: robotoBold
+                                                              .copyWith(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .primaryColor,
+                                                            fontSize: Dimensions
+                                                                .fontSizeLarge,
+                                                          )),
+                                                    ]);
+                                                  }),
+                                                  Container(
+                                                      height: Dimensions
+                                                          .paddingSizeExtraLarge),
+
+                                                  (itemController.item!
+                                                                  .description !=
+                                                              null &&
+                                                          itemController
+                                                              .item!
+                                                              .description!
+                                                              .isNotEmpty)
+                                                      ? SizedBox(
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                  'description'
+                                                                      .tr,
+                                                                  style:
+                                                                      robotoMedium),
+                                                              const SizedBox(
+                                                                  height: Dimensions
+                                                                      .paddingSizeExtraSmall),
+                                                              Text(
+                                                                  itemController
+                                                                      .item!
+                                                                      .description!,
+                                                                  maxLines: 9,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  style:
+                                                                      robotoRegular),
+                                                              const SizedBox(
+                                                                  height: Dimensions
+                                                                      .paddingSizeLarge),
+                                                            ],
+                                                          ),
+                                                        )
+                                                      : const SizedBox(),
                                                 ],
-                                              )
-                                            : const SizedBox(),
-                                      ],
-                                    )))),
-                      )),
-                      Builder(builder: (context) {
-                        return Container(
-                          width: 1170,
-                          padding:
-                              const EdgeInsets.all(Dimensions.paddingSizeSmall),
-                          child: CustomButton(
-                            buttonText: (Get.find<SplashController>()
-                                        .configModel!
-                                        .moduleConfig!
-                                        .module!
-                                        .stock! &&
-                                    stock! <= 0)
-                                ? 'out_of_stock'.tr
-                                : itemController.item!.availableDateStarts !=
-                                        null
-                                    ? 'order_now'.tr
-                                    : itemController.cartIndex != -1
-                                        ? 'update_in_cart'.tr
-                                        : 'add_to_cart'.tr,
-                            onPressed: (!Get.find<SplashController>()
-                                        .configModel!
-                                        .moduleConfig!
-                                        .module!
-                                        .stock! ||
-                                    stock! > 0)
-                                ? () {
-                                    if (!Get.find<SplashController>()
-                                            .configModel!
-                                            .moduleConfig!
-                                            .module!
-                                            .stock! ||
-                                        stock! > 0) {
-                                      if (itemController
-                                              .item!.availableDateStarts !=
-                                          null) {
-                                        Get.toNamed(
-                                            RouteHelper.getCheckoutRoute(
-                                                'campaign'),
-                                            arguments: CheckoutScreen(
-                                              storeId: null,
-                                              fromCart: false,
-                                              cartList: [cartModel],
-                                            ));
-                                      } else {
-                                        // if (Get.find<CartController>()
-                                        //     .existAnotherStoreItem(
-                                        //         cartModel!.item!.storeId,
-                                        //         Get.find<SplashController>()
-                                        //                     .module ==
-                                        //                 null
-                                        //             ? Get.find<
-                                        //                     SplashController>()
-                                        //                 .cacheModule!
-                                        //                 .id
-                                        //             : Get.find<
-                                        //                     SplashController>()
-                                        //                 .module!
-                                        //                 .id)) {
-                                        //   Get.dialog(
-                                        //       ConfirmationDialog(
-                                        //         icon: Images.warning,
-                                        //         title:
-                                        //             'are_you_sure_to_reset'.tr,
-                                        //         description: Get.find<
-                                        //                     SplashController>()
-                                        //                 .configModel!
-                                        //                 .moduleConfig!
-                                        //                 .module!
-                                        //                 .showRestaurantText!
-                                        //             ? 'if_you_continue'.tr
-                                        //             : 'if_you_continue_without_another_store'
-                                        //                 .tr,
-                                        //         onYesPressed: () {
-                                        //           Get.back();
-                                        //           Get.find<CartController>()
-                                        //               .removeAllAndAddToCart(
-                                        //                   cartModel!);
-                                        //           showCartSnackBar();
-                                        //         },
-                                        //       ),
-                                        //       barrierDismissible: false);
-                                        // }
-                                        //  else {
-                                        if (itemController.cartIndex == -1) {
-                                          Get.find<CartController>().addToCart(
-                                              cartModel!,
-                                              itemController.cartIndex);
-                                        }
-                                        _key.currentState!.shake();
-                                        showCartSnackBar();
-                                        // }
-                                      }
-                                    }
-                                  }
-                                : null,
-                          ),
-                        );
-                      }),
-                    ])
+                                              ),
+                                              Container(
+                                                height: context.height * 0.09,
+                                                child:
+                                                    Builder(builder: (context) {
+                                                  return Container(
+                                                    width: 1170,
+                                                    padding: const EdgeInsets
+                                                            .all(
+                                                        Dimensions
+                                                            .paddingSizeSmall),
+                                                    child: CustomButton(
+                                                      buttonText: (Get.find<
+                                                                      SplashController>()
+                                                                  .configModel!
+                                                                  .moduleConfig!
+                                                                  .module!
+                                                                  .stock! &&
+                                                              stock! <= 0)
+                                                          ? 'out_of_stock'.tr
+                                                          : itemController.item!
+                                                                      .availableDateStarts !=
+                                                                  null
+                                                              ? 'order_now'.tr
+                                                              : itemController
+                                                                          .cartIndex !=
+                                                                      -1
+                                                                  ? 'update_in_cart'
+                                                                      .tr
+                                                                  : 'add_to_cart'
+                                                                      .tr,
+                                                      onPressed: (!Get.find<
+                                                                      SplashController>()
+                                                                  .configModel!
+                                                                  .moduleConfig!
+                                                                  .module!
+                                                                  .stock! ||
+                                                              stock! > 0)
+                                                          ? () {
+                                                              if (!Get.find<
+                                                                          SplashController>()
+                                                                      .configModel!
+                                                                      .moduleConfig!
+                                                                      .module!
+                                                                      .stock! ||
+                                                                  stock! > 0) {
+                                                                if (itemController
+                                                                        .item!
+                                                                        .availableDateStarts !=
+                                                                    null) {
+                                                                  Get.toNamed(
+                                                                      RouteHelper
+                                                                          .getCheckoutRoute(
+                                                                              'campaign'),
+                                                                      arguments:
+                                                                          CheckoutScreen(
+                                                                        storeId:
+                                                                            null,
+                                                                        fromCart:
+                                                                            false,
+                                                                        cartList: [
+                                                                          cartModel
+                                                                        ],
+                                                                      ));
+                                                                } else {
+                                                                  // if (Get.find<CartController>()
+                                                                  //     .existAnotherStoreItem(
+                                                                  //         cartModel!.item!.storeId,
+                                                                  //         Get.find<SplashController>()
+                                                                  //                     .module ==
+                                                                  //                 null
+                                                                  //             ? Get.find<
+                                                                  //                     SplashController>()
+                                                                  //                 .cacheModule!
+                                                                  //                 .id
+                                                                  //             : Get.find<
+                                                                  //                     SplashController>()
+                                                                  //                 .module!
+                                                                  //                 .id)) {
+                                                                  //   Get.dialog(
+                                                                  //       ConfirmationDialog(
+                                                                  //         icon: Images.warning,
+                                                                  //         title:
+                                                                  //             'are_you_sure_to_reset'.tr,
+                                                                  //         description: Get.find<
+                                                                  //                     SplashController>()
+                                                                  //                 .configModel!
+                                                                  //                 .moduleConfig!
+                                                                  //                 .module!
+                                                                  //                 .showRestaurantText!
+                                                                  //             ? 'if_you_continue'.tr
+                                                                  //             : 'if_you_continue_without_another_store'
+                                                                  //                 .tr,
+                                                                  //         onYesPressed: () {
+                                                                  //           Get.back();
+                                                                  //           Get.find<CartController>()
+                                                                  //               .removeAllAndAddToCart(
+                                                                  //                   cartModel!);
+                                                                  //           showCartSnackBar();
+                                                                  //         },
+                                                                  //       ),
+                                                                  //       barrierDismissible: false);
+                                                                  // }
+                                                                  //  else {
+                                                                  if (itemController
+                                                                          .cartIndex ==
+                                                                      -1) {
+                                                                    Get.find<CartController>().addToCart(
+                                                                        cartModel!,
+                                                                        itemController
+                                                                            .cartIndex);
+                                                                  }
+                                                                  _key.currentState!
+                                                                      .shake();
+                                                                  showCartSnackBar();
+                                                                  // }
+                                                                }
+                                                              }
+                                                            }
+                                                          : null,
+                                                    ),
+                                                  );
+                                                }),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ))),
+                        ]),
+                      ),
+                    )
               : const Center(child: CircularProgressIndicator()),
         );
       },
@@ -695,17 +803,12 @@ class QuantityButton extends StatelessWidget {
       child: Container(
         // padding: EdgeInsets.all(3),
         height: 50, width: 50,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: Theme.of(context).primaryColor),
+        decoration:
+            BoxDecoration(shape: BoxShape.circle, gradient: commonGradient),
         child: Center(
           child: Icon(
             isIncrement ? Icons.add : Icons.remove,
-            color: isIncrement
-                ? Colors.white
-                : quantity! > 1
-                    ? Colors.white
-                    : Colors.white,
+            color: Theme.of(context).hintColor,
             size: isCartWidget ? 26 : 20,
           ),
         ),

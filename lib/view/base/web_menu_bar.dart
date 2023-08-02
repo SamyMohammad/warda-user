@@ -39,7 +39,7 @@ class _WebMenuBarState extends State<WebMenuBar> {
 
         InkWell(
           onTap: () => Get.toNamed(RouteHelper.getInitialRoute()),
-          child: Image.asset(Images.logo, width: 100),
+          child: Image.asset(Images.logoColor, width: 100),
         ),
 
         Get.find<LocationController>().getUserAddress() != null ? Expanded(child: InkWell(

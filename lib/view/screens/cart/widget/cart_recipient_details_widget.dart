@@ -15,6 +15,7 @@ import '../../../../util/dimensions.dart';
 import '../../../../util/images.dart';
 import '../../../../util/styles.dart';
 import '../../../base/custom_button.dart';
+import '../../../base/custom_snackbar.dart';
 import '../../../base/custom_text_field.dart';
 import '../../checkout/checkout_screen.dart';
 import '../../location/cubit/location_cubit.dart';
@@ -41,15 +42,6 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget> {
       builder: (context, state) {
         var cubit = BlocProvider.of<CartCubit>(context);
         return GetBuilder<CartController>(builder: (cartController) {
-          // return SizedBox(
-          //   height: context.height * 0.7,
-          //   child: CheckoutScreen(
-          //     cartList: cartController.cartList,
-          //     fromCart: true,
-          //     storeId: null,
-          //   ),
-          // );
-
           return GetBuilder<UserController>(
             builder: (userController) {
               bool isLoggedIn = Get.find<AuthController>().isLoggedIn();
@@ -126,18 +118,18 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget> {
                         height: context.height * 0.02,
                       ),
                       Text(
-                        '${'contact_person_name'.tr} *',
+                        '${'receiver_name'.tr} *',
                         style: robotoRegular,
                       ),
                       CustomTextField(
                         controller: cubit.fullNameController,
-                        titleText: 'contact_person_name'.tr,
+                        titleText: 'receiver_name'.tr,
                       ),
                       SizedBox(
                         height: context.height * 0.02,
                       ),
                       Text(
-                        '${'contact_person_number'.tr} *',
+                        '${'receiver_phone_number'.tr} *',
                         style: robotoRegular,
                       ),
                       CustomTextField(
@@ -164,17 +156,23 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget> {
                       SizedBox(
                         height: context.height * 0.02,
                       ),
-                      CustomTextField(
-                        controller: cubit.areaController,
-                        titleText: 'area'.tr,
-                      ),
-                      SizedBox(
-                        height: context.height * 0.02,
+                      Text(
+                        '${'receiver_address'.tr} *',
+                        style: robotoRegular,
                       ),
                       CustomTextField(
                         controller: cubit.adressController,
                         titleText: 'address'.tr,
                       ),
+
+                      // SizedBox(
+                      //   height: context.height * 0.02,
+                      // ),
+                      // CustomTextField(
+                      //   controller: cubit.areaController,
+                      //   titleText: 'area'.tr,
+                      // ),
+
                       SizedBox(
                         height: context.height * 0.02,
                       ),
@@ -202,12 +200,19 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget> {
                               });
                             }),
                       ),
-                      CustomButton(
-                        buttonText: 'continue'.tr,
-                        onPressed: () {
-                          cubit.changeActiveStep(3);
-                        },
-                      )
+
+                      // CustomButton(
+                      //   buttonText: 'continue'.tr,
+                      //   onPressed: () {
+                      //     String? message = cubit.validator(3);
+                      //     if (message.runtimeType != Null) {
+                      //       print('hello validator :: $message');
+                      //       showCustomSnackBar(message, isError: true);
+                      //     } else {
+                      //       cubit.changeActiveStep(3);
+                      //     }
+                      //   },
+                      // )
                     ]),
               );
             },

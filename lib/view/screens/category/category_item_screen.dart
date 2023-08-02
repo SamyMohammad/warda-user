@@ -5,6 +5,7 @@ import 'package:warda/data/model/response/item_model.dart';
 import 'package:warda/data/model/response/store_model.dart';
 import 'package:warda/helper/responsive_helper.dart';
 import 'package:warda/helper/route_helper.dart';
+import 'package:warda/util/app_constants.dart';
 import 'package:warda/util/dimensions.dart';
 import 'package:warda/util/styles.dart';
 import 'package:warda/view/base/cart_widget.dart';
@@ -132,12 +133,45 @@ class CategoryItemScreenState extends State<CategoryItemScreen>
           }
         },
         child: Scaffold(
+          backgroundColor: AppConstants.lightPinkColor,
           appBar: (ResponsiveHelper.isDesktop(context)
               ? const WebMenuBar()
               : PreferredSize(
                   preferredSize: Size(context.width, context.height * 0.15),
                   child: CustomAppBar(
                     title: widget.categoryName,
+                    titleWidget: catController.isSearching
+                        ? Container(
+                            width: context.width * 0.9,
+                            height: context.height * 0.05,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(30)),
+                            child: TextField(
+                                autofocus: true,
+                                textInputAction: TextInputAction.search,
+                                decoration: const InputDecoration(
+                                    hintText: 'Search...',
+                                    border: InputBorder.none,
+                                    contentPadding:
+                                        EdgeInsets.only(left: 15, bottom: 8)),
+                                style: robotoRegular.copyWith(
+                                    fontSize: Dimensions.fontSizeLarge),
+                                onSubmitted: (String query) {
+                                  catController.searchData(
+                                    query,
+                                    catController.subCategoryIndex == 0
+                                        ? widget.categoryID
+                                        : catController
+                                            .subCategoryList![
+                                                catController.subCategoryIndex]
+                                            .id
+                                            .toString(),
+                                    catController.type,
+                                  );
+                                }),
+                          )
+                        : null,
                     showLogo: true,
                     backButton: true,
                     onBackPressed: () {
@@ -149,42 +183,23 @@ class CategoryItemScreenState extends State<CategoryItemScreen>
                     },
                     actions: [
                       catController.isSearching
-                          ? Container(
-                              width: context.width * 0.9,
-                              child: TextField(
-                                  autofocus: true,
-                                  textInputAction: TextInputAction.search,
-                                  decoration: const InputDecoration(
-                                    hintText: 'Search...',
-                                    border: InputBorder.none,
+                          ? const SizedBox()
+                          : GestureDetector(
+                              onTap: () => catController.toggleSearch(),
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: Center(
+                                  child: Icon(
+                                    catController.isSearching
+                                        ? Icons.close_sharp
+                                        : Icons.search,
+                                    size: 25,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .color,
                                   ),
-                                  style: robotoRegular.copyWith(
-                                      fontSize: Dimensions.fontSizeLarge),
-                                  onSubmitted: (String query) {
-                                    catController.searchData(
-                                      query,
-                                      catController.subCategoryIndex == 0
-                                          ? widget.categoryID
-                                          : catController
-                                              .subCategoryList![catController
-                                                  .subCategoryIndex]
-                                              .id
-                                              .toString(),
-                                      catController.type,
-                                    );
-                                  }),
-                            )
-                          : IconButton(
-                              onPressed: () => catController.toggleSearch(),
-                              icon: Icon(
-                                catController.isSearching
-                                    ? Icons.close_sharp
-                                    : Icons.search,
-                                size: 25,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .color,
+                                ),
                               ),
                             ),
                     ],
@@ -201,7 +216,6 @@ class CategoryItemScreenState extends State<CategoryItemScreen>
                       child: Container(
                       height: 40,
                       width: Dimensions.webMaxWidth,
-                      color: Theme.of(context).cardColor,
                       padding: const EdgeInsets.symmetric(
                           vertical: Dimensions.paddingSizeExtraSmall),
                       child: ListView.builder(

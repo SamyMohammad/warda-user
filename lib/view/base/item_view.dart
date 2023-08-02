@@ -64,7 +64,7 @@ class _ItemsViewState extends State<ItemsView> {
               ? GridView.builder(
                   key: UniqueKey(),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisSpacing: 5,
+                    crossAxisSpacing: 20,
                     mainAxisSpacing: ResponsiveHelper.isDesktop(context)
                         ? Dimensions.paddingSizeLarge
                         : 5,
@@ -72,7 +72,7 @@ class _ItemsViewState extends State<ItemsView> {
                         ? 4
                         : widget.showTheme1Store
                             ? 2
-                            : 0.7,
+                            : 0.6,
                     crossAxisCount: ResponsiveHelper.isMobile(context) ? 2 : 2,
                   ),
                   physics: widget.isScrollable

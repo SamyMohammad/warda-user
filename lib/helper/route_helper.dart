@@ -80,6 +80,7 @@ import 'package:get/get.dart';
 import 'package:warda/view/screens/wallet/wallet_screen.dart';
 
 import '../view/screens/auth/auth_onBoarding_screen.dart';
+import '../view/screens/f_q/f_q_screen.dart';
 import '../view/screens/favourite/favourite_screen.dart';
 import '../view/screens/location/cubit/location_cubit.dart';
 import 'cashe_helper.dart';
@@ -115,6 +116,7 @@ class RouteHelper {
   static const String orderTracking = '/track-order';
   static const String basicCampaign = '/basic-campaign';
   static const String html = '/html';
+  static const String faq = '/faq';
   static const String categories = '/categories';
   static const String categoryItem = '/category-item';
   static const String popularItems = '/popular-items';
@@ -231,6 +233,7 @@ class RouteHelper {
   }
 
   static String getHtmlRoute(String page) => '$html?page=$page';
+  static String getFAQRoute() => faq;
   static String getCategoryRoute() => categories;
   static String getCategoryItemRoute(int? id, String name) {
     List<int> encoded = utf8.encode(name);
@@ -581,6 +584,7 @@ class RouteHelper {
                                   : HtmlType.aboutUs,
             )),
     GetPage(name: categories, page: () => getRoute(const CategoryScreen())),
+    GetPage(name: faq, page: () => getRoute(const FQScreen())),
     GetPage(
         name: categoryItem,
         page: () {

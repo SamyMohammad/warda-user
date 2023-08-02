@@ -15,6 +15,11 @@ final wardaRegular = TextStyle(
   fontWeight: FontWeight.w400,
   fontSize: Dimensions.fontSizeDefault,
 );
+const commonGradient = LinearGradient(
+  begin: Alignment.topCenter,
+  end: Alignment.bottomCenter,
+  colors: [Color(0x00e6e6e6), Color(0xfffbfbfb)],
+);
 
 final robotoMedium = TextStyle(
   fontFamily: AppConstants.fontFamilyCommon,

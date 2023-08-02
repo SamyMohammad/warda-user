@@ -17,7 +17,9 @@ import '../../../../helper/responsive_helper.dart';
 import '../../../../util/app_constants.dart';
 import '../../../../util/dimensions.dart';
 import '../../../../util/images.dart';
+import '../../../base/custom_button.dart';
 import '../../../base/custom_dropdown.dart';
+import '../../../base/custom_image.dart';
 import '../../../base/custom_snackbar.dart';
 import '../../../base/web_constrained_box.dart';
 import '../../checkout/checkout_screen.dart';
@@ -263,62 +265,80 @@ class CartCheckoutWidget extends StatelessWidget {
                       SizedBox(
                         height: context.height * 0.15,
                         child: ListView.builder(
-                            itemCount: 5,
+                            itemCount:
+                                orderController.paymentMethodList?.length,
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (context, index) {
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Stack(
-                                  alignment: Alignment.topRight,
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          border: Border.all(
-                                              color: index == 1
-                                                  ? AppConstants.primaryColor
-                                                  : Colors.white,
-                                              width: 1)),
-                                      width: context.width * 0.25,
-                                      height: context.width * 0.23,
-                                      margin: const EdgeInsets.all(5.0),
-                                      child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Image.asset(
-                                              Images.cashOnDelivery,
-                                              height: context.width * 0.16,
-                                              fit: BoxFit.fitHeight,
-                                            ),
-                                            Text(
-                                              'cash_on_delivery'.tr,
-                                              textAlign: TextAlign.center,
-                                              style: robotoRegular.copyWith(
-                                                  fontSize: 11),
-                                            ),
-                                          ]),
-                                    ),
-                                    index == 1
-                                        ? Positioned(
-                                            top: 0,
-                                            right: 0,
-                                            child: Container(
-                                              decoration: const BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: AppConstants
-                                                      .primaryColor),
-                                              child: const Icon(
-                                                Icons.done_outlined,
-                                                color: Colors.white,
-                                                size: 18,
+                              var payemnt =
+                                  orderController.paymentMethodList?[index];
+                              if (cubit.paymentKey.runtimeType == Null) {
+                                cubit.changePaymentMethod(payemnt!.key);
+                              }
+                              return GestureDetector(
+                                onTap: () {
+                                  cubit.changePaymentMethod(payemnt!.key);
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Stack(
+                                    alignment: Alignment.topRight,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            border: Border.all(
+                                                color: cubit.paymentKey ==
+                                                        payemnt?.key
+                                                    ? AppConstants.primaryColor
+                                                    : Colors.white,
+                                                width: 1)),
+                                        width: context.width * 0.25,
+                                        height: context.width * 0.23,
+                                        margin: const EdgeInsets.all(5.0),
+                                        child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        Dimensions.radiusSmall),
+                                                child: CustomImage(
+                                                  image: payemnt?.icon ?? '',
+                                                  height: context.height * 0.07,
+                                                  width: context.height * 0.1,
+                                                  fit: BoxFit.fitHeight,
+                                                ),
                                               ),
-                                            ),
-                                          )
-                                        : const SizedBox()
-                                  ],
+                                              Text(
+                                                payemnt?.key.tr ?? '',
+                                                textAlign: TextAlign.center,
+                                                style: robotoRegular.copyWith(
+                                                    fontSize: 11),
+                                              ),
+                                            ]),
+                                      ),
+                                      cubit.paymentKey == payemnt?.key
+                                          ? Positioned(
+                                              top: 0,
+                                              right: 0,
+                                              child: Container(
+                                                decoration: const BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: AppConstants
+                                                        .primaryColor),
+                                                child: const Icon(
+                                                  Icons.done_outlined,
+                                                  color: Colors.white,
+                                                  size: 18,
+                                                ),
+                                              ),
+                                            )
+                                          : const SizedBox()
+                                    ],
+                                  ),
                                 ),
                               );
                             }),
@@ -353,7 +373,34 @@ class CartCheckoutWidget extends StatelessWidget {
                       SizedBox(
                         height: context.height * 0.03,
                       ),
-                      reviewYourOrder(cartController, context)
+                      reviewYourOrder(cartController, context),
+                      SizedBox(
+                        height: context.height * 0.02,
+                      ),
+                      CustomButton(
+                        onPressed: () {
+                          String? message = cubit.validator(5);
+                          if (message.runtimeType != Null) {
+                          } else {
+                            cubit.placeOrder(
+                                orderController,
+                                cartController,
+                                storeController,
+                                orderAmount,
+                                null,
+                                maxCodOrderAmount,
+                                total,
+                                deliveryCharge!,
+                                tax,
+                                discount!);
+                          }
+                        },
+                        buttonText: 'continue'.tr,
+                        radius: 30,
+                      ),
+                      SizedBox(
+                        height: context.height * 0.04,
+                      ),
                     ],
                   ));
                 },
