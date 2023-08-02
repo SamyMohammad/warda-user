@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
@@ -65,7 +66,7 @@ class FilterCubit extends Cubit<FilterState> {
       CategoryController categoryController, BuildContext context) {
     showMaterialModalBottomSheet(
       context: context,
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white,
       expand: true,
       builder: (context) => BlocBuilder<FilterCubit, FilterState>(
         builder: (context, state) {
@@ -371,9 +372,11 @@ class FilterCubit extends Cubit<FilterState> {
                               buttonText: 'apply_filter'.tr,
                               radius: 30,
                             ),
-                            SizedBox(
-                              height: context.height * 0.04,
-                            ),
+                            Platform.isIOS
+                                ? SizedBox(
+                                    height: context.height * 0.03,
+                                  )
+                                : SizedBox(),
                           ],
                         )),
                       ),

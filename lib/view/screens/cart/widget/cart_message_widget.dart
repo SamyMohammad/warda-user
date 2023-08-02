@@ -193,6 +193,7 @@ class _CartMessageWidgetState extends State<CartMessageWidget> {
                   ),
                   CustomButton(
                     buttonText: 'generate_message'.tr,
+                    isLoading: cubit.state is CartLoading,
                     onPressed: () {
                       cubit.generateMessage();
                     },

@@ -116,7 +116,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                       .isDesktop(context)) {
                                                     await Get.toNamed(
                                                         RouteHelper
-                                                            .getAuthOnBoardingRoute(Get
+                                                            .getSignInRoute(Get
                                                                 .currentRoute));
                                                   } else {
                                                     Get.dialog(
@@ -167,7 +167,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           if (!ResponsiveHelper.isDesktop(
                                               context)) {
                                             await Get.toNamed(
-                                                RouteHelper.getAuthOnBoardingRoute(
+                                                RouteHelper.getSignInRoute(
                                                     Get.currentRoute));
                                           } else {
                                             Get.dialog(const SignInScreen(

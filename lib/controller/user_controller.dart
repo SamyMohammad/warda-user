@@ -107,7 +107,7 @@ class UserController extends GetxController implements GetxService {
       Get.find<AuthController>().clearSharedData();
       Get.find<CartController>().clearCartList();
       Get.find<WishListController>().removeWishes();
-      Get.offAllNamed(RouteHelper.getAuthOnBoardingRoute(RouteHelper.splash));
+      Get.offAllNamed(RouteHelper.getSignInRoute(RouteHelper.splash));
 
     }else{
       Get.back();

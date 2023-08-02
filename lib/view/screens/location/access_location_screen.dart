@@ -9,6 +9,7 @@ import '../../../controller/auth_controller.dart';
 import '../../../controller/location_controller.dart';
 import '../../../data/model/response/address_model.dart';
 import '../../../helper/responsive_helper.dart';
+import '../../../helper/route_helper.dart';
 import '../../../util/app_constants.dart';
 import '../../../util/dimensions.dart';
 import '../../../util/images.dart';
@@ -64,7 +65,9 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
       appBar: CustomAppBar(
         title: 'set_location'.tr,
         backButton: widget.fromHome,
-      
+        onBackPressed: () {
+          Get.offNamed(RouteHelper.getInitialRoute(fromSplash: false));
+        },
       ),
       endDrawer: MenuDrawer(),
       endDrawerEnableOpenDragGesture: false,

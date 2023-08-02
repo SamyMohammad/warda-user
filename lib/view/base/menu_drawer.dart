@@ -176,8 +176,8 @@ class MenuDrawerState extends State<MenuDrawer>
                       if (ResponsiveHelper.isDesktop(Get.context)) {
                         Get.offAllNamed(RouteHelper.getInitialRoute());
                       } else {
-                        Get.offAllNamed(RouteHelper.getAuthOnBoardingRoute(
-                            RouteHelper.splash));
+                        Get.offAllNamed(
+                            RouteHelper.getSignInRoute(RouteHelper.splash));
                       }
                     }),
                 useSafeArea: false);
@@ -187,7 +187,7 @@ class MenuDrawerState extends State<MenuDrawer>
               Get.dialog(
                   const SignInScreen(exitFromApp: false, backFromThis: false));
             } else {
-              Get.toNamed(RouteHelper.getAuthOnBoardingRoute(RouteHelper.main));
+              Get.toNamed(RouteHelper.getSignInRoute(RouteHelper.main));
             }
           }
         }));

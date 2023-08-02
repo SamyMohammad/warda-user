@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -107,6 +109,8 @@ class _CartScreenState extends State<CartScreen> {
                                 onPressed: () {
                                   String? message =
                                       cubit.validator(cubit.activeStep);
+                                  print(
+                                      'hello validator ::${cubit.activeStep} $message');
                                   if (message.runtimeType != Null) {
                                     print('hello validator :: $message');
                                     showCustomSnackBar(message, isError: true);
@@ -117,6 +121,11 @@ class _CartScreenState extends State<CartScreen> {
                                   }
                                 },
                               ),
+                        Platform.isIOS
+                            ? SizedBox(
+                                height: context.height * 0.03,
+                              )
+                            : SizedBox(),
                       ],
                     );
                   },
@@ -189,7 +198,15 @@ class _CartScreenState extends State<CartScreen> {
   ) {
     return GestureDetector(
       onTap: () {
-        cubit.changeActiveStep(currentStep);
+        String? message = cubit.validator(cubit.activeStep);
+        print('hello validator ::${cubit.activeStep} $message');
+        if (message.runtimeType != Null) {
+          print('hello validator :: $message');
+          showCustomSnackBar(message, isError: true);
+        } else {
+          cubit.changeActiveStep(
+              cubit.activeStep == 4 ? cubit.activeStep : cubit.activeStep + 1);
+        }
       },
       child: Container(
         width: context.width * 0.18,

@@ -610,6 +610,8 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                               ),
                                               Container(
                                                 height: context.height * 0.09,
+                                                margin:
+                                                    EdgeInsets.only(bottom: context.height * 0.03),
                                                 child:
                                                     Builder(builder: (context) {
                                                   return Container(

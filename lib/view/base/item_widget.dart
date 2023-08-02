@@ -114,8 +114,7 @@ class ItemWidget extends StatelessWidget {
           Container(
             padding: ResponsiveHelper.isDesktop(context)
                 ? const EdgeInsets.all(Dimensions.paddingSizeSmall)
-                : const EdgeInsets.symmetric(
-                    horizontal: 4, vertical: 2),
+                : const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
             margin: ResponsiveHelper.isDesktop(context)
                 ? null
                 : const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
@@ -204,7 +203,7 @@ class ItemWidget extends StatelessWidget {
                                           isStore ? store!.name! : item!.name!,
                                           style: robotoMedium.copyWith(
                                               fontSize:
-                                                  Dimensions.fontSizeLarge),
+                                                  Dimensions.fontSizeDefault),
                                           maxLines: desktop ? 2 : 2,
                                           overflow: TextOverflow.ellipsis,
                                         ),
@@ -309,7 +308,7 @@ class ItemWidget extends StatelessWidget {
                                                           discountType),
                                                   style: robotoMedium.copyWith(
                                                       fontSize: Dimensions
-                                                          .fontSizeExtraLarge,
+                                                          .fontSizeLarge,
                                                       fontWeight:
                                                           FontWeight.w400,
                                                       color: AppConstants

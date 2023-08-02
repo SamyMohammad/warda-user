@@ -247,6 +247,9 @@ class CartCheckoutWidget extends StatelessWidget {
                       child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      SizedBox(
+                        height: context.height * 0.02,
+                      ),
                       Row(
                         children: [
                           const Icon(
@@ -294,7 +297,7 @@ class CartCheckoutWidget extends StatelessWidget {
                                                     ? AppConstants.primaryColor
                                                     : Colors.white,
                                                 width: 1)),
-                                        width: context.width * 0.25,
+                                        width: context.width * 0.28,
                                         height: context.width * 0.23,
                                         margin: const EdgeInsets.all(5.0),
                                         child: Column(
@@ -351,6 +354,10 @@ class CartCheckoutWidget extends StatelessWidget {
                         height: context.height * 0.02,
                       ),
                       deliveryTime(cubit, context),
+                      SizedBox(
+                        height: context.height * 0.02,
+                      ),
+                      message(cubit, context),
                       SizedBox(
                         height: context.height * 0.02,
                       ),
@@ -476,7 +483,8 @@ class CartCheckoutWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('receiver_name'.tr,
-                      textAlign: TextAlign.start, style: robotoRegular),
+                      textAlign: TextAlign.start,
+                      style: robotoRegular.copyWith(fontSize: 12)),
                   Text(cubit.fullNameController.text, style: robotoRegular),
                 ],
               ),
@@ -486,7 +494,8 @@ class CartCheckoutWidget extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('receiver_phone_number'.tr, style: robotoRegular),
+                  Text('receiver_phone_number'.tr,
+                      style: robotoRegular.copyWith(fontSize: 12)),
                   Text(cubit.phoneNumerController.text, style: robotoRegular),
                 ],
               ),
@@ -525,10 +534,49 @@ class CartCheckoutWidget extends StatelessWidget {
         SizedBox(
           width: context.width * 0.7,
           child: Text('${cubit.deliveryDate} ${'at'.tr} ${cubit.deliveryTime}',
-              textAlign: TextAlign.start, style: robotoRegular),
+              textAlign: TextAlign.start,
+              style: robotoRegular.copyWith(fontSize: 12)),
         ),
       ],
     );
+  }
+
+  Widget message(CartCubit cubit, BuildContext context) {
+    return cubit.messageController.text.isNotEmpty ||
+            cubit.generatedMessage.runtimeType != Null
+        ? Column(
+            children: [
+              // delivery time
+              Row(
+                children: [
+                  const Icon(Icons.mail_outline,
+                      color: AppConstants.primaryColor, size: 20),
+                  SizedBox(
+                    width: context.width * 0.03,
+                  ),
+                  SizedBox(
+                    child: Text(
+                      'message'.tr,
+                      style: robotoMedium,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: context.height * 0.02,
+              ),
+              SizedBox(
+                width: context.width * 0.7,
+                child: Text(
+                    cubit.generatedMessage.runtimeType != Null
+                        ? cubit.generatedMessage ?? ''
+                        : cubit.messageController.text,
+                    textAlign: TextAlign.start,
+                    style: robotoRegular.copyWith(fontSize: 12)),
+              ),
+            ],
+          )
+        : SizedBox();
   }
 
   Widget promoCode(

@@ -60,8 +60,8 @@ class _CartDeliveryTimeWidgetState extends State<CartDeliveryTimeWidget>
                 indicatorPadding:
                     EdgeInsets.symmetric(horizontal: context.width * 0.05),
                 indicatorColor: AppConstants.greenColor,
-                labelStyle: robotoMedium.copyWith(fontSize: 18),
-                unselectedLabelStyle: robotoMedium.copyWith(fontSize: 14),
+                labelStyle: robotoMedium.copyWith(fontWeight: FontWeight.w600),
+                unselectedLabelStyle: robotoRegular.copyWith(),
                 tabs: [
                   Padding(
                     padding: const EdgeInsets.all(5.0),
@@ -73,14 +73,12 @@ class _CartDeliveryTimeWidgetState extends State<CartDeliveryTimeWidget>
                     padding: const EdgeInsets.all(5.0),
                     child: Text(
                       'tomorrow'.tr,
-                      style: robotoMedium,
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(5.0),
                     child: Text(
                       'custom'.tr,
-                      style: robotoMedium,
                     ),
                   ),
                 ]),
@@ -136,7 +134,7 @@ class _CartDeliveryTimeWidgetState extends State<CartDeliveryTimeWidget>
           // spacing: 10,
           itemHeight: context.height * 0.04,
           isForce2Digits: true,
-          itemWidth: context.width * 0.05,
+          itemWidth: context.width * 0.06,
           onTimeChange: (time) {
             cubit.changeArriveTime(time, isToday: isToday);
           },
@@ -259,18 +257,18 @@ class _CartDeliveryTimeWidgetState extends State<CartDeliveryTimeWidget>
           SizedBox(
             height: context.height * 0.03,
           ),
-          CustomButton(
-            onPressed: () {
-              String? message = cubit.validator(4);
-              if (message.runtimeType != Null) {
-                showCustomSnackBar(message, isError: true);
-              } else {
-                cubit.changeActiveStep(4);
-              }
-            },
-            radius: 30,
-            buttonText: 'continue'.tr,
-          ),
+          // CustomButton(
+          //   onPressed: () {
+          //     String? message = cubit.validator(4);
+          //     if (message.runtimeType != Null) {
+          //       showCustomSnackBar(message, isError: true);
+          //     } else {
+          //       cubit.changeActiveStep(4);
+          //     }
+          //   },
+          //   radius: 30,
+          //   buttonText: 'continue'.tr,
+          // ),
           SizedBox(
             height: context.height * 0.03,
           ),

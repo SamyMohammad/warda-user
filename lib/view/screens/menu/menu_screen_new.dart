@@ -132,7 +132,7 @@ class _MenuScreenNewState extends State<MenuScreenNew> {
                                   onTap: () async {
                                     if (!ResponsiveHelper.isDesktop(context)) {
                                       await Get.toNamed(
-                                          RouteHelper.getAuthOnBoardingRoute(
+                                          RouteHelper.getSignInRoute(
                                               Get.currentRoute));
                                     } else {
                                       Get.dialog(const SignInScreen(
@@ -243,16 +243,16 @@ class _MenuScreenNewState extends State<MenuScreenNew> {
                                           Get.offAllNamed(
                                               RouteHelper.getInitialRoute());
                                         } else {
-                                          Get.offAllNamed(RouteHelper
-                                              .getAuthOnBoardingRoute(
+                                          Get.offAllNamed(
+                                              RouteHelper.getSignInRoute(
                                                   RouteHelper.splash));
                                         }
                                       }),
                                   useSafeArea: false);
                             } else {
                               Get.find<WishListController>().removeWishes();
-                              Get.toNamed(RouteHelper.getAuthOnBoardingRoute(
-                                  Get.currentRoute));
+                              Get.toNamed(
+                                  RouteHelper.getSignInRoute(Get.currentRoute));
                             }
                           },
                         ),

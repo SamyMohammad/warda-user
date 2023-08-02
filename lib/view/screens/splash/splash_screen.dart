@@ -131,7 +131,7 @@ class SplashScreenState extends State<SplashScreen> {
                 // else {
 
                 Get.offNamed(
-                    RouteHelper.getAuthOnBoardingRoute(RouteHelper.onBoarding));
+                    RouteHelper.getSignInRoute(RouteHelper.onBoarding));
                 // Get.offNamed(RouteHelper.getSignInRoute(RouteHelper.onBoarding));
                 // }
 

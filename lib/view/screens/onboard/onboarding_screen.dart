@@ -176,7 +176,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                                                                     SplashController>()
                                                                 .disableIntro();
                                                             Get.offNamed(RouteHelper
-                                                                .getAuthOnBoardingRoute(
+                                                                .getSignInRoute(
                                                                     RouteHelper
                                                                         .onBoarding));
                                                           }

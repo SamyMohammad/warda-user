@@ -162,6 +162,7 @@ class CartCubit extends Cubit<CartState> {
   showMessageController() {
     emit(CartLoading());
     showGeneratedMessage = false;
+    generatedMessage = null;
     generateMessageWithAI = false;
 
     emit(CartInitial());
@@ -241,7 +242,7 @@ class CartCubit extends Cubit<CartState> {
     };
 
     for (var indexKey in inputs.keys) {
-      if (indexKey == (index - 1)) {
+      if (indexKey == (index )) {
         for (var element in inputs[indexKey]!.entries) {
           if (element.value.text.isEmpty) {
             return '${element.key.tr} ${'required'.tr}';

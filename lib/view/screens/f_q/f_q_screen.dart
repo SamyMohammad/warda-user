@@ -54,7 +54,7 @@ class _FQScreenState extends State<FQScreen> {
                                     const EdgeInsets.symmetric(vertical: 8),
                                 child: AnimatedContainer(
                                   alignment: Alignment.centerRight,
-                                  duration: Duration(milliseconds: 500),
+                                  duration: Duration(milliseconds: 1500),
                                   constraints: BoxConstraints(
                                       minHeight:
                                           cubit.currentQuestionOpen == index
