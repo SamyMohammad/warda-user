@@ -242,7 +242,7 @@ class CartCubit extends Cubit<CartState> {
     };
 
     for (var indexKey in inputs.keys) {
-      if (indexKey == (index )) {
+      if (indexKey == (index)) {
         for (var element in inputs[indexKey]!.entries) {
           if (element.value.text.isEmpty) {
             return '${element.key.tr} ${'required'.tr}';

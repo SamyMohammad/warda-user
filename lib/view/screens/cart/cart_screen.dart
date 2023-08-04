@@ -204,8 +204,7 @@ class _CartScreenState extends State<CartScreen> {
           print('hello validator :: $message');
           showCustomSnackBar(message, isError: true);
         } else {
-          cubit.changeActiveStep(
-              cubit.activeStep == 4 ? cubit.activeStep : cubit.activeStep + 1);
+          cubit.changeActiveStep(currentStep);
         }
       },
       child: Container(

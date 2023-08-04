@@ -374,7 +374,7 @@ class FilterCubit extends Cubit<FilterState> {
                             ),
                             Platform.isIOS
                                 ? SizedBox(
-                                    height: context.height * 0.03,
+                                    height: context.height * 0.07,
                                   )
                                 : SizedBox(),
                           ],
