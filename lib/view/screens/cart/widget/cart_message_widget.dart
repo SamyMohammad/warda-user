@@ -194,6 +194,8 @@ class _CartMessageWidgetState extends State<CartMessageWidget> {
                   CustomButton(
                     buttonText: 'generate_message'.tr,
                     isLoading: cubit.state is CartLoading,
+                    color: Theme.of(context).cardColor,
+                    textColor: Theme.of(context).primaryColor,
                     onPressed: () {
                       cubit.generateMessage();
                     },
@@ -221,6 +223,8 @@ class _CartMessageWidgetState extends State<CartMessageWidget> {
                   ),
                   CustomButton(
                     buttonText: 'create_message_with_chatgpt'.tr,
+                    color: Theme.of(context).cardColor,
+                    textColor: Theme.of(context).primaryColor,
                     onPressed: () {
                       cubit.showQuestion();
                     },

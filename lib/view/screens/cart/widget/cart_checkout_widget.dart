@@ -496,7 +496,9 @@ class CartCheckoutWidget extends StatelessWidget {
                 children: [
                   Text('receiver_phone_number'.tr,
                       style: robotoRegular.copyWith(fontSize: 12)),
-                  Text(cubit.phoneNumerController.text, style: robotoRegular),
+                  Text(
+                      '${cubit.countryDialCode} ${cubit.phoneNumerController.text}',
+                      style: robotoRegular),
                 ],
               ),
             ],

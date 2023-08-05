@@ -29,7 +29,7 @@ import '../widget/cart_delivery_time_widget.dart';
 import '../widget/cart_items_list_widget.dart';
 import '../widget/cart_message_widget.dart';
 import '../widget/cart_recipient_details_widget.dart';
-
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 part 'cart_state.dart';
 
 class CartCubit extends Cubit<CartState> {
@@ -227,7 +227,7 @@ class CartCubit extends Cubit<CartState> {
   }
 
   String? validator(int index) {
-    Map<int, Map<String, TextEditingController>> inputs = {
+    Map<int, Map<String, dynamic>> inputs = {
       3: {
         // 'message_to'.tr:messageToController,
         //'message'.tr: messageController,
@@ -235,16 +235,17 @@ class CartCubit extends Cubit<CartState> {
         //'link'.tr:linkSongController,
       },
       1: {
-        'receiver_name'.tr: fullNameController,
-        'receiver_phone_number'.tr: phoneNumerController,
-        'receiver_address'.tr: adressController,
+        'receiver_name'.tr: fullNameController.text,
+        'receiver_phone_number'.tr: phoneNumerController.text,
+        'receiver_address'.tr: adressController.text,
       },
+      2: {'delivery_time'.tr: deliveryDate, 'time'.tr: deliveryTime},
     };
 
     for (var indexKey in inputs.keys) {
-      if (indexKey == (index)) {
+      if (indexKey <= (index)) {
         for (var element in inputs[indexKey]!.entries) {
-          if (element.value.text.isEmpty) {
+          if (element.value.isEmpty) {
             return '${element.key.tr} ${'required'.tr}';
           }
         }
@@ -594,6 +595,29 @@ class CartCubit extends Cubit<CartState> {
     } else {
       showCustomSnackBar(message);
     }
+  }
+
+  setupCountryCode(UserController userController) async {
+    emit(CartLoading());
+    if (userController.userInfoModel != null) {
+      PhoneNumber number = await PhoneNumber.getRegionInfoFromPhoneNumber(
+          userController.userInfoModel?.phone ?? '');
+      countryDialCode = '+${number.dialCode}';
+
+      phoneNumerController.text = userController.userInfoModel?.phone
+              ?.replaceFirst(countryDialCode ?? '', "") ??
+          '';
+      print(';hellllO ${userController.userInfoModel!.phone}');
+      print(';hellllO countryDialCode ${countryDialCode}');
+      print(';hellllO phoneNumerController ${number.phoneNumber}');
+      String fullname =
+          '${userController.userInfoModel!.fName ?? ''} ${userController.userInfoModel!.lName ?? ''}';
+      fullNameController.text = fullname;
+    }
+
+    deliveryDate = dateToday;
+    deliveryTime = arriveTimeToday;
+    emit(CartInitial());
   }
 
   addAddress(

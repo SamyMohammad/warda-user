@@ -33,6 +33,8 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget> {
   @override
   void initState() {
     // TODO: implement initState
+    BlocProvider.of<CartCubit>(context)
+        .setupCountryCode(Get.find<UserController>());
     super.initState();
   }
 
@@ -45,16 +47,6 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget> {
           return GetBuilder<UserController>(
             builder: (userController) {
               bool isLoggedIn = Get.find<AuthController>().isLoggedIn();
-              if (userController.userInfoModel != null) {
-                cubit.phoneNumerController.text = userController
-                        .userInfoModel!.phone
-                        ?.replaceAll(cubit.countryDialCode ?? '', '') ??
-                    '';
-
-                String fullname =
-                    '${userController.userInfoModel!.fName ?? ''} ${userController.userInfoModel!.lName ?? ''}';
-                cubit.fullNameController.text = fullname;
-              }
               return SizedBox(
                 height: context.height * 0.7,
                 child: Column(
@@ -144,11 +136,12 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget> {
                           cubit.countryDialCode = countryCode.dialCode;
                         },
                         countryDialCode: cubit.countryDialCode != null
-                            ? CountryCode.fromCountryCode(
-                                    Get.find<SplashController>()
-                                        .configModel!
-                                        .country!)
-                                .code
+                            // ? CountryCode.fromCountryCode(
+                            //         Get.find<SplashController>()
+                            //             .configModel!
+                            //             .country!)
+                            //     .code
+                            ? cubit.countryDialCode
                             : Get.find<LocalizationController>()
                                 .locale
                                 .countryCode,
