@@ -57,7 +57,7 @@ class HomeScreen extends StatefulWidget {
       // Get.find<CampaignController>().getItemCampaignList(reload);
       // Get.find<StoreController>().getLatestStoreList(reload, 'all', false);
       // Get.find<ItemController>().getReviewedItemList(reload, 'all', false);
-      Get.find<StoreController>().getStoreList(1, reload);
+      //   Get.find<StoreController>().getStoreList(1, reload);
       Get.find<ItemController>().getPopularItemList(reload, 'all', false);
       Get.find<ItemController>().getDiscountItemList(true, 'all', false);
     }
@@ -142,8 +142,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 : SafeArea(
                     child: RefreshIndicator(
                       onRefresh: () async {
-                        print(
-                            'error::: ${Get.find<SplashController>().module}');
                         if (Get.find<SplashController>().module != null) {
                           await Get.find<BannerController>()
                               .getBannerList(true);
@@ -163,8 +161,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           //     .getLatestStoreList(true, 'all', false);
                           // await Get.find<ItemController>()
                           //     .getReviewedItemList(true, 'all', false);
-                          await Get.find<StoreController>()
-                              .getStoreList(1, true);
+                          // await Get.find<StoreController>()
+                          //     .getStoreList(1, true);
                           if (Get.find<AuthController>().isLoggedIn()) {
                             await Get.find<UserController>().getUserInfo();
                             await Get.find<NotificationController>()
@@ -304,25 +302,43 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                     .end,
                                                             children: [
                                                               Container(
-                                                                width: 30,
-                                                                height: 30,
+                                                                width: 25,
+                                                                height: 25,
+                                                                decoration: BoxDecoration(
+                                                                    color: AppConstants
+                                                                        .lightPinkColor,
+                                                                    shape: BoxShape
+                                                                        .circle),
                                                                 margin: const EdgeInsets
                                                                         .symmetric(
                                                                     horizontal:
-                                                                        12),
-                                                                child: Image
-                                                                    .network(
-                                                                  cubit.countrySelected
-                                                                          ?.flagLink ??
-                                                                      '',
-                                                                  errorBuilder:
-                                                                      ((context,
+                                                                        8),
+                                                                child:
+                                                                    ClipRRect(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              400),
+                                                                  child:
+                                                                      Padding(
+                                                                    padding:
+                                                                        const EdgeInsets
+                                                                            .all(0),
+                                                                    child: Image
+                                                                        .network(
+                                                                      cubit.countrySelected
+                                                                              ?.flagLink ??
+                                                                          '',
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                      errorBuilder: ((context,
                                                                           error,
                                                                           stackTrace) {
-                                                                    return Image
-                                                                        .asset(Images
-                                                                            .logoColor);
-                                                                  }),
+                                                                        return Image.asset(
+                                                                            Images.logoColor);
+                                                                      }),
+                                                                    ),
+                                                                  ),
                                                                 ),
                                                               ),
                                                               Text(

@@ -69,8 +69,11 @@ class _CartDeliveryTimeWidgetState extends State<CartDeliveryTimeWidget>
                       'fast'.tr,
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
+                  Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 5.0, horizontal: 2),
+                    width: context.width * 0.5,
                     child: Text(
                       'tomorrow'.tr,
                     ),

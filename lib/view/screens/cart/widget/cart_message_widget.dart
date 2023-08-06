@@ -194,6 +194,7 @@ class _CartMessageWidgetState extends State<CartMessageWidget> {
                   CustomButton(
                     buttonText: 'generate_message'.tr,
                     isLoading: cubit.state is CartLoading,
+                  
                     color: Theme.of(context).cardColor,
                     textColor: Theme.of(context).primaryColor,
                     onPressed: () {

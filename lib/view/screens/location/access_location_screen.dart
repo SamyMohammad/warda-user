@@ -324,14 +324,25 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
                                   Container(
                                     width: 35,
                                     height: 35,
+                                    decoration: BoxDecoration(
+                                        color: AppConstants.lightPinkColor,
+                                        shape: BoxShape.circle),
                                     margin:
                                         EdgeInsets.symmetric(horizontal: 12),
-                                    child: Image.network(
-                                      isCoutry ? item.flagLink : item.name,
-                                      errorBuilder:
-                                          ((context, error, stackTrace) {
-                                        return Image.asset(Images.logoColor);
-                                      }),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(400),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(0),
+                                        child: Image.network(
+                                          isCoutry ? item.flagLink : item.name,
+                                          fit: BoxFit.cover,
+                                          errorBuilder:
+                                              ((context, error, stackTrace) {
+                                            return Image.asset(
+                                                Images.logoColor);
+                                          }),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                   Text(

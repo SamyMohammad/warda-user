@@ -45,7 +45,8 @@ class CustomButton extends StatelessWidget {
       padding: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radius),
-          side: BorderSide(color: textColor ?? Theme.of(context).primaryColor,width: 0.6)),
+          side: BorderSide(
+              color: textColor ?? Theme.of(context).primaryColor, width: 0.6)),
     );
 
     return Center(
@@ -66,7 +67,7 @@ class CustomButton extends StatelessWidget {
                                 width: 15,
                                 child: CircularProgressIndicator(
                                   valueColor: AlwaysStoppedAnimation<Color>(
-                                      Theme.of(context).cardColor),
+                                      textColor ?? Theme.of(context).cardColor),
                                   strokeWidth: 2,
                                 ),
                               ),
@@ -74,7 +75,8 @@ class CustomButton extends StatelessWidget {
                                   width: Dimensions.paddingSizeSmall),
                               Text('loading'.tr,
                                   style: robotoMedium.copyWith(
-                                      color: Theme.of(context).cardColor)),
+                                      color: textColor ??
+                                          Theme.of(context).cardColor)),
                             ]),
                       )
                     : Row(

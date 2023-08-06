@@ -198,8 +198,8 @@ class _CartScreenState extends State<CartScreen> {
   ) {
     return GestureDetector(
       onTap: () {
-        String? message = cubit.validator(cubit.activeStep);
-        print('hello validator ::${cubit.activeStep} $message');
+        String? message = cubit.validator(currentStep);
+        print('hello validator ::$currentStep $message');
         if (message.runtimeType != Null) {
           print('hello validator :: $message');
           showCustomSnackBar(message, isError: true);
