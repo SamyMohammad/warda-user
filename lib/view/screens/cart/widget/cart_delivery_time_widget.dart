@@ -62,26 +62,35 @@ class _CartDeliveryTimeWidgetState extends State<CartDeliveryTimeWidget>
                 indicatorColor: AppConstants.greenColor,
                 labelStyle: robotoMedium.copyWith(fontWeight: FontWeight.w600),
                 unselectedLabelStyle: robotoRegular.copyWith(),
+                isScrollable: true,
                 tabs: [
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Text(
-                      'fast'.tr,
+                  Container(
+                    width: context.width * 0.18,
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Text(
+                        'fast'.tr,
+                      ),
                     ),
                   ),
                   Container(
                     alignment: Alignment.center,
                     padding: const EdgeInsets.symmetric(
                         vertical: 5.0, horizontal: 2),
-                    width: context.width * 0.5,
+                    width: context.width * 0.35,
                     child: Text(
                       'tomorrow'.tr,
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Text(
-                      'custom'.tr,
+                  Container(
+                    width: context.width * 0.2,
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Text(
+                        'custom'.tr,
+                      ),
                     ),
                   ),
                 ]),

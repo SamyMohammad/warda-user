@@ -226,7 +226,7 @@ class CartCubit extends Cubit<CartState> {
     emit(CartInitial());
   }
 
-  String? validator(int index) {
+  Map<int, String>? validator(int index) {
     Map<int, Map<String, dynamic>> inputs = {
       3: {
         // 'message_to'.tr:messageToController,
@@ -246,7 +246,7 @@ class CartCubit extends Cubit<CartState> {
       if (indexKey < index) {
         for (var element in inputs[indexKey]!.entries) {
           if (element.value.isEmpty) {
-            return '${element.key.tr} ${'required'.tr}';
+            return {indexKey: '${element.key.tr} ${'required'.tr}'};
           }
         }
       }

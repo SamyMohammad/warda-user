@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart'
     as staggeredGridview;
@@ -108,7 +110,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                     )),
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context).hintColor,
+                                        color: Theme.of(context).cardColor,
                                         borderRadius: BorderRadius.circular(
                                             Dimensions.radiusSmall),
                                         boxShadow: [
@@ -116,6 +118,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                               color: Colors.grey[
                                                   Get.isDarkMode ? 800 : 200]!,
                                               blurRadius: 5,
+                                              offset: Offset(1, 1),
                                               spreadRadius: 1)
                                         ],
                                         // image: DecorationImage(
@@ -132,23 +135,33 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                                   BorderRadius.circular(
                                                       Dimensions.radiusSmall),
                                               child: CustomImage(
-                                                fit: BoxFit.cover,
+                                                fit: BoxFit.contain,
                                                 width: context.width,
                                                 height: context.height * 0.255,
                                                 image:
                                                     '${Get.find<SplashController>().configModel!.baseUrls!.categoryImageUrl}/${catController.categoryList![indexFakeData].image}',
                                               ),
                                             ),
-                                            Text(
-                                              catController
-                                                  .categoryList![indexFakeData]
-                                                  .name!,
-                                              textAlign: TextAlign.center,
-                                              style: wardaRegular.copyWith(
-                                                  fontSize: 30,
-                                                  color: Colors.white),
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
+                                            Container(
+                                              padding: EdgeInsets.all(8),
+                                              decoration: BoxDecoration(
+                                                  color: AppConstants
+                                                      .lightPinkColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(8)),
+                                              child: Text(
+                                                catController
+                                                    .categoryList![
+                                                        indexFakeData]
+                                                    .name!,
+                                                textAlign: TextAlign.center,
+                                                style: wardaRegular.copyWith(
+                                                    fontSize: 30,
+                                                    color: AppConstants
+                                                        .primaryColor),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
                                             ),
                                           ]),
                                     ),

@@ -25,7 +25,8 @@ class BottomNavItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap as void Function()?,
       child: Container(
-        width: isCategoryItem ? context.width * 0.19 : context.width * 0.19,
+        width: isCategoryItem ? context.width * 0.215 : context.width * 0.188,
+        // color: Colors.red,
         // margin: isCategoryItem
         //     ? EdgeInsets.symmetric(horizontal: context.width * 0.02)
         //     : null,

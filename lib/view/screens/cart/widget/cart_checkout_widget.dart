@@ -386,7 +386,8 @@ class CartCheckoutWidget extends StatelessWidget {
                       ),
                       CustomButton(
                         onPressed: () {
-                          String? message = cubit.validator(5);
+                          String? message =
+                              cubit.validator(5)?.entries.first.value ?? '';
                           if (message.runtimeType != Null) {
                           } else {
                             cubit.placeOrder(
@@ -447,12 +448,22 @@ class CartCheckoutWidget extends StatelessWidget {
                       Container(
                         width: 25,
                         height: 25,
-                        margin: const EdgeInsets.symmetric(horizontal: 12),
-                        child: Image.network(
-                          cubit.countrySelected?.flagLink ?? '',
-                          errorBuilder: ((context, error, stackTrace) {
-                            return Image.asset(Images.logoColor);
-                          }),
+                        decoration: BoxDecoration(
+                            color: AppConstants.lightPinkColor,
+                            shape: BoxShape.circle),
+                        margin: const EdgeInsets.symmetric(horizontal: 8),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(400),
+                          child: Padding(
+                            padding: const EdgeInsets.all(0),
+                            child: Image.network(
+                              cubit.countrySelected?.flagLink ?? '',
+                              fit: BoxFit.cover,
+                              errorBuilder: ((context, error, stackTrace) {
+                                return Image.asset(Images.logoColor);
+                              }),
+                            ),
+                          ),
                         ),
                       ),
                       Text(

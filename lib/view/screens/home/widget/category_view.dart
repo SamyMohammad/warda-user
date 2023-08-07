@@ -11,6 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:get/get.dart';
 
+import '../../../../util/app_constants.dart';
+import '../../../../util/images.dart';
+
 class CategoryView extends StatelessWidget {
   const CategoryView({Key? key}) : super(key: key);
 
@@ -34,21 +37,21 @@ class CategoryView extends StatelessWidget {
                   children: [
                     Expanded(
                       child: SizedBox(
-                        height: context.width * 0.24,
+                        height: context.width * 0.26,
                         child: categoryController.categoryList != null
                             ? ListView.builder(
                                 controller: scrollController,
-                                itemCount: 
-                                categoryController.categoryList!.length > 15
-                                    ? 15
-                                    : categoryController
-                                        .categoryList!.length,
+                                itemCount:
+                                    categoryController.categoryList!.length > 15
+                                        ? 15
+                                        : categoryController
+                                            .categoryList!.length,
                                 padding: const EdgeInsets.only(
                                     left: Dimensions.paddingSizeSmall),
                                 physics: const BouncingScrollPhysics(),
                                 scrollDirection: Axis.horizontal,
                                 itemBuilder: (context, index) {
-                                  index = 0;
+                                  //index = 0;
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 1),
@@ -61,31 +64,60 @@ class CategoryView extends StatelessWidget {
                                             .categoryList![index].name!,
                                       )),
                                       child: SizedBox(
-                                        width: context.width * 0.22,
-                                        height: context.width * 0.22,
+                                        width: context.width * 0.2,
+                                        height: context.width * 0.2,
                                         child: Column(children: [
+                                          // Container(
+                                          //   margin: EdgeInsets.only(
+                                          //     left: index == 0
+                                          //         ? 0
+                                          //         : Dimensions
+                                          //             .paddingSizeExtraSmall,
+                                          //     right: Dimensions
+                                          //         .paddingSizeExtraSmall,
+                                          //   ),
+                                          //   color: Colors.amber,
+                                          //   height: context.width * 0.15,
+                                          //   width: context.width * 0.15,
+                                          //   child: ClipRRect(
+                                          //     borderRadius:
+                                          //         BorderRadius.circular(500),
+                                          //     child: CustomImage(
+                                          //       image:
+                                          //           '${Get.find<SplashController>().configModel!.baseUrls!.categoryImageUrl}/${categoryController.categoryList?[index].image}',
+                                          //       height: context.width * 0.15,
+                                          //       width: context.width * 0.15,
+                                          //       fit: BoxFit.contain,
+                                          //     ),
+                                          //   ),
+                                          // ),
+
                                           Container(
-                                            margin: EdgeInsets.only(
-                                              left: index == 0
-                                                  ? 0
-                                                  : Dimensions
-                                                      .paddingSizeExtraSmall,
-                                              right: Dimensions
-                                                  .paddingSizeExtraSmall,
-                                            ),
-                                            child: Stack(children: [
-                                              ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(500),
-                                                child: CustomImage(
-                                                  image:
-                                                      '${Get.find<SplashController>().configModel!.baseUrls!.categoryImageUrl}/${categoryController.categoryList?[index].image}',
-                                                  height: context.width * 0.13,
-                                                  width: context.width * 0.13,
-                                                  fit: BoxFit.cover,
+                                            height: context.width * 0.15,
+                                            width: context.width * 0.15,
+                                            decoration: BoxDecoration(
+                                                color:
+                                                    AppConstants.lightPinkColor,
+                                                shape: BoxShape.circle),
+                                            margin: const EdgeInsets.symmetric(
+                                                horizontal: 8),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(400),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8),
+                                                child: Image.network(
+                                                  '${Get.find<SplashController>().configModel!.baseUrls!.categoryImageUrl}/${categoryController.categoryList?[index].image}',
+                                                  fit: BoxFit.contain,
+                                                  errorBuilder: ((context,
+                                                      error, stackTrace) {
+                                                    return Image.asset(
+                                                        Images.logoColor);
+                                                  }),
                                                 ),
                                               ),
-                                            ]),
+                                            ),
                                           ),
                                           const SizedBox(
                                               height: Dimensions
@@ -101,7 +133,9 @@ class CategoryView extends StatelessWidget {
                                                       : 0),
                                               child: Text(
                                                 categoryController
-                                                    .categoryList?[index].name??'',
+                                                        .categoryList?[index]
+                                                        .name ??
+                                                    '',
                                                 style: robotoRegular.copyWith(
                                                     fontSize: 11,
                                                     fontFamily: 'Poppins',

@@ -107,12 +107,22 @@ class _CartScreenState extends State<CartScreen> {
                                 width: context.width * 0.9,
                                 height: context.height * 0.07,
                                 onPressed: () {
-                                  String? message =
-                                      cubit.validator(cubit.activeStep);
+                                  String? message = cubit
+                                          .validator(cubit.activeStep)
+                                          ?.entries
+                                          .first
+                                          .value ??
+                                      '';
                                   print(
-                                      'hello validator ::${cubit.activeStep} $message');
-                                  if (message.runtimeType != Null) {
+                                      'hello validator ::${message.isEmpty} $message');
+                                  if (message.isNotEmpty) {
                                     print('hello validator :: $message');
+                                    cubit.changeActiveStep(cubit
+                                            .validator(cubit.activeStep)
+                                            ?.entries
+                                            .first
+                                            .key ??
+                                        0);
                                     showCustomSnackBar(message, isError: true);
                                   } else {
                                     cubit.changeActiveStep(cubit.activeStep == 4
@@ -198,10 +208,13 @@ class _CartScreenState extends State<CartScreen> {
   ) {
     return GestureDetector(
       onTap: () {
-        String? message = cubit.validator(currentStep);
+        String? message =
+            cubit.validator(currentStep)?.entries.first.value ?? '';
         print('hello validator ::$currentStep $message');
-        if (message.runtimeType != Null) {
+        if (message.isNotEmpty) {
           print('hello validator :: $message');
+          cubit.changeActiveStep(
+              cubit.validator(currentStep)?.entries.first.key ?? 0);
           showCustomSnackBar(message, isError: true);
         } else {
           cubit.changeActiveStep(currentStep);
