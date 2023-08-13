@@ -25,7 +25,7 @@ import 'package:warda/view/base/custom_snackbar.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:warda/data/model/response/payment_methods_model_dart';
+import 'package:warda/data/model/response/payment_methods_model.dart';
 
 import '../data/model/response/questions_model.dart';
 

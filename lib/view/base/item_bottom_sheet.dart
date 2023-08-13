@@ -625,9 +625,12 @@ class _ItemBottomSheetState extends State<ItemBottomSheet> {
                                   discount! > 0
                                       ? Text(
                                           PriceConverter.convertPrice(
-                                            (price * itemController.quantity!) +
-                                                addonsCost,
-                                          ),
+                                              (price *
+                                                      itemController
+                                                          .quantity!) +
+                                                  addonsCost,
+                                              currencySymbol:
+                                                  widget.item?.currrenySymbol),
                                           textDirection: TextDirection.ltr,
                                           style: robotoMedium.copyWith(
                                               color: Theme.of(context)
@@ -642,11 +645,12 @@ class _ItemBottomSheetState extends State<ItemBottomSheet> {
                                       width: Dimensions.paddingSizeExtraSmall),
                                   Text(
                                     PriceConverter.convertPrice(
-                                      (price * itemController.quantity!) +
-                                          addonsCost,
-                                      discount: discount,
-                                      discountType: discountType,
-                                    ),
+                                        (price * itemController.quantity!) +
+                                            addonsCost,
+                                        discount: discount,
+                                        discountType: discountType,
+                                        currencySymbol:
+                                            widget.item?.currrenySymbol),
                                     style: robotoBold.copyWith(
                                         color: Theme.of(context).primaryColor),
                                     textDirection: TextDirection.ltr,
@@ -946,7 +950,8 @@ class AddonView extends StatelessWidget {
                 const Spacer(),
                 Text(
                   item.addOns![index].price! > 0
-                      ? PriceConverter.convertPrice(item.addOns![index].price)
+                      ? PriceConverter.convertPrice(item.addOns![index].price,
+                          currencySymbol: item.currrenySymbol)
                       : 'free'.tr,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

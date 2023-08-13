@@ -304,6 +304,8 @@ class ItemWidget extends StatelessWidget {
                                                   PriceConverter.convertPrice(
                                                       item!.price,
                                                       discount: discount,
+                                                      currencySymbol:
+                                                          item!.currrenySymbol,
                                                       discountType:
                                                           discountType),
                                                   style: robotoMedium.copyWith(

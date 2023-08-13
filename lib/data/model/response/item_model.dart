@@ -74,6 +74,8 @@ class Item {
   String? moduleType;
   String? unitType;
   int? stock;
+  String? currrenySymbol;
+  String? currrenyCode;
   String? availableDateStarts;
   int? organic;
 
@@ -107,6 +109,8 @@ class Item {
     this.moduleType,
     this.unitType,
     this.stock,
+    this.currrenyCode,
+    this.currrenySymbol,
     this.organic,
   });
 
@@ -164,6 +168,8 @@ class Item {
     moduleType = json['module_type'];
     veg = json['veg'] != null ? int.parse(json['veg'].toString()) : 0;
     stock = json['stock'];
+    currrenySymbol = json['currreny_symbol'];
+    currrenyCode = json['currreny_code'];
     unitType = json['unit_type'];
     availableDateStarts = json['available_date_starts'];
     organic = json['organic'];
@@ -209,6 +215,8 @@ class Item {
     data['module_id'] = moduleId;
     data['module_type'] = moduleType;
     data['stock'] = stock;
+    data['currreny_code'] = currrenyCode;
+    data['currreny_symbol'] = currrenySymbol;
     data['unit_type'] = unitType;
     data['available_date_starts'] = availableDateStarts;
     data['organic'] = organic;

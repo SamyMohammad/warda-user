@@ -566,7 +566,10 @@ class CheckoutButton extends StatelessWidget {
                               Get.find<SplashController>()
                                       .configModel!
                                       .freeDeliveryOver! -
-                                  cartController.subTotal),
+                                  cartController.subTotal,
+                                  
+                                  
+                                  ),
                           style: robotoMedium.copyWith(
                               color: Theme.of(context).primaryColor)),
                       const SizedBox(width: Dimensions.paddingSizeExtraSmall),
