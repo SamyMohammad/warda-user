@@ -28,7 +28,7 @@ class ItemsView extends StatefulWidget {
       required this.items,
       required this.isStore,
       this.isScrollable = false,
-      this.shimmerLength = 20,
+      this.shimmerLength = 1,
       this.padding = const EdgeInsets.all(Dimensions.paddingSizeSmall),
       this.noDataText,
       this.isCampaign = false,
@@ -72,7 +72,7 @@ class _ItemsViewState extends State<ItemsView> {
                         ? 4
                         : widget.showTheme1Store
                             ? 2
-                            : 0.6,
+                            : 0.67,
                     crossAxisCount: ResponsiveHelper.isMobile(context) ? 2 : 2,
                   ),
                   physics: widget.isScrollable
@@ -135,10 +135,13 @@ class _ItemsViewState extends State<ItemsView> {
               itemBuilder: (context, index) {
                 return widget.showTheme1Store
                     ? StoreShimmer(isEnable: isNull)
-                    : ItemShimmer(
-                        isEnabled: isNull,
-                        isStore: widget.isStore,
-                        hasDivider: index != widget.shimmerLength - 1);
+                    : Center(
+                        child: CircularProgressIndicator(),
+                      );
+                // : ItemShimmer(
+                //     isEnabled: isNull,
+                //     isStore: widget.isStore,
+                //     hasDivider: index != widget.shimmerLength - 1);
               },
             ),
     ]);

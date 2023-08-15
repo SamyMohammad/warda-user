@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:warda/controller/category_controller.dart';
 import 'package:warda/controller/splash_controller.dart';
 import 'package:warda/data/model/response/item_model.dart';
@@ -16,7 +19,10 @@ import 'package:warda/view/base/web_menu_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../controller/search_controller.dart';
 import '../../base/custom_app_bar.dart';
+import '../home/home_screen.dart';
+import '../search/cubit/filter_cubit.dart';
 
 class CategoryItemScreen extends StatefulWidget {
   final String? categoryID;
@@ -133,45 +139,107 @@ class CategoryItemScreenState extends State<CategoryItemScreen>
           }
         },
         child: Scaffold(
-          backgroundColor: AppConstants.lightPinkColor,
+          backgroundColor: Theme.of(context).cardColor,
           appBar: (ResponsiveHelper.isDesktop(context)
               ? const WebMenuBar()
               : PreferredSize(
-                  preferredSize: Size(context.width, context.height * 0.15),
+                  preferredSize: Size(
+                      context.width,
+                      Platform.isIOS
+                          ? context.height * 0.08
+                          : context.height * 0.07),
                   child: CustomAppBar(
                     title: widget.categoryName,
-                    titleWidget: catController.isSearching
-                        ? Container(
-                            width: context.width * 0.9,
-                            height: context.height * 0.05,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(30)),
-                            child: TextField(
-                                autofocus: true,
-                                textInputAction: TextInputAction.search,
-                                decoration: const InputDecoration(
-                                    hintText: 'Search...',
-                                    border: InputBorder.none,
-                                    contentPadding:
-                                        EdgeInsets.only(left: 15, bottom: 8)),
-                                style: robotoRegular.copyWith(
-                                    fontSize: Dimensions.fontSizeLarge),
-                                onSubmitted: (String query) {
-                                  catController.searchData(
-                                    query,
-                                    catController.subCategoryIndex == 0
-                                        ? widget.categoryID
-                                        : catController
-                                            .subCategoryList![
-                                                catController.subCategoryIndex]
-                                            .id
-                                            .toString(),
-                                    catController.type,
-                                  );
-                                }),
-                          )
-                        : null,
+                    // actions: [
+                    //   Container(
+                    //     alignment: Alignment.topCenter,
+                    //     child: GestureDetector(
+                    //       onTap: () {
+                    //         Get.toNamed(RouteHelper.getSearchRoute());
+                    //         BlocProvider.of<FilterCubit>(context)
+                    //             .filterBottomSheet(
+                    //                 Get.find<SearchingController>(),
+                    //                 Get.find<CategoryController>(),
+                    //                 context);
+                    //       },
+                    //       // child: SizedBox(
+                    //       //   height: 30,
+                    //       //   width: 30,
+                    //       // )
+                    //       child: Icon(
+                    //         Icons.filter_alt,
+                    //         // color: AppConstants.primaryColor,
+                    //         size: 30,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ],
+                    titleWidget:
+                        // ? Container(
+                        //     width: context.width * 0.9,
+                        //     height: context.height * 0.05,
+                        //     decoration: BoxDecoration(
+                        //         color: Colors.white,
+                        //         borderRadius: BorderRadius.circular(30)),
+                        //     child: TextField(
+                        //         autofocus: true,
+                        //         textInputAction: TextInputAction.search,
+                        //         decoration: const InputDecoration(
+                        //             hintText: 'Search...',
+                        //             border: InputBorder.none,
+                        //             contentPadding:
+                        //                 EdgeInsets.only(left: 15, bottom: 8)),
+                        //         style: robotoRegular.copyWith(
+                        //             fontSize: Dimensions.fontSizeLarge),
+                        //         onSubmitted: (String query) {
+                        //           catController.searchData(
+                        //             query,
+                        //             catController.subCategoryIndex == 0
+                        //                 ? widget.categoryID
+                        //                 : catController
+                        //                     .subCategoryList![
+                        //                         catController.subCategoryIndex]
+                        //                     .id
+                        //                     .toString(),
+                        //             catController.type,
+                        //           );
+                        //         }),
+                        //   ) : null
+                        Center(
+                            child: Container(
+                      height: context.height * 0.04,
+                      width: context.width * 0.75,
+                      color: Theme.of(context).cardColor,
+                      child: InkWell(
+                        onTap: () => Get.toNamed(RouteHelper.getSearchRoute()),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: Dimensions.paddingSizeSmall),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).cardColor,
+                            borderRadius:
+                                BorderRadius.circular(Dimensions.radiusSmall),
+                            boxShadow: [
+                              BoxShadow(
+                                  color:
+                                      Colors.grey[Get.isDarkMode ? 800 : 200]!,
+                                  spreadRadius: 1,
+                                  offset: Offset(1, 1),
+                                  blurRadius: 5)
+                            ],
+                          ),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: const [
+                                Icon(
+                                  Icons.search,
+                                  size: 23,
+                                  color: Colors.grey,
+                                ),
+                              ]),
+                        ),
+                      ),
+                    )),
                     showLogo: true,
                     backButton: true,
                     onBackPressed: () {
@@ -181,28 +249,28 @@ class CategoryItemScreenState extends State<CategoryItemScreen>
                         Get.back();
                       }
                     },
-                    actions: [
-                      catController.isSearching
-                          ? const SizedBox()
-                          : GestureDetector(
-                              onTap: () => catController.toggleSearch(),
-                              child: Padding(
-                                padding: const EdgeInsets.only(right: 8.0),
-                                child: Center(
-                                  child: Icon(
-                                    catController.isSearching
-                                        ? Icons.close_sharp
-                                        : Icons.search,
-                                    size: 25,
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge!
-                                        .color,
-                                  ),
-                                ),
-                              ),
-                            ),
-                    ],
+                    // actions: [
+                    //   catController.isSearching
+                    //       ? const SizedBox()
+                    //       : GestureDetector(
+                    //           onTap: () => catController.toggleSearch(),
+                    //           child: Padding(
+                    //             padding: const EdgeInsets.only(right: 8.0),
+                    //             child: Center(
+                    //               child: Icon(
+                    //                 catController.isSearching
+                    //                     ? Icons.close_sharp
+                    //                     : Icons.search,
+                    //                 size: 25,
+                    //                 color: Theme.of(context)
+                    //                     .textTheme
+                    //                     .bodyLarge!
+                    //                     .color,
+                    //               ),
+                    //             ),
+                    //           ),
+                    //         ),
+                    // ],
                   ))),
           endDrawer: const MenuDrawer(),
           endDrawerEnableOpenDragGesture: false,

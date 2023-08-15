@@ -103,7 +103,7 @@ class FilterCubit extends Cubit<FilterState> {
                         // color: Colors.white.withOpacity(0.8),
                         child: Center(
                             child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -8,6 +8,7 @@ class Images {
   static const String couponCoffee = 'assets/image/coupon_coffee.png';
 
   static const String placeholder = 'assets/image/placeholder.jpg';
+  static const String testItemImg = 'assets/image/test_item_img.png';
   static const String notificationPlaceholder =
       'assets/image/notification_placeholder.jpg';
   static const String arabic = 'assets/image/arabic.png';

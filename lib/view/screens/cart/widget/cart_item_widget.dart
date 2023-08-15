@@ -98,7 +98,7 @@ class CartItemWidget extends StatelessWidget {
                 : SlidableAction(
                     onPressed: (context) =>
                         Get.find<CartController>().removeFromCart(cartIndex),
-                    backgroundColor: AppConstants.lightPinkColor,
+                    backgroundColor: AppConstants.splashBackgroundColor,
                     borderRadius: BorderRadius.horizontal(
                         right: Radius.circular(
                             Get.find<LocalizationController>().isLtr
@@ -133,18 +133,24 @@ class CartItemWidget extends StatelessWidget {
               Row(children: [
                 Stack(
                   children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(forReview ? 5 : 15),
-                      child: CustomImage(
-                        image:
-                            '${Get.find<SplashController>().configModel!.baseUrls!.itemImageUrl}/${cart.item!.image}',
-                        height: forReview
-                            ? context.height * 0.08
-                            : context.height * 0.13,
-                        width: forReview
-                            ? context.height * 0.08
-                            : context.height * 0.13,
-                        fit: BoxFit.cover,
+                    Container(
+                      decoration: BoxDecoration(
+                          color: AppConstants.lightPinkColor,
+                          borderRadius:
+                              BorderRadius.circular(Dimensions.radiusDefault)),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(forReview ? 5 : 15),
+                        child: CustomImage(
+                          image:
+                              '${Get.find<SplashController>().configModel!.baseUrls!.itemImageUrl}/${cart.item!.image}',
+                          height: forReview
+                              ? context.height * 0.08
+                              : context.height * 0.16,
+                          width: forReview
+                              ? context.height * 0.08
+                              : context.height * 0.15,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                     isAvailable

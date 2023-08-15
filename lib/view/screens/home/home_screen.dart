@@ -258,7 +258,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 height: context.height * 0.03,
                                                 fit: BoxFit.fitHeight,
                                               ),
-
                                               InkWell(
                                                 onTap: () => Get.find<
                                                         LocationController>()
@@ -302,8 +301,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                     .end,
                                                             children: [
                                                               Container(
-                                                                width: 25,
-                                                                height: 25,
+                                                                width: 20,
+                                                                height: 20,
                                                                 decoration: BoxDecoration(
                                                                     color: AppConstants
                                                                         .lightPinkColor,
@@ -312,7 +311,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 margin: const EdgeInsets
                                                                         .symmetric(
                                                                     horizontal:
-                                                                        8),
+                                                                        2),
                                                                 child:
                                                                     ClipRRect(
                                                                   borderRadius:
@@ -375,43 +374,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       },
                                                     )),
                                               ),
-                                              // InkWell(
-                                              //   child:
-                                              //       GetBuilder<NotificationController>(
-                                              //           builder:
-                                              //               (notificationController) {
-                                              //     return Stack(children: [
-                                              //       Icon(Icons.notifications,
-                                              //           size: 25,
-                                              //           color: Theme.of(context)
-                                              //               .textTheme
-                                              //               .bodyLarge!
-                                              //               .color),
-                                              //       notificationController
-                                              //               .hasNotification
-                                              //           ? Positioned(
-                                              //               top: 0,
-                                              //               right: 0,
-                                              //               child: Container(
-                                              //                 height: 10,
-                                              //                 width: 10,
-                                              //                 decoration: BoxDecoration(
-                                              //                   color: Theme.of(context)
-                                              //                       .primaryColor,
-                                              //                   shape: BoxShape.circle,
-                                              //                   border: Border.all(
-                                              //                       width: 1,
-                                              //                       color: Theme.of(
-                                              //                               context)
-                                              //                           .cardColor),
-                                              //                 ),
-                                              //               ))
-                                              //           : const SizedBox(),
-                                              //     ]);
-                                              //   }),
-                                              //   onTap: () => Get.toNamed(
-                                              //       RouteHelper.getNotificationRoute()),
-                                              // ),
                                             ]),
                                       )),
                                       actions: const [SizedBox()],
@@ -424,14 +386,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                             delegate: SliverDelegate(
                                                 child: Center(
                                                     child: Container(
-                                              height: 42,
-                                              width: Dimensions.webMaxWidth,
-                                              color: Theme.of(context)
-                                                  .scaffoldBackgroundColor,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: Dimensions
-                                                          .paddingSizeSmall),
+                                              height: context.height * 0.035,
+                                              width: context.width * 0.85,
+                                              color:
+                                                  Theme.of(context).cardColor,
                                               child: InkWell(
                                                 onTap: () => Get.toNamed(
                                                     RouteHelper
@@ -455,39 +413,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   ? 800
                                                                   : 200]!,
                                                           spreadRadius: 1,
+                                                          offset: Offset(1, 1),
                                                           blurRadius: 5)
                                                     ],
                                                   ),
                                                   child: Row(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment.end,
-                                                      children: [
-                                                        const Icon(
+                                                      children: const [
+                                                        Icon(
                                                           Icons.search,
-                                                          size: 25,
-                                                          color: Colors.black,
+                                                          size: 23,
+                                                          color: Colors.grey,
                                                         ),
-                                                        // const SizedBox(
-                                                        //     width: Dimensions
-                                                        //         .paddingSizeExtraSmall),
-                                                        // Expanded(
-                                                        //     child: Text(
-                                                        //   Get.find<SplashController>()
-                                                        //           .configModel!
-                                                        //           .moduleConfig!
-                                                        //           .module!
-                                                        //           .showRestaurantText!
-                                                        //       ? 'search_food_or_restaurant'
-                                                        //           .tr
-                                                        //       : 'search_item_or_store'
-                                                        //           .tr,
-                                                        //   style: robotoRegular.copyWith(
-                                                        //     fontSize: Dimensions
-                                                        //         .fontSizeSmall,
-                                                        //     color: Theme.of(context)
-                                                        //         .hintColor,
-                                                        //   ),
-                                                        // )),
                                                       ]),
                                                 ),
                                               ),
@@ -498,11 +436,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                     SliverToBoxAdapter(
                                       child: Center(
                                           child: SizedBox(
-                                        width: Dimensions.webMaxWidth,
+                                        width: context.width,
                                         child: !showMobileModule
                                             ? Column(
                                                 crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                    CrossAxisAlignment.center,
                                                 children: [
                                                     const BannerView(
                                                         isFeatured: false),
@@ -511,8 +449,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     //     isPopular: true,
                                                     //     isFeatured: false),
                                                     //const ItemCampaignView(),
-                                                    const DiscountWidget(),
-
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal:
+                                                                  context.width *
+                                                                      0.075),
+                                                      child:
+                                                          const DiscountWidget(),
+                                                    ),
+                                                    SizedBox(
+                                                      height:
+                                                          context.height * 0.02,
+                                                    ),
                                                     const PopularItemView(
                                                         isPopular: true),
                                                     SizedBox(

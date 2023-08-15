@@ -34,19 +34,20 @@ class BannerView extends StatelessWidget {
       return (bannerList != null && bannerList.isEmpty)
           ? const SizedBox()
           : Container(
-              width: MediaQuery.of(context).size.width,
-              height: GetPlatform.isDesktop ? 500 : context.height * 0.25,
+              width: context.width * 0.85,
+              height: GetPlatform.isDesktop ? 500 : context.height * 0.2,
               // color: Colors.red,
               padding:
                   const EdgeInsets.only(top: Dimensions.paddingSizeExtraSmall),
               child: bannerList != null
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
                             alignment: Alignment.center,
                             width: context.width * 0.99,
-                            height: context.height * 0.23,
+                            height: context.height * 0.18,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
                             ),
@@ -127,7 +128,7 @@ class BannerView extends StatelessWidget {
                                       }
                                     },
                                     child: Container(
-                                        height: context.height * 0.2,
+                                        height: context.height * 0.18,
                                         width: context.width * 0.9,
                                         decoration: BoxDecoration(
                                           borderRadius:

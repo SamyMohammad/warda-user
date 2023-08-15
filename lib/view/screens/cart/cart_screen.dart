@@ -101,7 +101,7 @@ class _CartScreenState extends State<CartScreen> {
                                           cartBody(cubit.activeStep, cubit)))),
                         ),
                         cubit.activeStep == 4
-                            ? SizedBox()
+                            ? const SizedBox()
                             : CustomButton(
                                 buttonText: 'continue'.tr,
                                 width: context.width * 0.9,
@@ -135,7 +135,7 @@ class _CartScreenState extends State<CartScreen> {
                             ? SizedBox(
                                 height: context.height * 0.03,
                               )
-                            : SizedBox(),
+                            : const SizedBox(),
                       ],
                     );
                   },
@@ -149,7 +149,7 @@ class _CartScreenState extends State<CartScreen> {
   Widget cartHeader(CartController cartController, CartCubit cubit) {
     return Container(
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           stepperWidget(
@@ -163,29 +163,78 @@ class _CartScreenState extends State<CartScreen> {
               ),
               'cart'.tr,
               0),
-
+          SizedBox(
+            width: context.width * 0.07,
+            child: Center(
+              child: Container(
+                  margin:
+                      EdgeInsetsDirectional.only(top: context.height * 0.025),
+                  height: 2.0,
+                  color: cubit.activeStep < 1
+                      ? Colors.grey
+                      : AppConstants.primaryColor),
+            ),
+          ),
           stepperWidget(
               context,
               cubit,
-              Icon(Icons.place_outlined, color: Colors.white, size: 25),
+              const Icon(Icons.place_outlined, color: Colors.white, size: 25),
               'recipient_details'.tr,
               1),
+          SizedBox(
+            width: context.width * 0.07,
+            child: Center(
+              child: Container(
+                  margin:
+                      EdgeInsetsDirectional.only(top: context.height * 0.025),
+                  height: 2.0,
+                  color: cubit.activeStep < 2
+                      ? Colors.grey
+                      : AppConstants.primaryColor),
+            ),
+          ),
           stepperWidget(
               context,
               cubit,
-              Icon(Icons.av_timer_outlined, color: Colors.white, size: 25),
+              const Icon(Icons.av_timer_outlined,
+                  color: Colors.white, size: 25),
               'time'.tr,
               2),
+          SizedBox(
+            width: context.width * 0.07,
+            child: Center(
+              child: Container(
+                  margin:
+                      EdgeInsetsDirectional.only(top: context.height * 0.025),
+                  height: 2.0,
+                  color: cubit.activeStep < 3
+                      ? Colors.grey
+                      : AppConstants.primaryColor),
+            ),
+          ),
           stepperWidget(
               context,
               cubit,
-              Icon(Icons.mail_outline_outlined, color: Colors.white, size: 25),
+              const Icon(Icons.mail_outline_outlined,
+                  color: Colors.white, size: 25),
               'message'.tr,
               3),
+          SizedBox(
+            width: context.width * 0.07,
+            child: Center(
+              child: Container(
+                  margin:
+                      EdgeInsetsDirectional.only(top: context.height * 0.025),
+                  height: 2.0,
+                  color: cubit.activeStep < 4
+                      ? Colors.grey
+                      : AppConstants.primaryColor),
+            ),
+          ),
           stepperWidget(
               context,
               cubit,
-              Icon(Icons.payment_outlined, color: Colors.white, size: 25),
+              const Icon(Icons.payment_outlined, color: Colors.white, size: 25),
               'checkout'.tr,
               4),
           // ResponsiveHelper.isDesktop(context)
@@ -221,107 +270,48 @@ class _CartScreenState extends State<CartScreen> {
         }
       },
       child: Container(
-        width: context.width * 0.18,
+        width: context.width * 0.13,
         height: context.height * 0.1,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                SizedBox(
-                  height: context.height * 0.05,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      currentStep != 0
-                          ? Align(
-                              alignment: Alignment.centerRight,
-                              child: SizedBox(
-                                width: context.width * 0.01,
-                              ),
-                            )
-                          : SizedBox(
-                              width: 0,
-                            ),
-                      currentStep != 0
-                          ? Positioned(
-                              left: 0,
-                              child: Container(
-                                width: context.width * 0.1,
-                                height: 4,
-                                decoration: BoxDecoration(
-                                    border: Border(
-                                        bottom: BorderSide(
-                                            color: AppConstants.primaryColor))),
-                              ),
-                            )
-                          : SizedBox(
-                              width: 0,
-                            ),
-                      Container(
-                        width: context.width * 0.18,
-                        decoration: const BoxDecoration(
-                            color: AppConstants.primaryColor,
-                            shape: BoxShape.circle),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Opacity(
-                            opacity: cubit.activeStep >= currentStep ? 1 : 0.3,
-                            child: SizedBox(
-                                width: 25,
-                                height: 25,
-                                child: Center(child: image)),
-                          ),
-                        ),
-                      ),
-                      currentStep != 4
-                          ? Align(
-                              alignment: Alignment.centerRight,
-                              child: SizedBox(
-                                width: context.width * 0.01,
-                              ),
-                            )
-                          : SizedBox(
-                              width: 0,
-                            ),
-                      currentStep != 4
-                          ? Positioned(
-                              right: 0,
-                              child: Container(
-                                width: context.width * 0.1,
-                                height: 4,
-                                decoration: BoxDecoration(
-                                    border: Border(
-                                        bottom: BorderSide(
-                                            color: AppConstants.primaryColor))),
-                              ),
-                            )
-                          : SizedBox(
-                              width: 0,
-                            ),
-                    ],
+            SizedBox(
+              height: context.height * 0.05,
+              child: Container(
+                width: context.width * 0.18,
+                decoration: BoxDecoration(
+                    color: cubit.activeStep < currentStep
+                        ? Colors.grey
+                        : AppConstants.primaryColor,
+                    shape: BoxShape.circle),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Opacity(
+                    opacity: cubit.activeStep >= currentStep ? 1 : 0.3,
+                    child: SizedBox(
+                        width: 25, height: 25, child: Center(child: image)),
                   ),
                 ),
-                Container(
-                  width: context.width * 0.18,
-                  height: context.height * 0.05,
-                  alignment: Alignment.center,
-                  child: Text(title,
-                      maxLines: 2,
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
-                      style: robotoRegular.copyWith(
-                          color: AppConstants.primaryColor,
-                          fontWeight: cubit.activeStep == currentStep
-                              ? FontWeight.w800
-                              : FontWeight.w400,
-                          fontSize: 10)),
-                )
-              ],
+              ),
             ),
+            Container(
+              width: context.width * 0.18,
+              height: context.height * 0.05,
+              alignment: Alignment.center,
+              child: Text(title,
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  style: robotoRegular.copyWith(
+                      color: cubit.activeStep < currentStep
+                          ? Colors.grey
+                          : AppConstants.primaryColor,
+                      fontWeight: cubit.activeStep == currentStep
+                          ? FontWeight.w800
+                          : FontWeight.w400,
+                      fontSize: 10)),
+            )
           ],
         ),
       ),
@@ -563,13 +553,11 @@ class CheckoutButton extends StatelessWidget {
                       const SizedBox(width: Dimensions.paddingSizeExtraSmall),
                       Text(
                           PriceConverter.convertPrice(
-                              Get.find<SplashController>()
-                                      .configModel!
-                                      .freeDeliveryOver! -
-                                  cartController.subTotal,
-                                  
-                                  
-                                  ),
+                            Get.find<SplashController>()
+                                    .configModel!
+                                    .freeDeliveryOver! -
+                                cartController.subTotal,
+                          ),
                           style: robotoMedium.copyWith(
                               color: Theme.of(context).primaryColor)),
                       const SizedBox(width: Dimensions.paddingSizeExtraSmall),

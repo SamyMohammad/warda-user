@@ -6,7 +6,6 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart'
 import 'package:warda/controller/category_controller.dart';
 import 'package:warda/controller/search_controller.dart';
 import 'package:warda/controller/splash_controller.dart';
-import 'package:warda/helper/responsive_helper.dart';
 import 'package:warda/helper/route_helper.dart';
 import 'package:warda/util/dimensions.dart';
 import 'package:warda/util/styles.dart';
@@ -36,7 +35,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size(context.width, context.height * 0.12),
+        preferredSize: Size(context.width, context.height * 0.07),
         child: CustomAppBar(
           title: 'categories'.tr,
           showLogo: true,
@@ -79,22 +78,21 @@ class _CategoryScreenState extends State<CategoryScreen> {
                             mainAxisSpacing: 2,
                             children: List.generate(
                                 catController.categoryList!.length, (index) {
+                              bool unExpanded = ((((index + 1) % 3 == 0 &&
+                                          (index + 2) % 4 == 0) ||
+                                      ((index + 1) % 4 == 0 &&
+                                          (index) % 3 == 0)) ||
+                                  ((index + 2) % 4 == 0 && (index) % 3 == 0) ||
+                                  ((index + 1) % 4 == 0 &&
+                                      (index - 1) % 3 == 0) ||
+                                  ((index + 2) % 4 == 0 &&
+                                      (index - 1) % 3 == 0) ||
+                                  ((index + 1) % 4 == 0 &&
+                                      (index - 2) % 3 == 0));
+
                               int indexFakeData = index;
                               return staggeredGridview.StaggeredGridTile.count(
-                                crossAxisCellCount: (((index + 1) % 3 == 0 &&
-                                                (index + 2) % 4 == 0) ||
-                                            ((index + 1) % 4 == 0 &&
-                                                (index) % 3 == 0)) ||
-                                        ((index + 2) % 4 == 0 &&
-                                            (index) % 3 == 0) ||
-                                        ((index + 1) % 4 == 0 &&
-                                            (index - 1) % 3 == 0) ||
-                                        ((index + 2) % 4 == 0 &&
-                                            (index - 1) % 3 == 0) ||
-                                        ((index + 1) % 4 == 0 &&
-                                            (index - 2) % 3 == 0)
-                                    ? 1
-                                    : 2,
+                                crossAxisCellCount: unExpanded ? 1 : 2,
                                 mainAxisCellCount: 1.1,
                                 child: Container(
                                   margin: EdgeInsets.all(8),
@@ -111,13 +109,12 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                     child: Container(
                                       decoration: BoxDecoration(
                                         color: Theme.of(context).cardColor,
-                                        borderRadius: BorderRadius.circular(
-                                            Dimensions.radiusSmall),
+                                        borderRadius: BorderRadius.circular(0),
                                         boxShadow: [
                                           BoxShadow(
                                               color: Colors.grey[
                                                   Get.isDarkMode ? 800 : 200]!,
-                                              blurRadius: 5,
+                                              blurRadius: 1,
                                               offset: Offset(1, 1),
                                               spreadRadius: 1)
                                         ],
@@ -132,10 +129,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                           children: [
                                             ClipRRect(
                                               borderRadius:
-                                                  BorderRadius.circular(
-                                                      Dimensions.radiusSmall),
+                                                  BorderRadius.circular(0),
                                               child: CustomImage(
-                                                fit: BoxFit.contain,
+                                                fit: BoxFit.cover,
                                                 width: context.width,
                                                 height: context.height * 0.255,
                                                 image:
@@ -144,23 +140,29 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                             ),
                                             Container(
                                               padding: EdgeInsets.all(8),
+                                              width: context.width,
+                                              height: context.height * 0.255,
                                               decoration: BoxDecoration(
-                                                  color: AppConstants
-                                                      .lightPinkColor,
+                                                  color: Colors.black
+                                                      .withOpacity(0.08),
                                                   borderRadius:
-                                                      BorderRadius.circular(8)),
-                                              child: Text(
-                                                catController
-                                                    .categoryList![
-                                                        indexFakeData]
-                                                    .name!,
-                                                textAlign: TextAlign.center,
-                                                style: wardaRegular.copyWith(
-                                                    fontSize: 30,
-                                                    color: AppConstants
-                                                        .primaryColor),
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
+                                                      BorderRadius.circular(0)),
+                                              child: Center(
+                                                child: Text(
+                                                  catController
+                                                      .categoryList![
+                                                          indexFakeData]
+                                                      .name!,
+                                                  textAlign: TextAlign.center,
+                                                  style: wardaRegular.copyWith(
+                                                      fontSize:
+                                                          unExpanded ? 30 : 40,
+                                                      color: Theme.of(context)
+                                                          .cardColor),
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
                                               ),
                                             ),
                                           ]),

@@ -29,20 +29,17 @@ class DiscountWidget extends StatelessWidget {
           ? const SizedBox()
           : Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
-                  child: TitleWidget(
-                    title: 'discount'.tr,
-                  ),
+                TitleWidget(
+                  title: 'discount'.tr,
                 ),
                 Container(
                   margin:
-                      EdgeInsets.symmetric(horizontal: context.width * 0.03),
+                      EdgeInsets.symmetric(horizontal: context.width * 0.00),
                   decoration: BoxDecoration(
                       gradient: commonGradient,
                       color: Color(0xffd9d9d9),
                       borderRadius: BorderRadius.circular(10)),
-                  height: context.height * 0.2,
+                  height: context.height * 0.16,
                   child: itemList != null
                       ? ListView.builder(
                           controller: ScrollController(),
@@ -55,9 +52,9 @@ class DiscountWidget extends StatelessWidget {
                           itemBuilder: (context, index) {
                             return Padding(
                               padding: const EdgeInsets.fromLTRB(
-                                  2, 2, Dimensions.paddingSizeSmall, 2),
+                                  2, 0, Dimensions.paddingSizeSmall, 0),
                               child: Container(
-                                height: context.height * 0.15,
+                                height: context.height * 0.16,
                                 alignment: Alignment.center,
                                 padding: const EdgeInsets.all(
                                     Dimensions.paddingSizeExtraSmall),
@@ -75,45 +72,42 @@ class DiscountWidget extends StatelessWidget {
                                             image:
                                                 '${Get.find<SplashController>().configModel!.baseUrls!.itemImageUrl}'
                                                 '/${itemList[index].image}',
-                                            height: context.height * 0.2,
-                                            width: context.height * 0.15,
-                                            fit: BoxFit.fitHeight,
+                                            height: context.height * 0.15,
+                                            width: context.height * 0.13,
+                                            fit: BoxFit.fill,
                                           ),
                                         ),
                                       ]),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: Dimensions
-                                                .paddingSizeExtraSmall),
+                                            horizontal:
+                                                Dimensions.paddingSizeSmall),
                                         child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
+                                                MainAxisAlignment.start,
                                             children: [
-                                              Wrap(children: [
-                                                Text(
-                                                  itemList[index].name!,
-                                                  style: robotoMedium.copyWith(
-                                                      fontSize: Dimensions
-                                                          .fontSizeExtraLarge),
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ]),
+                                              Text(
+                                                itemList[index].name!,
+                                                style: robotoMedium.copyWith(
+                                                    fontSize: Dimensions
+                                                        .fontSizeExtraLarge),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
                                               const SizedBox(
-                                                height: 6,
+                                                height: 3,
                                               ),
                                               Wrap(children: [
                                                 Text(
                                                   itemList[index].description!,
                                                   style: robotoMedium.copyWith(
                                                       fontSize: Dimensions
-                                                          .fontSizeDefault,
+                                                          .fontSizeSmall,
                                                       color: Theme.of(context)
                                                           .hintColor),
-                                                  maxLines: 3,
+                                                  maxLines: 2,
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                 ),
@@ -149,52 +143,49 @@ class DiscountWidget extends StatelessWidget {
                                                                           index]
                                                                       .discountType,
                                                             ),
-                                                            textDirection:
-                                                                TextDirection
-                                                                    .ltr,
-                                                            style: robotoBold
-                                                                .copyWith(
-                                                                    fontSize:
-                                                                        Dimensions
-                                                                            .fontSizeDefault),
+                                                            style: robotoBold.copyWith(
+                                                                fontSize: Dimensions
+                                                                    .fontSizeDefault,
+                                                                color: AppConstants
+                                                                    .priceColor),
                                                           ),
-                                                          SizedBox(
-                                                              width: itemList[index]
-                                                                          .discount! >
-                                                                      0
-                                                                  ? Dimensions
-                                                                      .paddingSizeExtraSmall
-                                                                  : 0),
-                                                          itemList[index]
-                                                                      .discount! >
-                                                                  0
-                                                              ? Text(
-                                                                  PriceConverter.convertPrice(
-                                                                      itemController
-                                                                          .getStartingPrice(
-                                                                              itemList[index])),
-                                                                  style: robotoMedium
-                                                                      .copyWith(
-                                                                    fontSize:
-                                                                        Dimensions
-                                                                            .fontSizeExtraSmall,
-                                                                    color: Theme.of(
-                                                                            context)
-                                                                        .disabledColor,
-                                                                    decoration:
-                                                                        TextDecoration
-                                                                            .lineThrough,
-                                                                  ),
-                                                                  textDirection:
-                                                                      TextDirection
-                                                                          .ltr,
-                                                                )
-                                                              : const SizedBox(),
+                                                          // SizedBox(
+                                                          //     width: itemList[index]
+                                                          //                 .discount! >
+                                                          //             0
+                                                          //         ? Dimensions
+                                                          //             .paddingSizeExtraSmall
+                                                          //         : 0),
+                                                          // itemList[index]
+                                                          //             .discount! >
+                                                          //         0
+                                                          //     ? Text(
+                                                          //         PriceConverter.convertPrice(
+                                                          //             itemController
+                                                          //                 .getStartingPrice(
+                                                          //                     itemList[index])),
+                                                          //         style: robotoMedium
+                                                          //             .copyWith(
+                                                          //           fontSize:
+                                                          //               Dimensions
+                                                          //                   .fontSizeExtraSmall,
+                                                          //           color: Theme.of(
+                                                          //                   context)
+                                                          //               .disabledColor,
+                                                          //           decoration:
+                                                          //               TextDecoration
+                                                          //                   .lineThrough,
+                                                          //         ),
+                                                          //         textDirection:
+                                                          //             TextDirection
+                                                          //                 .ltr,
+                                                          //       )
+                                                          //     : const SizedBox(),
                                                         ]),
                                                   ]),
-                                              const SizedBox(
-                                                height: 6,
-                                              ),
+                                              // const SizedBox(
+                                              //   height: 6,
+                                              // ),
                                               CustomButton(
                                                 onPressed: () {
                                                   Get.find<ItemController>()
@@ -203,8 +194,9 @@ class DiscountWidget extends StatelessWidget {
                                                           context);
                                                 },
                                                 width: context.width * 0.25,
-                                                height: context.height * 0.04,
+                                                height: context.height * 0.035,
                                                 fontSize: 13,
+                                                radius: 10,
                                                 buttonText: 'get_now'.tr,
                                               )
                                             ]),

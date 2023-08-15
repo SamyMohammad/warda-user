@@ -8,9 +8,10 @@ class AppConstants {
   static const double appVersion = 1.0;
 
   static const Color primaryColor = Color(0xFFBA264A);
+  static Color priceColor = const Color(0xFFBA264A).withOpacity(0.4);
   static const Color splashBackgroundColor = Color(0xFFbb264a);
   static const Color greenColor = Color(0xFF08756B);
-  static Color lightPinkColor = Color(0xFFCACACA).withOpacity(0.1);
+  static const Color lightPinkColor = Color(0xFFFFF5F7);
 
   static const String fontFamily = "Philosopher";
   static const String fontFamilyCommon = "Poppins"; //Roboto

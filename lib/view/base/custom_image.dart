@@ -40,7 +40,8 @@ class CustomImage extends StatelessWidget {
               ? placeholder
               : isNotification
                   ? Images.notificationPlaceholder
-                  : Images.placeholder,
+                  : Images.testItemImg,
+          // : Images.placeholder,
           height: height,
           width: width,
           fit: fit),
