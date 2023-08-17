@@ -186,6 +186,8 @@ class ItemTitleView extends StatelessWidget {
           })
         : Container(
             // decoration: BoxDecoration(gradient: commonGradient),
+            width: context.width * 0.9,
+            alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(
                 horizontal: Dimensions.paddingSizeSmall),
             child: GetBuilder<ItemController>(

@@ -39,7 +39,7 @@ class DiscountWidget extends StatelessWidget {
                       gradient: commonGradient,
                       color: Color(0xffd9d9d9),
                       borderRadius: BorderRadius.circular(10)),
-                  height: context.height * 0.16,
+                  height: context.height * 0.175,
                   child: itemList != null
                       ? ListView.builder(
                           controller: ScrollController(),

@@ -12,6 +12,7 @@ import '../../../base/custom_snackbar.dart';
 import '../../../base/web_constrained_box.dart';
 import '../cubit/cart_cubit.dart';
 import 'cart_item_widget.dart';
+import 'continue_widget.dart';
 
 class CartItemsListWidget extends StatefulWidget {
   const CartItemsListWidget({Key? key}) : super(key: key);
@@ -51,6 +52,7 @@ class _CartItemsListWidgetState extends State<CartItemsListWidget> {
                           },
                         ),
                         const Divider(thickness: 0.5, height: 5),
+
                         // Padding(
                         //   padding: const EdgeInsets
                         //           .only(
@@ -109,7 +111,9 @@ class _CartItemsListWidgetState extends State<CartItemsListWidget> {
                             : const SizedBox(),
                       ]),
                 ),
-                const SizedBox(height: Dimensions.paddingSizeSmall),
+                SizedBox(
+                  height: context.height * 0.03,
+                ),
 
                 ResponsiveHelper.isDesktop(context)
                     ? const SizedBox.shrink()
@@ -125,31 +129,9 @@ class _CartItemsListWidgetState extends State<CartItemsListWidget> {
                             height: context.height * 0.07,
                             onPressed: () {},
                           ),
-                          SizedBox(
-                            height: context.height * 0.01,
-                          ),
-                          // CustomButton(
-                          //   buttonText: 'continue'.tr,
-                          //   width: context.width * 0.8,
-                          //   radius: 30,
-                          //   height: context.height * 0.07,
-                          //   onPressed: () {
-                          //     String? message =
-                          //         BlocProvider.of<CartCubit>(context)
-                          //             .validator(1);
-                          //     if (message.runtimeType != Null) {
-                          //       showCustomSnackBar(message, isError: true);
-                          //     } else {
-                          //       BlocProvider.of<CartCubit>(context)
-                          //           .changeActiveStep(1);
-                          //     }
-                          //   },
-                          // ),
-                          SizedBox(
-                            height: context.height * 0.04,
-                          ),
                         ],
-                      )
+                      ),
+                const ContinueCartBtn(),
                 // : CheckoutButton(
                 //     cartController: cartController,
                 //     availableList: cartController.availableList),

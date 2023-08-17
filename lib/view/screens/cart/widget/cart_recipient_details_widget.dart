@@ -20,6 +20,7 @@ import '../../../base/custom_text_field.dart';
 import '../../checkout/checkout_screen.dart';
 import '../../location/cubit/location_cubit.dart';
 import '../cubit/cart_cubit.dart';
+import 'continue_widget.dart';
 
 class CartRecipientDetailsWidget extends StatefulWidget {
   const CartRecipientDetailsWidget({Key? key}) : super(key: key);
@@ -193,6 +194,8 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget> {
                               });
                             }),
                       ),
+
+                const ContinueCartBtn(),
 
                       // CustomButton(
                       //   buttonText: 'continue'.tr,

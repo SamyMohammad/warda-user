@@ -128,7 +128,8 @@ class SuggestedItemWidget extends StatelessWidget {
                                             discount: discount,
                                             discountType: discountType),
                                         style: robotoMedium.copyWith(
-                                            fontSize: Dimensions.fontSizeLarge,
+                                            fontSize:
+                                                Dimensions.fontSizeDefault,
                                             fontWeight: FontWeight.w400,
                                             color: AppConstants.primaryColor),
                                         textDirection: TextDirection.ltr,

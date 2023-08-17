@@ -1,3 +1,4 @@
+import 'package:warda/util/app_constants.dart';
 import 'package:warda/util/dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:warda/util/styles.dart';
@@ -20,13 +21,16 @@ class QuantityButton extends StatelessWidget {
     return InkWell(
       onTap: onTap as void Function()?,
       child: Container(
-        height: fromSheet ? 30 : 35,
-        width: fromSheet ? 30 : 35,
+        height: fromSheet ? 30 : 20,
+        width: fromSheet ? 30 : 30,
         margin:
             const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall),
         decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          gradient: commonGradient,
+          borderRadius: BorderRadius.circular(12),
+          shape: BoxShape.rectangle,
+          color: isIncrement
+              ? AppConstants.primaryColor
+              : AppConstants.lightPinkColor,
           // border: Border.all(
           //     width: 1,
           //     color: showRemoveIcon
@@ -48,10 +52,12 @@ class QuantityButton extends StatelessWidget {
                 : isIncrement
                     ? Icons.add
                     : Icons.remove,
-            size: 20,
+            size: 15,
             color: showRemoveIcon
                 ? Theme.of(context).colorScheme.error
-                : Theme.of(context).hintColor,
+                : isIncrement
+                    ? Theme.of(context).cardColor
+                    : Theme.of(context).hintColor,
           ),
         ),
       ),

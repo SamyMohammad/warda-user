@@ -10,6 +10,7 @@ import '../../../base/custom_button.dart';
 import '../../../base/custom_snackbar.dart';
 import '../../../base/custom_text_field.dart';
 import '../cubit/cart_cubit.dart';
+import 'continue_widget.dart';
 
 class CartMessageWidget extends StatefulWidget {
   const CartMessageWidget({Key? key}) : super(key: key);
@@ -72,8 +73,9 @@ class _CartMessageWidgetState extends State<CartMessageWidget> {
                 //   radius: 30,
                 // ),
                 SizedBox(
-                  height: context.height * 0.03,
+                  height: context.height * 0.01,
                 ),
+                const ContinueCartBtn(),
               ],
             ),
           );
@@ -194,7 +196,6 @@ class _CartMessageWidgetState extends State<CartMessageWidget> {
                   CustomButton(
                     buttonText: 'generate_message'.tr,
                     isLoading: cubit.state is CartLoading,
-                  
                     color: Theme.of(context).cardColor,
                     textColor: Theme.of(context).primaryColor,
                     onPressed: () {

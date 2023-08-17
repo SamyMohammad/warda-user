@@ -604,7 +604,7 @@ class RouteHelper {
     GetPage(
         name: update,
         page: () => UpdateScreen(isUpdate: Get.parameters['update'] == 'true')),
-    GetPage(name: cart, page: () => getRoute(const CartScreen(fromNav: false))),
+    GetPage(name: cart, page: () => getRoute(CartScreen(fromNav: false))),
     GetPage(
         name: addAddress,
         page: () => getRoute(AddAddressScreen(

@@ -10,6 +10,7 @@ import '../../../base/custom_button.dart';
 import '../../../base/custom_snackbar.dart';
 import '../../../base/custom_text_field.dart';
 import '../cubit/cart_cubit.dart';
+import 'continue_widget.dart';
 
 class CartDeliveryTimeWidget extends StatefulWidget {
   const CartDeliveryTimeWidget({Key? key}) : super(key: key);
@@ -34,7 +35,7 @@ class _CartDeliveryTimeWidgetState extends State<CartDeliveryTimeWidget>
       builder: (context, state) {
         var cubit = BlocProvider.of<CartCubit>(context);
         return SizedBox(
-          height: context.height * 0.7,
+          height: context.height * 0.8,
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Row(
@@ -138,18 +139,28 @@ class _CartDeliveryTimeWidgetState extends State<CartDeliveryTimeWidget>
             )
           ],
         ),
-        TimePickerSpinner(
-          is24HourMode: false,
-          normalTextStyle: robotoRegular.copyWith(color: Colors.grey),
-          highlightedTextStyle:
-              robotoRegular.copyWith(color: AppConstants.primaryColor),
-          // spacing: 10,
-          itemHeight: context.height * 0.04,
-          isForce2Digits: true,
-          itemWidth: context.width * 0.06,
-          onTimeChange: (time) {
-            cubit.changeArriveTime(time, isToday: isToday);
-          },
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
+              height: context.height * 0.04,
+              width: context.width * 0.5,
+              decoration: BoxDecoration(color: AppConstants.lightPinkColor),
+            ),
+            TimePickerSpinner(
+              is24HourMode: false,
+              normalTextStyle: robotoRegular.copyWith(color: Colors.grey),
+              highlightedTextStyle:
+                  robotoRegular.copyWith(color: AppConstants.primaryColor),
+              // spacing: 10,
+              itemHeight: context.height * 0.04,
+              isForce2Digits: true,
+              itemWidth: context.width * 0.06,
+              onTimeChange: (time) {
+                cubit.changeArriveTime(time, isToday: isToday);
+              },
+            ),
+          ],
         ),
         SizedBox(
           height: context.height * 0.02,
@@ -167,21 +178,9 @@ class _CartDeliveryTimeWidgetState extends State<CartDeliveryTimeWidget>
           maxLines: 3,
         ),
         SizedBox(
-          height: context.height * 0.03,
+          height: context.height * 0.01,
         ),
-        // CustomButton(
-        //   onPressed: () async {
-        //     String? message = cubit.validator(4);
-        //     if (message.runtimeType != Null) {
-        //       print('hello validator :: $message');
-        //       showCustomSnackBar(message, isError: true);
-        //     } else {
-        //       cubit.changeActiveStep(4);
-        //     }
-        //   },
-        //   radius: 30,
-        //   buttonText: 'continue'.tr,
-        // ),
+        const ContinueCartBtn(),
       ],
     );
   }
@@ -236,20 +235,32 @@ class _CartDeliveryTimeWidgetState extends State<CartDeliveryTimeWidget>
               )
             ],
           ),
-          TimePickerSpinner(
-            is24HourMode: false,
-            normalTextStyle: robotoRegular.copyWith(color: Colors.grey),
-            highlightedTextStyle:
-                robotoRegular.copyWith(color: AppConstants.primaryColor),
-            // spacing: 10,
-            itemHeight: context.height * 0.04,
-            isForce2Digits: true,
-            itemWidth: context.width * 0.05,
-            onTimeChange: (time) {
-              cubit.changeArriveTime(
-                time,
-              );
-            },
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                height: context.height * 0.04,
+                width: context.width * 0.5,
+                decoration: BoxDecoration(color: AppConstants.lightPinkColor),
+              ),
+              TimePickerSpinner(
+                is24HourMode: false,
+                normalTextStyle: robotoRegular.copyWith(color: Colors.grey),
+                highlightedTextStyle: robotoRegular.copyWith(
+                    color: AppConstants.primaryColor,
+                    fontWeight: FontWeight.w600),
+
+                // spacing: 10,
+                itemHeight: context.height * 0.04,
+                isForce2Digits: true,
+                itemWidth: context.width * 0.055,
+                onTimeChange: (time) {
+                  cubit.changeArriveTime(
+                    time,
+                  );
+                },
+              ),
+            ],
           ),
           SizedBox(
             height: context.height * 0.02,
@@ -267,23 +278,9 @@ class _CartDeliveryTimeWidgetState extends State<CartDeliveryTimeWidget>
             maxLines: 3,
           ),
           SizedBox(
-            height: context.height * 0.03,
+            height: context.height * 0.01,
           ),
-          // CustomButton(
-          //   onPressed: () {
-          //     String? message = cubit.validator(4);
-          //     if (message.runtimeType != Null) {
-          //       showCustomSnackBar(message, isError: true);
-          //     } else {
-          //       cubit.changeActiveStep(4);
-          //     }
-          //   },
-          //   radius: 30,
-          //   buttonText: 'continue'.tr,
-          // ),
-          SizedBox(
-            height: context.height * 0.03,
-          ),
+          const ContinueCartBtn(),
         ],
       ),
     );

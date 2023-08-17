@@ -139,7 +139,7 @@ class CategoryItemScreenState extends State<CategoryItemScreen>
           }
         },
         child: Scaffold(
-          backgroundColor: Theme.of(context).cardColor,
+          backgroundColor: AppConstants.lightPinkColor,
           appBar: (ResponsiveHelper.isDesktop(context)
               ? const WebMenuBar()
               : PreferredSize(
@@ -147,7 +147,7 @@ class CategoryItemScreenState extends State<CategoryItemScreen>
                       context.width,
                       Platform.isIOS
                           ? context.height * 0.08
-                          : context.height * 0.07),
+                          : context.height * 0.1),
                   child: CustomAppBar(
                     title: widget.categoryName,
                     // actions: [
@@ -209,7 +209,7 @@ class CategoryItemScreenState extends State<CategoryItemScreen>
                             child: Container(
                       height: context.height * 0.04,
                       width: context.width * 0.75,
-                      color: Theme.of(context).cardColor,
+                      color: AppConstants.lightPinkColor,
                       child: InkWell(
                         onTap: () => Get.toNamed(RouteHelper.getSearchRoute()),
                         child: Container(

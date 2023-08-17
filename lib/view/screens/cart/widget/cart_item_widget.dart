@@ -114,9 +114,7 @@ class CartItemWidget extends StatelessWidget {
           ],
         ),
         child: Container(
-          padding: const EdgeInsets.symmetric(
-              vertical: Dimensions.paddingSizeExtraSmall,
-              horizontal: Dimensions.paddingSizeSmall),
+          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
           decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(forReview ? 5 : 20),
@@ -136,10 +134,10 @@ class CartItemWidget extends StatelessWidget {
                     Container(
                       decoration: BoxDecoration(
                           color: AppConstants.lightPinkColor,
-                          borderRadius:
-                              BorderRadius.circular(Dimensions.radiusDefault)),
+                          borderRadius: BorderRadius.circular(
+                              forReview ? 8 : Dimensions.radiusDefault)),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(forReview ? 5 : 15),
+                        borderRadius: BorderRadius.circular(forReview ? 2 : 15),
                         child: CustomImage(
                           image:
                               '${Get.find<SplashController>().configModel!.baseUrls!.itemImageUrl}/${cart.item!.image}',

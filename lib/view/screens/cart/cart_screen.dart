@@ -1,14 +1,10 @@
-import 'dart:io';
 
-import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:warda/controller/cart_controller.dart';
 import 'package:warda/controller/coupon_controller.dart';
 import 'package:warda/controller/splash_controller.dart';
 import 'package:warda/controller/store_controller.dart';
-import 'package:warda/data/model/response/cart_model.dart';
 import 'package:warda/data/model/response/item_model.dart';
 import 'package:warda/data/model/response/store_model.dart';
 import 'package:warda/helper/price_converter.dart';
@@ -20,21 +16,10 @@ import 'package:warda/util/styles.dart';
 import 'package:warda/view/base/custom_app_bar.dart';
 import 'package:warda/view/base/custom_button.dart';
 import 'package:warda/view/base/custom_snackbar.dart';
-import 'package:warda/view/base/footer_view.dart';
-import 'package:warda/view/base/item_widget.dart';
 import 'package:warda/view/base/menu_drawer.dart';
 import 'package:warda/view/base/no_data_screen.dart';
-import 'package:warda/view/base/web_constrained_box.dart';
-import 'package:warda/view/screens/cart/widget/cart_checkout_widget.dart';
-import 'package:warda/view/screens/cart/widget/cart_delivery_time_widget.dart';
-import 'package:warda/view/screens/cart/widget/cart_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:warda/view/screens/cart/widget/cart_items_list_widget.dart';
-import 'package:warda/view/screens/cart/widget/cart_message_widget.dart';
-import 'package:warda/view/screens/cart/widget/cart_recipient_details_widget.dart';
-import 'package:warda/view/screens/cart/widget/suggested_item_widget.dart';
-import 'package:warda/view/screens/store/store_screen.dart';
 
 import '../../../controller/order_controller.dart';
 import '../../../util/app_constants.dart';
@@ -42,8 +27,8 @@ import 'cubit/cart_cubit.dart';
 import 'widget/not_available_bottom_sheet.dart';
 
 class CartScreen extends StatefulWidget {
-  final bool fromNav;
-  const CartScreen({Key? key, required this.fromNav}) : super(key: key);
+   bool fromNav;
+   CartScreen({Key? key, required this.fromNav}) : super(key: key);
 
   @override
   State<CartScreen> createState() => _CartScreenState();
@@ -100,42 +85,6 @@ class _CartScreenState extends State<CartScreen> {
                                       child:
                                           cartBody(cubit.activeStep, cubit)))),
                         ),
-                        cubit.activeStep == 4
-                            ? const SizedBox()
-                            : CustomButton(
-                                buttonText: 'continue'.tr,
-                                width: context.width * 0.9,
-                                height: context.height * 0.07,
-                                onPressed: () {
-                                  String? message = cubit
-                                          .validator(cubit.activeStep)
-                                          ?.entries
-                                          .first
-                                          .value ??
-                                      '';
-                                  print(
-                                      'hello validator ::${message.isEmpty} $message');
-                                  if (message.isNotEmpty) {
-                                    print('hello validator :: $message');
-                                    cubit.changeActiveStep(cubit
-                                            .validator(cubit.activeStep)
-                                            ?.entries
-                                            .first
-                                            .key ??
-                                        0);
-                                    showCustomSnackBar(message, isError: true);
-                                  } else {
-                                    cubit.changeActiveStep(cubit.activeStep == 4
-                                        ? cubit.activeStep
-                                        : cubit.activeStep + 1);
-                                  }
-                                },
-                              ),
-                        Platform.isIOS
-                            ? SizedBox(
-                                height: context.height * 0.03,
-                              )
-                            : const SizedBox(),
                       ],
                     );
                   },
@@ -163,36 +112,16 @@ class _CartScreenState extends State<CartScreen> {
               ),
               'cart'.tr,
               0),
-          SizedBox(
-            width: context.width * 0.07,
-            child: Center(
-              child: Container(
-                  margin:
-                      EdgeInsetsDirectional.only(top: context.height * 0.025),
-                  height: 2.0,
-                  color: cubit.activeStep < 1
-                      ? Colors.grey
-                      : AppConstants.primaryColor),
-            ),
-          ),
+
+          dividerWidget(cubit, 1),
           stepperWidget(
               context,
               cubit,
               const Icon(Icons.place_outlined, color: Colors.white, size: 25),
               'recipient_details'.tr,
               1),
-          SizedBox(
-            width: context.width * 0.07,
-            child: Center(
-              child: Container(
-                  margin:
-                      EdgeInsetsDirectional.only(top: context.height * 0.025),
-                  height: 2.0,
-                  color: cubit.activeStep < 2
-                      ? Colors.grey
-                      : AppConstants.primaryColor),
-            ),
-          ),
+
+          dividerWidget(cubit, 2),
           stepperWidget(
               context,
               cubit,
@@ -200,18 +129,8 @@ class _CartScreenState extends State<CartScreen> {
                   color: Colors.white, size: 25),
               'time'.tr,
               2),
-          SizedBox(
-            width: context.width * 0.07,
-            child: Center(
-              child: Container(
-                  margin:
-                      EdgeInsetsDirectional.only(top: context.height * 0.025),
-                  height: 2.0,
-                  color: cubit.activeStep < 3
-                      ? Colors.grey
-                      : AppConstants.primaryColor),
-            ),
-          ),
+
+          dividerWidget(cubit, 3),
           stepperWidget(
               context,
               cubit,
@@ -219,18 +138,7 @@ class _CartScreenState extends State<CartScreen> {
                   color: Colors.white, size: 25),
               'message'.tr,
               3),
-          SizedBox(
-            width: context.width * 0.07,
-            child: Center(
-              child: Container(
-                  margin:
-                      EdgeInsetsDirectional.only(top: context.height * 0.025),
-                  height: 2.0,
-                  color: cubit.activeStep < 4
-                      ? Colors.grey
-                      : AppConstants.primaryColor),
-            ),
-          ),
+          dividerWidget(cubit, 4),
           stepperWidget(
               context,
               cubit,
@@ -248,6 +156,20 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
+  Widget dividerWidget(CartCubit cubit, int nextIndex) {
+    return SizedBox(
+      width: context.width * 0.06,
+      child: Center(
+        child: Container(
+            margin: EdgeInsetsDirectional.only(top: context.height * 0.025),
+            height: 2.0,
+            color: cubit.activeStep < nextIndex
+                ? Colors.grey
+                : AppConstants.primaryColor),
+      ),
+    );
+  }
+
   Widget stepperWidget(
     BuildContext context,
     CartCubit cubit,
@@ -259,9 +181,7 @@ class _CartScreenState extends State<CartScreen> {
       onTap: () {
         String? message =
             cubit.validator(currentStep)?.entries.first.value ?? '';
-        print('hello validator ::$currentStep $message');
         if (message.isNotEmpty) {
-          print('hello validator :: $message');
           cubit.changeActiveStep(
               cubit.validator(currentStep)?.entries.first.key ?? 0);
           showCustomSnackBar(message, isError: true);
@@ -270,7 +190,7 @@ class _CartScreenState extends State<CartScreen> {
         }
       },
       child: Container(
-        width: context.width * 0.13,
+        width: context.width * 0.14,
         height: context.height * 0.1,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

@@ -83,7 +83,7 @@ class DashboardScreenState extends State<DashboardScreen> {
 
     _screens = [
       const HomeScreen(),
-      const CartScreen(fromNav: true),
+       CartScreen(fromNav: true),
       const CategoryScreen(
         fromNav: true,
       ),

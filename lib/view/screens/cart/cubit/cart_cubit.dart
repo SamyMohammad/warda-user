@@ -227,6 +227,7 @@ class CartCubit extends Cubit<CartState> {
   }
 
   Map<int, String>? validator(int index) {
+    print('hello plz validate this $index');
     Map<int, Map<String, dynamic>> inputs = {
       3: {
         // 'message_to'.tr:messageToController,
@@ -243,7 +244,7 @@ class CartCubit extends Cubit<CartState> {
     };
 
     for (var indexKey in inputs.keys) {
-      if (indexKey < index) {
+      if (indexKey <= index) {
         for (var element in inputs[indexKey]!.entries) {
           if (element.value.isEmpty) {
             return {indexKey: '${element.key.tr} ${'required'.tr}'};
