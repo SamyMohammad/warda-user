@@ -8,11 +8,15 @@ class CasheHelper {
     return await storage.read(key: key) ?? '';
   }
 
+  Future<String> readCityId(String key) async {
+    storage = const FlutterSecureStorage();
+    return await storage.read(key: key) ?? '1';
+  }
+
   store(String key, String value) async {
     storage = const FlutterSecureStorage();
     await storage.write(key: key, value: value);
 
-    if (key == AppConstants.zoneId) {
-    }
+    if (key == AppConstants.zoneId) {}
   }
 }

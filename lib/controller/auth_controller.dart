@@ -207,7 +207,7 @@ class AuthController extends GetxController implements GetxService {
     Response response = await authRepo.login(username: username, password: password);
     ResponseModel responseModel;
     if (response.statusCode == 200) {
-      if (Get.find<SplashController>().configModel!.customerVerification! &&
+      if (Get.find<SplashController>().configModel?.customerVerification?? true &&
           response.body['is_phone_verified'] == 0) {
         print('token::: ${response.body['token']}');
         authRepo.saveUserToken(response.body['token'],

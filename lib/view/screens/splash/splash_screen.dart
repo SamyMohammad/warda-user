@@ -75,72 +75,66 @@ class SplashScreenState extends State<SplashScreen> {
   void _route() async {
     bool haveZoneId =
         await BlocProvider.of<LocationCubit>(context).haveCityId();
-    Get.find<SplashController>().getConfigData().then((isSuccess) {
-      if (isSuccess) {
-        Timer(const Duration(seconds: 1), () async {
-          double? minimumVersion = 0;
-          if (GetPlatform.isAndroid) {
-            minimumVersion = Get.find<SplashController>()
-                .configModel!
-                .appMinimumVersionAndroid;
-          } else if (GetPlatform.isIOS) {
-            minimumVersion =
-                Get.find<SplashController>().configModel!.appMinimumVersionIos;
-          }
-          if (AppConstants.appVersion < minimumVersion! ||
-              Get.find<SplashController>().configModel!.maintenanceMode!) {
-            Get.offNamed(RouteHelper.getUpdateRoute(
-                AppConstants.appVersion < minimumVersion));
+    await Get.find<SplashController>().getConfigData();
+    Timer(const Duration(seconds: 1), () async {
+      // double? minimumVersion = 0;
+      // if (GetPlatform.isAndroid) {
+      //   minimumVersion =
+      //       Get.find<SplashController>().configModel!.appMinimumVersionAndroid;
+      // } else if (GetPlatform.isIOS) {
+      //   minimumVersion =
+      //       Get.find<SplashController>().configModel!.appMinimumVersionIos;
+      // }
+      // if (AppConstants.appVersion < minimumVersion! ||
+      //     Get.find<SplashController>().configModel!.maintenanceMode!) {
+      //   Get.offNamed(RouteHelper.getUpdateRoute(
+      //       AppConstants.appVersion < minimumVersion));
+      // } else
+      //  {
+      if (widget.body != null) {
+        if (widget.body!.notificationType == NotificationType.order) {
+          Get.offNamed(RouteHelper.getOrderDetailsRoute(widget.body!.orderId,
+              fromNotification: true));
+        } else if (widget.body!.notificationType == NotificationType.general) {
+          Get.offNamed(
+              RouteHelper.getNotificationRoute(fromNotification: true));
+        } else {
+          Get.offNamed(RouteHelper.getChatRoute(
+              notificationBody: widget.body,
+              conversationID: widget.body!.conversationId,
+              fromNotification: true));
+        }
+      } else {
+        if (Get.find<AuthController>().isLoggedIn()) {
+          Get.find<AuthController>().updateToken();
+          if (Get.find<LocationController>().getUserAddress() != null) {
+            await Get.find<WishListController>().getWishList();
+            Get.offNamed(RouteHelper.getInitialRoute(fromSplash: true));
+          } else if (haveZoneId) {
+            Get.offNamed(RouteHelper.getInitialRoute(fromSplash: true));
           } else {
-            if (widget.body != null) {
-              if (widget.body!.notificationType == NotificationType.order) {
-                Get.offNamed(RouteHelper.getOrderDetailsRoute(
-                    widget.body!.orderId,
-                    fromNotification: true));
-              } else if (widget.body!.notificationType ==
-                  NotificationType.general) {
-                Get.offNamed(
-                    RouteHelper.getNotificationRoute(fromNotification: true));
-              } else {
-                Get.offNamed(RouteHelper.getChatRoute(
-                    notificationBody: widget.body,
-                    conversationID: widget.body!.conversationId,
-                    fromNotification: true));
-              }
-            } else {
-              if (Get.find<AuthController>().isLoggedIn()) {
-                Get.find<AuthController>().updateToken();
-                if (Get.find<LocationController>().getUserAddress() != null) {
-                  await Get.find<WishListController>().getWishList();
-                  Get.offNamed(RouteHelper.getInitialRoute(fromSplash: true));
-                } else if (haveZoneId) {
-                  Get.offNamed(RouteHelper.getInitialRoute(fromSplash: true));
-                } else {
-                  print('hello spash:: zone id is write >  ${haveZoneId}');
-                  Get.find<LocationController>()
-                      .navigateToLocationScreen('splash', offNamed: true);
-                }
-              } else {
-                // if (Get.find<SplashController>().showIntro()!) {
-                //   if (AppConstants.languages.length > 1) {
-                //     Get.offNamed(RouteHelper.getLanguageRoute('splash'));
-                //   } else {
-                //     Get.offNamed(RouteHelper.getOnBoardingRoute());
-                //   }
-                // }
-                // else {
-
-                Get.offNamed(
-                    RouteHelper.getSignInRoute(RouteHelper.onBoarding));
-                // Get.offNamed(RouteHelper.getSignInRoute(RouteHelper.onBoarding));
-                // }
-
-                //  Get.offNamed(RouteHelper.getOnBoardingRoute());
-              }
-            }
+            print('hello spash:: zone id is write >  ${haveZoneId}');
+            Get.find<LocationController>()
+                .navigateToLocationScreen('splash', offNamed: true);
           }
-        });
+        } else {
+          // if (Get.find<SplashController>().showIntro()!) {
+          //   if (AppConstants.languages.length > 1) {
+          //     Get.offNamed(RouteHelper.getLanguageRoute('splash'));
+          //   } else {
+          //     Get.offNamed(RouteHelper.getOnBoardingRoute());
+          //   }
+          // }
+          // else {
+
+          Get.offNamed(RouteHelper.getSignInRoute(RouteHelper.onBoarding));
+          // Get.offNamed(RouteHelper.getSignInRoute(RouteHelper.onBoarding));
+          // }
+
+          //  Get.offNamed(RouteHelper.getOnBoardingRoute());
+        }
       }
+      // }
     });
   }
 

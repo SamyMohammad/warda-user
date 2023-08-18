@@ -55,7 +55,7 @@ class SignInScreenState extends State<SignInScreen> {
         Get.find<AuthController>().getUserCountryCode().isNotEmpty
             ? Get.find<AuthController>().getUserCountryCode()
             : CountryCode.fromCountryCode(
-                    Get.find<SplashController>().configModel!.country!)
+                    Get.find<SplashController>().configModel?.country ?? "EG")
                 .dialCode;
     _phoneController.text = Get.find<AuthController>().getUserNumber();
     _emailController.text = Get.find<AuthController>().getUserEmail();
@@ -279,7 +279,7 @@ class SignInScreenState extends State<SignInScreen> {
                                     color: Colors.black,
                                     decoration: TextDecoration.underline)),
                           ),
-                         // const SocialMediaLogin(),
+                          // const SocialMediaLogin(),
 
                           const SizedBox(
                               height: Dimensions.paddingSizeExtraLarge),
@@ -363,8 +363,8 @@ class SignInScreenState extends State<SignInScreen> {
             authController.clearUserNumberAndPassword();
           }
           String token = status.message!.substring(1, status.message!.length);
-          if (Get.find<SplashController>().configModel!.customerVerification! &&
-              int.parse(status.message![0]) == 0) {
+          if (Get.find<SplashController>().configModel?.customerVerification ??
+              true && int.parse(status.message![0]) == 0) {
             List<int> encoded = utf8.encode(password);
             String data = base64Encode(encoded);
             Get.toNamed(RouteHelper.getVerificationRoute(

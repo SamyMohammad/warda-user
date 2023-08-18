@@ -60,11 +60,16 @@ class DashboardScreenState extends State<DashboardScreen> {
   late bool _isLogin;
   bool active = false;
 
+  returnConfigData() async {
+    await Get.find<SplashController>().getConfigData();
+  }
+
   @override
   void initState() {
     super.initState();
 
     _isLogin = Get.find<AuthController>().isLoggedIn();
+    returnConfigData();
 
     if (_isLogin) {
       if (Get.find<SplashController>().configModel!.loyaltyPointStatus == 1 &&
@@ -83,7 +88,7 @@ class DashboardScreenState extends State<DashboardScreen> {
 
     _screens = [
       const HomeScreen(),
-       CartScreen(fromNav: true),
+      CartScreen(fromNav: true),
       const CategoryScreen(
         fromNav: true,
       ),
