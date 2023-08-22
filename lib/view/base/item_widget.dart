@@ -120,7 +120,9 @@ class ItemWidget extends StatelessWidget {
                 : const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-              color: Theme.of(context).cardColor,
+              color: isFeatured
+                  ? AppConstants.lightPinkColor
+                  : Theme.of(context).cardColor,
               boxShadow: ResponsiveHelper.isDesktop(context)
                   ? [
                       BoxShadow(
@@ -151,7 +153,9 @@ class ItemWidget extends StatelessWidget {
                               shape: BoxShape.rectangle,
                               borderRadius: BorderRadius.circular(
                                   Dimensions.radiusDefault),
-                              color: AppConstants.lightPinkColor),
+                              color: isFeatured
+                                  ? Theme.of(context).cardColor
+                                  : AppConstants.lightPinkColor),
                           child: ClipRRect(
                             borderRadius:
                                 BorderRadius.circular(Dimensions.radiusDefault),

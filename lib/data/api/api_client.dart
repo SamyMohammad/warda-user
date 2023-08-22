@@ -93,7 +93,7 @@ class ApiClient extends GetxService {
   Future<Response> getData(String uri,
       {Map<String, dynamic>? query, Map<String, String>? headers}) async {
     try {
-      print('====>Header: ${_mainHeaders['moduleId']} API Call: $uri ');
+      print('====>Header: ${_mainHeaders['Authorization']}');
       if (uri == '/api/v1/config/get-zone-id') {
         print('hello:: getZone ${headers},,,,$uri');
       }

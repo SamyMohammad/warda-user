@@ -112,6 +112,7 @@ class CustomTextFieldState extends State<CustomTextField> {
                       ? [FilteringTextInputFormatter.allow(RegExp(r'\d'))]
                       : null,
           decoration: InputDecoration(
+            //contentPadding: EdgeInsets.only(right: 12),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
               borderSide: BorderSide(

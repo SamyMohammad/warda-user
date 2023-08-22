@@ -1,15 +1,10 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ticket_widget/ticket_widget.dart';
 import 'package:warda/controller/coupon_controller.dart';
-import 'package:warda/controller/localization_controller.dart';
 import 'package:warda/controller/splash_controller.dart';
-import 'package:warda/controller/theme_controller.dart';
 import 'package:warda/helper/date_converter.dart';
 import 'package:warda/helper/price_converter.dart';
-import 'package:warda/helper/responsive_helper.dart';
 import 'package:warda/util/app_constants.dart';
 import 'package:warda/util/dimensions.dart';
 import 'package:warda/util/images.dart';
@@ -30,10 +25,16 @@ class CouponCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
-        gradient: commonGradient,
-      ),
-      margin: EdgeInsets.symmetric(horizontal: 12),
+          borderRadius: BorderRadius.circular(30),
+          color: Theme.of(context).cardColor,
+          boxShadow: const [
+            BoxShadow(
+                color: AppConstants.lightPinkColor,
+                offset: Offset(1, 1),
+                blurRadius: 1,
+                spreadRadius: 1)
+          ]),
+      margin: const EdgeInsets.symmetric(horizontal: 12),
       height: context.height * 0.2,
       width: context.width * 0.55,
       child: Column(

@@ -43,8 +43,8 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
 
     if (!widget.fromHome &&
         Get.find<LocationController>().getUserAddress() != null) {
-      Future.delayed(Duration(milliseconds: 500), () {
-        Get.dialog(CustomLoader(), barrierDismissible: false);
+      Future.delayed(const Duration(milliseconds: 500), () {
+        Get.dialog(const CustomLoader(), barrierDismissible: false);
         Get.find<LocationController>().autoNavigate(
           Get.find<LocationController>().getUserAddress(),
           widget.fromSignUp,
@@ -69,7 +69,7 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
           Get.offNamed(RouteHelper.getInitialRoute(fromSplash: false));
         },
       ),
-      endDrawer: MenuDrawer(),
+      endDrawer: const MenuDrawer(),
       endDrawerEnableOpenDragGesture: false,
       body: BlocBuilder<LocationCubit, LocationState>(
         bloc: BlocProvider.of<LocationCubit>(context)..getCountryData(),
@@ -80,7 +80,7 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
               child: Padding(
             padding: ResponsiveHelper.isDesktop(context)
                 ? EdgeInsets.zero
-                : EdgeInsets.all(Dimensions.paddingSizeSmall),
+                : const EdgeInsets.all(Dimensions.paddingSizeSmall),
             child:
                 GetBuilder<LocationController>(builder: (locationController) {
               return (ResponsiveHelper.isDesktop(context) &&
@@ -103,7 +103,7 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
                                   locationController.addressList!.isNotEmpty
                                       ? ListView.builder(
                                           physics:
-                                              NeverScrollableScrollPhysics(),
+                                              const NeverScrollableScrollPhysics(),
                                           shrinkWrap: true,
                                           itemCount: locationController
                                               .addressList!.length,
@@ -119,7 +119,7 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
                                                       fromAddress: false,
                                                       onTap: () {
                                                         Get.dialog(
-                                                            CustomLoader(),
+                                                            const CustomLoader(),
                                                             barrierDismissible:
                                                                 false);
                                                         AddressModel _address =
@@ -144,7 +144,8 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
                                           text: 'no_saved_address_found'.tr),
                                   // : Center(
                                   //     child: CircularProgressIndicator()),
-                                  SizedBox(height: Dimensions.paddingSizeLarge),
+                                  const SizedBox(
+                                      height: Dimensions.paddingSizeLarge),
                                   // ResponsiveHelper.isDesktop(context)
                                   //     ? BottomButton(
                                   //         locationController:
@@ -165,7 +166,7 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
                         ])
                       : Center(
                           child: SingleChildScrollView(
-                          physics: BouncingScrollPhysics(),
+                          physics: const BouncingScrollPhysics(),
                           child: FooterView(
                               child: SizedBox(
                                   width: 700,
@@ -175,7 +176,7 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
                                       children: [
                                         Image.asset(Images.deliveryLocation,
                                             height: 220),
-                                        SizedBox(
+                                        const SizedBox(
                                             height:
                                                 Dimensions.paddingSizeSmall),
                                         Text(
@@ -187,7 +188,7 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
                                                 fontSize: Dimensions
                                                     .fontSizeExtraLarge)),
                                         Padding(
-                                          padding: EdgeInsets.all(
+                                          padding: const EdgeInsets.all(
                                               Dimensions.paddingSizeSmall),
                                           child: Text(
                                             'by_allowing_location_access'.tr,
@@ -216,13 +217,13 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
     if (state is CountiresLoaded) {
       return Column(
         children: [
-          SizedBox(height: Dimensions.paddingSizeLarge),
+          const SizedBox(height: Dimensions.paddingSizeLarge),
           dropDownCoutriesCities(true, cubit, state),
-          SizedBox(height: Dimensions.paddingSizeLarge),
+          const SizedBox(height: Dimensions.paddingSizeLarge),
           state.countrySelected.runtimeType != Null
               ? dropDownCoutriesCities(false, cubit, state)
-              : SizedBox(),
-          SizedBox(height: Dimensions.paddingSizeLarge),
+              : const SizedBox(),
+          const SizedBox(height: Dimensions.paddingSizeLarge),
           GestureDetector(
             onTap: (state.citySelected.runtimeType != Null &&
                     state.countrySelected.runtimeType != Null)
@@ -231,13 +232,14 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (_) => DashboardScreen(pageIndex: 0)));
+                            builder: (_) =>
+                                const DashboardScreen(pageIndex: 0)));
                   }
                 : null,
             child: Container(
               width: MediaQuery.of(context).size.width * 0.6,
               height: MediaQuery.of(context).size.height * 0.06,
-              child: Center(
+              child: const Center(
                   child: Text(
                 'Continue',
                 style: TextStyle(
@@ -254,14 +256,14 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
                   boxShadow: [
                     BoxShadow(
                         color: Colors.grey.withOpacity(0.2),
-                        offset: Offset(0, 1))
+                        offset: const Offset(0, 1))
                   ]),
             ),
           )
         ],
       );
     } else {
-      return SizedBox(height: Dimensions.paddingSizeLarge);
+      return const SizedBox(height: Dimensions.paddingSizeLarge);
     }
   }
 
@@ -272,7 +274,7 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
         width: MediaQuery.of(context).size.width * 0.8,
         child: Center(
           child: DropdownButtonHideUnderline(
-            child: Container(
+            child: SizedBox(
               width: MediaQuery.of(context).size.width * 0.7,
               child: DropdownButton2(
                 isExpanded: true,
@@ -303,8 +305,8 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
                                   Container(
                                     width: 35,
                                     height: 35,
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 12),
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 12),
                                   ),
                                   Text(
                                     item.name,
@@ -324,11 +326,11 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
                                   Container(
                                     width: 35,
                                     height: 35,
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                         color: AppConstants.lightPinkColor,
                                         shape: BoxShape.circle),
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 12),
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 12),
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(400),
                                       child: Padding(
@@ -367,8 +369,8 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
                 dropdownStyleData: const DropdownStyleData(
                   maxHeight: 200,
                 ),
-                menuItemStyleData: MenuItemStyleData(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                menuItemStyleData: const MenuItemStyleData(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
                 ),
               ),
             ),
@@ -376,7 +378,7 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
         ),
       );
     } else {
-      return SizedBox();
+      return const SizedBox();
     }
   }
 }

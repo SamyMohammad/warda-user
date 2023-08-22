@@ -180,7 +180,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                             color: wishController.wishItemIdList
                                     .contains(itemController.item!.id)
                                 ? Theme.of(context).primaryColor
-                                : Theme.of(context).disabledColor,
+                                : Theme.of(context).primaryColor,
                           ),
                         );
                       }),

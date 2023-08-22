@@ -235,6 +235,7 @@ class Images {
       'assets/image/phone_order_details.png';
   static const String pendingFoodOrderDetails = 'assets/image/pending_food.gif';
 
+  static const String cartHeader = 'assets/image/cart_header.png';
   //nav bar
   static const String homeColor = 'assets/image/home_color.png';
   static const String categoriesColor = 'assets/image/categories_color.png';

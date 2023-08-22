@@ -1,6 +1,7 @@
 import 'package:warda/controller/auth_controller.dart';
 import 'package:warda/controller/order_controller.dart';
 import 'package:warda/helper/responsive_helper.dart';
+import 'package:warda/util/app_constants.dart';
 import 'package:warda/util/dimensions.dart';
 import 'package:warda/util/styles.dart';
 import 'package:warda/view/base/custom_app_bar.dart';
@@ -54,16 +55,19 @@ class OrderScreenState extends State<OrderScreen>
                       color: Theme.of(context).cardColor,
                       child: TabBar(
                         controller: _tabController,
-                        indicatorColor: Theme.of(context).primaryColor,
-                        indicatorWeight: 3,
-                        labelColor: Theme.of(context).primaryColor,
+                        indicatorColor: Color.fromRGBO(8, 117, 107, 1),
+                        indicatorWeight: 2,
+                        labelPadding: EdgeInsets.zero,
+                        indicatorPadding: EdgeInsets.symmetric(
+                            horizontal: context.width * 0.1, vertical: 0),
+                        labelColor: AppConstants.greenColor,
                         unselectedLabelColor: Theme.of(context).disabledColor,
                         unselectedLabelStyle: robotoRegular.copyWith(
                             color: Theme.of(context).disabledColor,
                             fontSize: Dimensions.fontSizeSmall),
                         labelStyle: robotoBold.copyWith(
                             fontSize: Dimensions.fontSizeSmall,
-                            color: Theme.of(context).primaryColor),
+                            color: AppConstants.greenColor),
                         tabs: [
                           Tab(text: 'running'.tr),
                           Tab(text: 'history'.tr),

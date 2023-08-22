@@ -105,7 +105,7 @@ class _CartScreenState extends State<CartScreen> {
               context,
               cubit,
               Image.asset(
-                Images.cartBlack,
+                Images.cartHeader,
                 color: Colors.white,
                 width: 25,
                 height: 25,

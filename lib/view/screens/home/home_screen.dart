@@ -36,6 +36,7 @@ import 'package:warda/view/screens/parcel/parcel_category_screen.dart';
 
 import '../../../controller/order_controller.dart';
 import '../../../controller/search_controller.dart';
+import '../../../controller/wishlist_controller.dart';
 import '../../../util/app_constants.dart';
 import '../search/cubit/filter_cubit.dart';
 
@@ -98,6 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Get.find<SearchingController>().getOccasionFilter();
     Get.find<SearchingController>().getSizesFilter();
     Get.find<SearchingController>().getFAQ();
+    Get.find<WishListController>().getWishList();
 
     Get.find<OrderController>().getPaymentMethods();
     WidgetsBinding.instance.addPostFrameCallback((_) {

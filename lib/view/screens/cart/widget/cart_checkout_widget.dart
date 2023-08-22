@@ -386,22 +386,23 @@ class CartCheckoutWidget extends StatelessWidget {
                       ),
                       CustomButton(
                         onPressed: () {
-                          String? message =
-                              cubit.validator(5)?.entries.first.value ?? '';
-                          if (message.runtimeType != Null) {
-                          } else {
-                            cubit.placeOrder(
-                                orderController,
-                                cartController,
-                                storeController,
-                                orderAmount,
-                                null,
-                                maxCodOrderAmount,
-                                total,
-                                deliveryCharge!,
-                                tax,
-                                discount!);
-                          }
+                          // String? message =
+                          //     cubit.validator(5)?.entries.first.value ?? '';
+                          // if (message.runtimeType != Null ||
+                          //     message.isNotEmpty) {
+                          // } else {
+                          cubit.placeOrder(
+                              orderController,
+                              cartController,
+                              storeController,
+                              orderAmount,
+                              null,
+                              maxCodOrderAmount,
+                              total,
+                              deliveryCharge!,
+                              tax,
+                              discount!);
+                          // }
                         },
                         buttonText: 'continue'.tr,
                         radius: 30,

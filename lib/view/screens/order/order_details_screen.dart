@@ -36,6 +36,8 @@ import 'package:get/get.dart';
 import 'package:warda/view/screens/store/widget/review_dialog.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../../util/app_constants.dart';
+
 class OrderDetailsScreen extends StatefulWidget {
   final OrderModel? orderModel;
   final int? orderId;
@@ -871,6 +873,67 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                                           CrossAxisAlignment
                                                               .start,
                                                       children: [
+                                                          Container(
+                                                            width:
+                                                                context.width,
+                                                            alignment: Alignment
+                                                                .center,
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Text(
+                                                                    'delivery_time'
+                                                                        .tr,
+                                                                    style: robotoMedium
+                                                                        .copyWith(
+                                                                            color:
+                                                                                Colors.black)),
+                                                                Text(
+                                                                    DateConverter
+                                                                        .dateTimeStringToDateTime(order
+                                                                            .scheduleAt!),
+                                                                    style: robotoMedium
+                                                                        .copyWith(
+                                                                            color:
+                                                                                AppConstants.primaryColor)),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            height:
+                                                                context.height *
+                                                                    0.02,
+                                                          ),
+                                                          Container(
+                                                            width:
+                                                                context.width,
+                                                            alignment: Alignment
+                                                                .center,
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Text(
+                                                                    'deliver_to'
+                                                                        .tr,
+                                                                    style: robotoMedium
+                                                                        .copyWith(
+                                                                            color:
+                                                                                Colors.black)),
+                                                                Text(
+                                                                    order.deliveryAddress
+                                                                            ?.address ??
+                                                                        '',
+                                                                    style: robotoMedium
+                                                                        .copyWith(
+                                                                            color:
+                                                                                AppConstants.primaryColor)),
+                                                              ],
+                                                            ),
+                                                          ),
                                                           Text('item_info'.tr,
                                                               style:
                                                                   robotoMedium),
@@ -1065,46 +1128,46 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
                                       !parcel
                                           ? Container(
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    Theme.of(context).cardColor,
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      color: Theme.of(context)
-                                                          .primaryColor
-                                                          .withOpacity(0.05),
-                                                      blurRadius: 10)
-                                                ],
-                                              ),
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: Dimensions
-                                                          .paddingSizeLarge,
-                                                      vertical: Dimensions
-                                                          .paddingSizeSmall),
-                                              child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text('delivery_details'.tr,
-                                                        style: robotoMedium),
-                                                    const SizedBox(
-                                                        height: Dimensions
-                                                            .paddingSizeSmall),
-                                                    // DeliveryDetails(
-                                                    //     from: true,
-                                                    //     address: order
-                                                    //         .store!.address),
-                                                    const Divider(
-                                                        height: Dimensions
-                                                            .paddingSizeLarge),
-                                                    DeliveryDetails(
-                                                        from: false,
-                                                        address: order
-                                                            .deliveryAddress!
-                                                            .address),
-                                                  ]),
-                                            )
+                                              // decoration: BoxDecoration(
+                                              //   color:
+                                              //       Theme.of(context).cardColor,
+                                              //   boxShadow: [
+                                              //     BoxShadow(
+                                              //         color: Theme.of(context)
+                                              //             .primaryColor
+                                              //             .withOpacity(0.05),
+                                              //         blurRadius: 10)
+                                              //   ],
+                                              // ),
+                                              // padding:
+                                              //     const EdgeInsets.symmetric(
+                                              //         horizontal: Dimensions
+                                              //             .paddingSizeLarge,
+                                              //         vertical: Dimensions
+                                              //             .paddingSizeSmall),
+                                              // child: Column(
+                                              //     crossAxisAlignment:
+                                              //         CrossAxisAlignment.start,
+                                              //     children: [
+                                              //       Text('delivery_details'.tr,
+                                              //           style: robotoMedium),
+                                              //       const SizedBox(
+                                              //           height: Dimensions
+                                              //               .paddingSizeSmall),
+                                              //       // DeliveryDetails(
+                                              //       //     from: true,
+                                              //       //     address: order
+                                              //       //         .store!.address),
+                                              //       const Divider(
+                                              //           height: Dimensions
+                                              //               .paddingSizeLarge),
+                                              //       DeliveryDetails(
+                                              //           from: false,
+                                              //           address: order
+                                              //               .deliveryAddress!
+                                              //               .address),
+                                              //     ]),
+                                              )
                                           : const SizedBox(),
                                       SizedBox(
                                           height: !parcel
@@ -1983,37 +2046,38 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen> {
                         )
                       : const SizedBox(),
                   order.orderStatus == 'pending'
-                      ? Expanded(
-                          child: Padding(
-                          padding: ResponsiveHelper.isDesktop(context)
-                              ? EdgeInsets.zero
-                              : const EdgeInsets.all(
-                                  Dimensions.paddingSizeSmall),
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                                minimumSize: const Size(1, 50),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      Dimensions.radiusDefault),
-                                  side: BorderSide(
-                                      width: 2,
-                                      color: Theme.of(context).disabledColor),
-                                )),
-                            onPressed: () {
-                              orderController.setOrderCancelReason('');
-                              Get.dialog(
-                                  CancellationDialogue(orderId: order.id));
-                            },
-                            child: Text(
-                                parcel
-                                    ? 'cancel_delivery'.tr
-                                    : 'cancel_order'.tr,
-                                style: robotoBold.copyWith(
-                                  color: Theme.of(context).disabledColor,
-                                  fontSize: Dimensions.fontSizeLarge,
-                                )),
-                          ),
-                        ))
+                      // ? Expanded(
+                      //     child: Padding(
+                      //     padding: ResponsiveHelper.isDesktop(context)
+                      //         ? EdgeInsets.zero
+                      //         : const EdgeInsets.all(
+                      //             Dimensions.paddingSizeSmall),
+                      //     child: TextButton(
+                      //       style: TextButton.styleFrom(
+                      //           minimumSize: const Size(1, 50),
+                      //           shape: RoundedRectangleBorder(
+                      //             borderRadius: BorderRadius.circular(
+                      //                 Dimensions.radiusDefault),
+                      //             side: BorderSide(
+                      //                 width: 2,
+                      //                 color: Theme.of(context).disabledColor),
+                      //           )),
+                      //       onPressed: () {
+                      //         orderController.setOrderCancelReason('');
+                      //         Get.dialog(
+                      //             CancellationDialogue(orderId: order.id));
+                      //       },
+                      //       child: Text(
+                      //           parcel
+                      //               ? 'cancel_delivery'.tr
+                      //               : 'cancel_order'.tr,
+                      //           style: robotoBold.copyWith(
+                      //             color: Theme.of(context).disabledColor,
+                      //             fontSize: Dimensions.fontSizeLarge,
+                      //           )),
+                      //     ),
+                      //   ))
+                      ? const SizedBox()
                       : const SizedBox(),
                 ]),
               ),
