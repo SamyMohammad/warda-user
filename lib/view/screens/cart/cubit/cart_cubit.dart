@@ -49,6 +49,7 @@ class CartCubit extends Cubit<CartState> {
           Get.find<SplashController>().configModel!.country!)
       .dialCode;
   bool keepSecret = false;
+  bool showLinkArrowUp = false;
   String? paymentKey;
   //deliver time params
   String dateToday = DateFormat.yMMMMd('en_US').format(DateTime.now());
@@ -92,6 +93,12 @@ class CartCubit extends Cubit<CartState> {
   changePaymentMethod(String key) {
     emit(CartLoading());
     paymentKey = key;
+    emit(CartInitial());
+  }
+
+  changeLinkArrowUp() {
+    emit(CartLoading());
+    showLinkArrowUp = !showLinkArrowUp;
     emit(CartInitial());
   }
 

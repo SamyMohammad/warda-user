@@ -15,6 +15,7 @@ class AppConstants {
 
   static const String fontFamily = "Philosopher";
   static const String fontFamilyCommon = "Poppins"; //Roboto
+  static const String fontFamilyItalic = "KaushanScript"; //RobotoKaushanScript
 
   static const String baseUrl = 'https://warda.spiromo.store';
   static const String categoryUri = '/api/v1/categories';

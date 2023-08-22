@@ -85,32 +85,36 @@ class SearchScreenState extends State<SearchScreen> {
                         : Center(
                             child: SizedBox(
                                 width: Dimensions.webMaxWidth,
-                                child: Row(children: [
+                                child: Row(
+                                  children: [
                                   const SizedBox(
                                       width: Dimensions.paddingSizeSmall),
                                   Expanded(
-                                      child: SearchField(
-                                    controller: cubit.searchController,
-                                    hint: Get.find<SplashController>()
-                                            .configModel!
-                                            .moduleConfig!
-                                            .module!
-                                            .showRestaurantText!
-                                        ? 'search_food_or_restaurant'.tr
-                                        : 'search_item_or_store'.tr,
-                                    suffixIcon: Icons.filter_alt,
-                                    iconPressed: () => _actionSearch(
-                                        false,
-                                        cubit.searchController.text.trim(),
-                                        false,
-                                        Get.find<SearchingController>(),
-                                        Get.find<CategoryController>()),
-                                    onSubmit: (text) => _actionSearch(
-                                        true,
-                                        cubit.searchController.text.trim(),
-                                        false,
-                                        Get.find<SearchingController>(),
-                                        Get.find<CategoryController>()),
+                                      child: Padding(
+                                    padding: const EdgeInsets.only(right: 4.0),
+                                    child: SearchField(
+                                      controller: cubit.searchController,
+                                      hint: Get.find<SplashController>()
+                                              .configModel!
+                                              .moduleConfig!
+                                              .module!
+                                              .showRestaurantText!
+                                          ? 'search_food_or_restaurant'.tr
+                                          : 'search_item_or_store'.tr,
+                                      suffixIcon: Icons.filter_alt,
+                                      iconPressed: () => _actionSearch(
+                                          false,
+                                          cubit.searchController.text.trim(),
+                                          false,
+                                          Get.find<SearchingController>(),
+                                          Get.find<CategoryController>()),
+                                      onSubmit: (text) => _actionSearch(
+                                          true,
+                                          cubit.searchController.text.trim(),
+                                          false,
+                                          Get.find<SearchingController>(),
+                                          Get.find<CategoryController>()),
+                                    ),
                                   )),
                                   CustomButton(
                                     onPressed: () => searchController

@@ -35,7 +35,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size(context.width, context.height * 0.07),
+        preferredSize: Size(context.width, context.height * 0.08),
         child: CustomAppBar(
           title: 'categories'.tr,
           showLogo: true,

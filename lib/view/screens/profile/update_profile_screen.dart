@@ -113,35 +113,50 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                       fontWeight: FontWeight.w400),
                                 ),
                               ),
-                              
                               SizedBox(
                                 height: context.height * 0.02,
                               ),
                               SizedBox(
-                                  width: context.width * 0.8,
+                                  width: context.width * 0.9,
                                   child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          'user_name'.tr,
-                                          style: robotoRegular.copyWith(
-                                              fontSize:
-                                                  Dimensions.fontSizeSmall,
-                                              color: Theme.of(context)
-                                                  .disabledColor),
-                                        ),
-                                        const SizedBox(
-                                            height: Dimensions
-                                                .paddingSizeExtraSmall),
-                                        MyTextField(
-                                          hintText: 'first_name'.tr,
-                                          controller: _firstNameController,
-                                          focusNode: _firstNameFocus,
-                                          nextFocus: _lastNameFocus,
-                                          inputType: TextInputType.name,
-                                          capitalization:
-                                              TextCapitalization.words,
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.grey),
+                                              borderRadius:
+                                                  BorderRadius.circular(12)),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              // Text(
+                                              //   'user_name'.tr,
+                                              //   style: robotoRegular.copyWith(
+                                              //       fontSize: Dimensions
+                                              //           .fontSizeSmall,
+                                              //       color: Theme.of(context)
+                                              //           .disabledColor),
+                                              // ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 8.0),
+                                                child: MyTextField(
+                                                  hintText: 'first_name'.tr,
+                                                  labelText: 'user_name'.tr,
+                                                  controller:
+                                                      _firstNameController,
+                                                  focusNode: _firstNameFocus,
+                                                  nextFocus: _lastNameFocus,
+                                                  inputType: TextInputType.name,
+                                                  capitalization:
+                                                      TextCapitalization.words,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                         // const SizedBox(
                                         //     height: Dimensions.paddingSizeLarge),
@@ -168,58 +183,46 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                         const SizedBox(
                                             height:
                                                 Dimensions.paddingSizeLarge),
-                                        Row(children: [
-                                          Text(
-                                            'phone'.tr,
-                                            style: robotoRegular.copyWith(
-                                                fontSize:
-                                                    Dimensions.fontSizeSmall,
-                                                color: Theme.of(context)
-                                                    .disabledColor),
+
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.grey),
+                                              borderRadius:
+                                                  BorderRadius.circular(12)),
+                                          padding:
+                                              const EdgeInsets.only(top: 10.0),
+                                          child: MyTextField(
+                                            hintText: 'phone'.tr,
+                                            labelText:
+                                                '${'phone'.tr} (${'non_changeable'.tr})',
+                                            controller: _phoneController,
+                                            focusNode: _phoneFocus,
+                                            inputType: TextInputType.phone,
+                                            isEnabled: false,
                                           ),
-                                          const SizedBox(
-                                              width: Dimensions
-                                                  .paddingSizeExtraSmall),
-                                          Text('(${'non_changeable'.tr})',
-                                              style: robotoRegular.copyWith(
-                                                fontSize: Dimensions
-                                                    .fontSizeExtraSmall,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .error,
-                                              )),
-                                        ]),
-                                        const SizedBox(
-                                            height: Dimensions
-                                                .paddingSizeExtraSmall),
-                                        MyTextField(
-                                          hintText: 'phone'.tr,
-                                          controller: _phoneController,
-                                          focusNode: _phoneFocus,
-                                          inputType: TextInputType.phone,
-                                          isEnabled: false,
                                         ),
                                         const SizedBox(
                                             height:
                                                 Dimensions.paddingSizeLarge),
 
-                                        Text(
-                                          'email'.tr,
-                                          style: robotoRegular.copyWith(
-                                              fontSize:
-                                                  Dimensions.fontSizeSmall,
-                                              color: Theme.of(context)
-                                                  .disabledColor),
-                                        ),
-                                        const SizedBox(
-                                            height: Dimensions
-                                                .paddingSizeExtraSmall),
-                                        MyTextField(
-                                          hintText: 'email'.tr,
-                                          controller: _emailController,
-                                          focusNode: _emailFocus,
-                                          inputAction: TextInputAction.done,
-                                          inputType: TextInputType.emailAddress,
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.grey),
+                                              borderRadius:
+                                                  BorderRadius.circular(12)),
+                                          padding:
+                                              const EdgeInsets.only(top: 8.0),
+                                          child: MyTextField(
+                                            hintText: 'email'.tr,
+                                            labelText: 'email'.tr,
+                                            controller: _emailController,
+                                            focusNode: _emailFocus,
+                                            inputAction: TextInputAction.done,
+                                            inputType:
+                                                TextInputType.emailAddress,
+                                          ),
                                         ),
                                         const SizedBox(
                                             height:
@@ -308,11 +311,16 @@ class UpdateProfileButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return !isLoading
-        ? CustomButton(
-            onPressed: onPressed,
-            radius: 30,
-            margin: const EdgeInsets.all(Dimensions.paddingSizeSmall),
-            buttonText: 'update'.tr,
+        ? Padding(
+            padding: const EdgeInsets.only(bottom: 12.0),
+            child: CustomButton(
+              onPressed: onPressed,
+              radius: 30,
+              height: context.height * 0.07,
+              width: context.width * 0.91,
+              margin: const EdgeInsets.all(Dimensions.paddingSizeSmall),
+              buttonText: 'save'.tr,
+            ),
           )
         : const Center(child: CircularProgressIndicator());
   }

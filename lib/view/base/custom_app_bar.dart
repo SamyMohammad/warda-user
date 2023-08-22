@@ -115,7 +115,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                               width: context.width * 0.6,
                               alignment: Alignment.center,
                               child: Text(title,
-                                  style: wardaRegular.copyWith(
+                                  style: wardaItalic.copyWith(
                                     fontSize: Dimensions.fontSizeOverLarge,
                                     color: foregroundColor,
                                   ))),

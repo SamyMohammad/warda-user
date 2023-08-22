@@ -88,33 +88,38 @@ class NoDataScreen extends StatelessWidget {
                         ),
                       ),
                     )
-                  // : isCart
-                  //     ? InkWell(
-                  //         onTap: () {
-                  //           //  Get.toNamed(
-                  //           //   RouteHelper.getInitialRoute(fromSplash: true))
-                  //           DashboardScreenState().setPage(1);
-                  //         },
-                  //         child: Container(
-                  //           decoration: BoxDecoration(
-                  //             borderRadius: BorderRadius.circular(30),
-                  //             color: Theme.of(context).primaryColor,
-                  //           ),
-                  //           width: context.width * 0.75,
-                  //           padding: const EdgeInsets.symmetric(
-                  //               vertical: 15, horizontal: 20),
-                  //           child: Row(
-                  //             mainAxisAlignment: MainAxisAlignment.center,
-                  //             mainAxisSize: MainAxisSize.min,
-                  //             children: [
-                  //               Text('start_shopping'.tr,
-                  //                   style: robotoMedium.copyWith(
-                  //                       color: Theme.of(context).cardColor)),
-                  //             ],
-                  //           ),
-                  //         ),
-                  //       )
-                  : const SizedBox(),
+                  : isCart
+                      ? InkWell(
+                          onTap: () {
+                            // Get.toNamed(
+                            //     RouteHelper.getInitialRoute(fromSplash: true));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) =>
+                                        const DashboardScreen(pageIndex: 0)));
+                            // DashboardScreenState().setPage(1);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            width: context.width * 0.75,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 15, horizontal: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text('start_shopping'.tr,
+                                    style: robotoMedium.copyWith(
+                                        color: Theme.of(context).cardColor)),
+                              ],
+                            ),
+                          ),
+                        )
+                      : const SizedBox(),
             ]),
       ),
     );

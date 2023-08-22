@@ -9,6 +9,11 @@ final robotoRegular = TextStyle(
   fontWeight: FontWeight.w400,
   fontSize: Dimensions.fontSizeDefault,
 );
+final wardaItalic = TextStyle(
+  fontFamily: AppConstants.fontFamilyItalic,
+  fontWeight: FontWeight.w400,
+  fontSize: Dimensions.fontSizeDefault,
+);
 
 final wardaRegular = TextStyle(
   fontFamily: AppConstants.fontFamily,

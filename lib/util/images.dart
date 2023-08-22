@@ -12,6 +12,7 @@ class Images {
   static const String notificationPlaceholder =
       'assets/image/notification_placeholder.jpg';
   static const String arabic = 'assets/image/arabic.png';
+  static const String link = 'assets/image/link.png';
   static const String call = 'assets/image/call.png';
   static const String checked = 'assets/image/checked.png';
   static const String english = 'assets/image/english.png';

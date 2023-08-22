@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_credit_card/credit_card_widget.dart';
 import 'package:get/get.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:warda/controller/auth_controller.dart';
@@ -7,6 +8,7 @@ import 'package:warda/controller/user_controller.dart';
 import 'package:warda/controller/wallet_controller.dart';
 import 'package:warda/helper/price_converter.dart';
 import 'package:warda/helper/responsive_helper.dart';
+import 'package:warda/util/app_constants.dart';
 import 'package:warda/util/dimensions.dart';
 import 'package:warda/util/images.dart';
 import 'package:warda/util/styles.dart';
@@ -139,165 +141,206 @@ class _WalletScreenState extends State<WalletScreen> {
                             child: GetBuilder<WalletController>(
                                 builder: (walletController) {
                               return Column(children: [
-                                Stack(children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(
-                                        Dimensions.paddingSizeExtraLarge),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(
-                                          Dimensions.radiusDefault),
-                                      color: widget.fromWallet
-                                          ? Theme.of(context).primaryColor
-                                          : Theme.of(context)
-                                              .primaryColor
-                                              .withOpacity(0.2),
-                                    ),
-                                    child: Row(
-                                        mainAxisAlignment: widget.fromWallet
-                                            ? MainAxisAlignment.start
-                                            : MainAxisAlignment.center,
-                                        children: [
-                                          Image.asset(
-                                              widget.fromWallet
-                                                  ? Images.wallet
-                                                  : Images.loyal,
-                                              height: 60,
-                                              width: 60,
-                                              color: widget.fromWallet
-                                                  ? Theme.of(context).cardColor
-                                                  : null),
-                                          const SizedBox(
-                                              width: Dimensions
-                                                  .paddingSizeExtraLarge),
-                                          widget.fromWallet
-                                              ? Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                      Text('wallet_amount'.tr,
-                                                          style: robotoRegular.copyWith(
-                                                              fontSize: Dimensions
-                                                                  .fontSizeSmall,
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .cardColor)),
-                                                      const SizedBox(
-                                                          height: Dimensions
-                                                              .paddingSizeSmall),
-                                                      Text(
-                                                        PriceConverter.convertPrice(
-                                                            userController
-                                                                .userInfoModel!
-                                                                .walletBalance),
-                                                        textDirection:
-                                                            TextDirection.ltr,
-                                                        style: robotoBold.copyWith(
-                                                            fontSize: Dimensions
-                                                                .fontSizeOverLarge,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .cardColor),
-                                                      ),
-                                                    ])
-                                              : Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                      Text(
-                                                        '${'loyalty_points'.tr} !',
-                                                        style: robotoRegular.copyWith(
-                                                            fontSize: Dimensions
-                                                                .fontSizeSmall,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodyLarge!
-                                                                .color),
-                                                      ),
-                                                      Text(
-                                                        userController
-                                                                    .userInfoModel!
-                                                                    .loyaltyPoint ==
-                                                                null
-                                                            ? '0'
-                                                            : userController
-                                                                .userInfoModel!
-                                                                .loyaltyPoint
-                                                                .toString(),
-                                                        style: robotoBold.copyWith(
-                                                            fontSize: Dimensions
-                                                                .fontSizeOverLarge,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodyLarge!
-                                                                .color),
-                                                      ),
-                                                      const SizedBox(
-                                                          height: Dimensions
-                                                              .paddingSizeSmall),
-                                                    ])
-                                        ]),
-                                  ),
-                                  ResponsiveHelper.isDesktop(context) &&
-                                          !widget.fromWallet
-                                      ? Positioned(
-                                          top: 30,
-                                          right: 20,
-                                          child: InkWell(
-                                            onTap: () {
-                                              Get.dialog(
-                                                Dialog(
-                                                    backgroundColor:
-                                                        Colors.transparent,
-                                                    child: WalletBottomSheet(
-                                                      fromWallet:
-                                                          widget.fromWallet,
-                                                      amount: Get.find<
-                                                                      UserController>()
-                                                                  .userInfoModel!
-                                                                  .loyaltyPoint ==
-                                                              null
-                                                          ? '0'
-                                                          : Get.find<
-                                                                  UserController>()
-                                                              .userInfoModel!
-                                                              .loyaltyPoint
-                                                              .toString(),
-                                                    )),
-                                              );
-                                            },
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                color: Theme.of(context)
-                                                    .primaryColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        Dimensions
-                                                            .radiusDefault),
-                                              ),
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: Dimensions
-                                                          .paddingSizeLarge,
-                                                      vertical: Dimensions
-                                                          .paddingSizeSmall),
-                                              child: Text(
-                                                  'convert_to_wallet_money'.tr,
-                                                  style: robotoMedium.copyWith(
-                                                      color: Theme.of(context)
-                                                          .cardColor,
-                                                      fontSize: Dimensions
-                                                          .fontSizeSmall)),
-                                            ),
+                                widget.fromWallet
+                                    ? GetBuilder<UserController>(
+                                        builder: (user) {
+                                        return CreditCardWidget(
+                                          cardNumber: "",
+                                          labelExpiredDate: 'wallet_amount'.tr,
+                                          labelValidThru: 'wallet_amount'.tr,
+                                          expiryDate:
+                                              PriceConverter.convertPrice(
+                                                  userController.userInfoModel!
+                                                      .walletBalance),
+                                          // bankName: 'hello',
+                                          cardHolderName:
+                                              '${user.userInfoModel?.fName ?? ''}  ${user.userInfoModel?.lName ?? ''}',
+
+                                          cardBgColor:
+                                              AppConstants.primaryColor,
+                                          // textStyle: robotoMedium.,
+                                          // labelCardHolder: 'Cardholders name',
+                                          isHolderNameVisible: true,
+                                          cvvCode: '155',
+                                          showBackView: false,
+                                          onCreditCardWidgetChange:
+                                              (CreditCardBrand) {}, //true when you want to show cvv(back) view
+                                        );
+                                      })
+                                    : Stack(children: [
+                                        Container(
+                                          padding: const EdgeInsets.all(
+                                              Dimensions.paddingSizeExtraLarge),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                                Dimensions.radiusDefault),
+                                            color: widget.fromWallet
+                                                ? Theme.of(context).primaryColor
+                                                : Theme.of(context)
+                                                    .primaryColor
+                                                    .withOpacity(0.2),
                                           ),
-                                        )
-                                      : const SizedBox(),
-                                ]),
+                                          child: Row(
+                                              mainAxisAlignment: widget
+                                                      .fromWallet
+                                                  ? MainAxisAlignment.start
+                                                  : MainAxisAlignment.center,
+                                              children: [
+                                                Image.asset(
+                                                    widget.fromWallet
+                                                        ? Images.wallet
+                                                        : Images.loyal,
+                                                    height: 60,
+                                                    width: 60,
+                                                    color: widget.fromWallet
+                                                        ? Theme.of(context)
+                                                            .cardColor
+                                                        : null),
+                                                const SizedBox(
+                                                    width: Dimensions
+                                                        .paddingSizeExtraLarge),
+                                                widget.fromWallet
+                                                    ? Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                            Text(
+                                                                'wallet_amount'
+                                                                    .tr,
+                                                                style: robotoRegular.copyWith(
+                                                                    fontSize:
+                                                                        Dimensions
+                                                                            .fontSizeSmall,
+                                                                    color: Theme.of(
+                                                                            context)
+                                                                        .cardColor)),
+                                                            const SizedBox(
+                                                                height: Dimensions
+                                                                    .paddingSizeSmall),
+                                                            Text(
+                                                              PriceConverter.convertPrice(
+                                                                  userController
+                                                                      .userInfoModel!
+                                                                      .walletBalance),
+                                                              textDirection:
+                                                                  TextDirection
+                                                                      .ltr,
+                                                              style: robotoBold.copyWith(
+                                                                  fontSize:
+                                                                      Dimensions
+                                                                          .fontSizeOverLarge,
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .cardColor),
+                                                            ),
+                                                          ])
+                                                    : Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                            Text(
+                                                              '${'loyalty_points'.tr} !',
+                                                              style: robotoRegular.copyWith(
+                                                                  fontSize:
+                                                                      Dimensions
+                                                                          .fontSizeSmall,
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .bodyLarge!
+                                                                      .color),
+                                                            ),
+                                                            Text(
+                                                              userController
+                                                                          .userInfoModel!
+                                                                          .loyaltyPoint ==
+                                                                      null
+                                                                  ? '0'
+                                                                  : userController
+                                                                      .userInfoModel!
+                                                                      .loyaltyPoint
+                                                                      .toString(),
+                                                              style: robotoBold.copyWith(
+                                                                  fontSize:
+                                                                      Dimensions
+                                                                          .fontSizeOverLarge,
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .bodyLarge!
+                                                                      .color),
+                                                            ),
+                                                            const SizedBox(
+                                                                height: Dimensions
+                                                                    .paddingSizeSmall),
+                                                          ])
+                                              ]),
+                                        ),
+                                        ResponsiveHelper.isDesktop(context) &&
+                                                !widget.fromWallet
+                                            ? Positioned(
+                                                top: 30,
+                                                right: 20,
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    Get.dialog(
+                                                      Dialog(
+                                                          backgroundColor:
+                                                              Colors
+                                                                  .transparent,
+                                                          child:
+                                                              WalletBottomSheet(
+                                                            fromWallet: widget
+                                                                .fromWallet,
+                                                            amount: Get.find<
+                                                                            UserController>()
+                                                                        .userInfoModel!
+                                                                        .loyaltyPoint ==
+                                                                    null
+                                                                ? '0'
+                                                                : Get.find<
+                                                                        UserController>()
+                                                                    .userInfoModel!
+                                                                    .loyaltyPoint
+                                                                    .toString(),
+                                                          )),
+                                                    );
+                                                  },
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      color: Theme.of(context)
+                                                          .primaryColor,
+                                                      borderRadius: BorderRadius
+                                                          .circular(Dimensions
+                                                              .radiusDefault),
+                                                    ),
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: Dimensions
+                                                            .paddingSizeLarge,
+                                                        vertical: Dimensions
+                                                            .paddingSizeSmall),
+                                                    child: Text(
+                                                        'convert_to_wallet_money'
+                                                            .tr,
+                                                        style: robotoMedium.copyWith(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .cardColor,
+                                                            fontSize: Dimensions
+                                                                .fontSizeSmall)),
+                                                  ),
+                                                ),
+                                              )
+                                            : const SizedBox(),
+                                      ]),
                                 Column(children: [
                                   Padding(
                                     padding: const EdgeInsets.only(

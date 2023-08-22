@@ -259,7 +259,8 @@ class PopularItemView extends StatelessWidget {
                               );
                             },
                           )
-                        : PopularItemShimmer(enabled: itemList == null),
+                        : SizedBox(),
+                    // PopularItemShimmer(enabled: itemList == null),
                   ),
                 ],
               ),

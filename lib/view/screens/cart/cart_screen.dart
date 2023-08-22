@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:warda/controller/cart_controller.dart';
@@ -27,8 +26,8 @@ import 'cubit/cart_cubit.dart';
 import 'widget/not_available_bottom_sheet.dart';
 
 class CartScreen extends StatefulWidget {
-   bool fromNav;
-   CartScreen({Key? key, required this.fromNav}) : super(key: key);
+  bool fromNav;
+  CartScreen({Key? key, required this.fromNav}) : super(key: key);
 
   @override
   State<CartScreen> createState() => _CartScreenState();
@@ -190,7 +189,7 @@ class _CartScreenState extends State<CartScreen> {
         }
       },
       child: Container(
-        width: context.width * 0.14,
+        width: currentStep == 4 ? context.width * 0.15 : context.width * 0.14,
         height: context.height * 0.1,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -199,10 +198,12 @@ class _CartScreenState extends State<CartScreen> {
             SizedBox(
               height: context.height * 0.05,
               child: Container(
-                width: context.width * 0.18,
+                width: currentStep == 4
+                    ? context.width * 0.19
+                    : context.width * 0.18,
                 decoration: BoxDecoration(
                     color: cubit.activeStep < currentStep
-                        ? Colors.grey
+                        ? Color(0xFFE8E8E8)
                         : AppConstants.primaryColor,
                     shape: BoxShape.circle),
                 child: Padding(

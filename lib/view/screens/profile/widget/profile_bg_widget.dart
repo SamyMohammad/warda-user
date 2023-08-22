@@ -131,10 +131,10 @@ class ProfileBgWidget extends StatelessWidget {
                       ),
                       Text(
                         orderTotal.toString(),
-                        style: robotoRegular.copyWith(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600),
+                        style: robotoMedium.copyWith(
+                          color: Colors.black,
+                          fontSize: 15,
+                        ),
                       ),
                     ],
                   ),
@@ -158,10 +158,10 @@ class ProfileBgWidget extends StatelessWidget {
                       ),
                       Text(
                         walletBalance.toString(),
-                        style: robotoRegular.copyWith(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600),
+                        style: robotoMedium.copyWith(
+                          color: Colors.black,
+                          fontSize: 15,
+                        ),
                       ),
                     ],
                   ),

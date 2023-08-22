@@ -49,8 +49,10 @@ class BottomNavItem extends StatelessWidget {
             isSelected
                 ? Text(
                     title.toUpperCase(),
-                    style: wardaRegular.copyWith(
-                        fontSize: 12, color: AppConstants.primaryColor),
+                    style: wardaItalic.copyWith(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: AppConstants.primaryColor),
                   )
                 : const SizedBox()
           ],

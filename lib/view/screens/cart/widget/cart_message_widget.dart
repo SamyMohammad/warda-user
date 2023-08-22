@@ -57,7 +57,7 @@ class _CartMessageWidgetState extends State<CartMessageWidget> {
                   height: context.height * 0.02,
                 ),
                 const Divider(
-                  thickness: 3,
+                  thickness: 1,
                 ),
                 qrWidget(cubit),
                 // CustomButton(
@@ -106,42 +106,91 @@ class _CartMessageWidgetState extends State<CartMessageWidget> {
         ),
         Container(
           // margin: const EdgeInsets.symmetric(horizontal: 12),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 2),
-              child: Text('link_optional'.tr,
-                  textAlign: TextAlign.start,
-                  style: robotoRegular.copyWith(fontSize: 13)),
-            ),
-            cubit.showGeneratedQrCode
-                ? Container(
-                    width: context.width,
-                    alignment: Alignment.center,
-                    child: QrImage(
-                      data: cubit.linkSongController.text,
-                      version: QrVersions.auto,
-                      size: context.height * 0.24,
-                      eyeStyle: const QrEyeStyle(
-                          //eyeShape: QrEyeShape.square,
-                          color: Colors.black),
-                      dataModuleStyle:
-                          const QrDataModuleStyle(color: Colors.black),
-                      // Colors.black),
-                      gapless: false,
-                      embeddedImage: const AssetImage(Images.logoCircle),
-                      embeddedImageStyle: QrEmbeddedImageStyle(
-                        size: Size((context.height * 0.22) / 4,
-                            (context.height * 0.22) / 4),
-                      ),
-                    ),
-                  )
-                : CustomTextField(
-                    controller: cubit.linkSongController,
-                    titleText: 'paste_link_for_song_video'.tr,
-                    showBorder: true,
-                  ),
-          ]),
+          decoration: BoxDecoration(
+              border:
+                  Border.all(color: AppConstants.primaryColor.withOpacity(0.2)),
+              borderRadius: BorderRadius.circular(15)),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: cubit.showLinkArrowUp
+                        ? [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text('link_optional'.tr,
+                                  textAlign: TextAlign.start,
+                                  style: robotoRegular.copyWith(fontSize: 13)),
+                            ),
+                            cubit.showGeneratedQrCode
+                                ? Container(
+                                    width: context.width,
+                                    alignment: Alignment.center,
+                                    child: QrImage(
+                                      data: cubit.linkSongController.text,
+                                      version: QrVersions.auto,
+                                      size: context.height * 0.24,
+                                      eyeStyle: const QrEyeStyle(
+                                          //eyeShape: QrEyeShape.square,
+                                          color: Colors.black),
+                                      dataModuleStyle: const QrDataModuleStyle(
+                                          color: Colors.black),
+                                      // Colors.black),
+                                      gapless: false,
+                                      embeddedImage:
+                                          const AssetImage(Images.logoCircle),
+                                      embeddedImageStyle: QrEmbeddedImageStyle(
+                                        size: Size((context.height * 0.22) / 4,
+                                            (context.height * 0.22) / 4),
+                                      ),
+                                    ),
+                                  )
+                                : CustomTextField(
+                                    controller: cubit.linkSongController,
+                                    titleText: 'paste_link_for_song_video'.tr,
+                                    showBorder: false,
+                                  ),
+                          ]
+                        : [
+                            Row(
+                              children: [
+                                Container(
+                                  child: Image.asset(
+                                    Images.link,
+                                    width: context.width * 0.12,
+                                    height: context.height * 0.07,
+                                  ),
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('link_optional'.tr,
+                                        textAlign: TextAlign.start,
+                                        style: robotoRegular.copyWith(
+                                            fontSize: 13)),
+                                    Text('paste_link_for_song_video'.tr,
+                                        style: robotoRegular.copyWith(
+                                            fontSize: 12,
+                                            color:
+                                                Theme.of(context).hintColor)),
+                                  ],
+                                )
+                              ],
+                            )
+                          ]),
+              ),
+              IconButton(
+                  onPressed: () {
+                    cubit.changeLinkArrowUp();
+                  },
+                  icon: cubit.showLinkArrowUp
+                      ? Icon(Icons.keyboard_arrow_up_outlined)
+                      : Icon(Icons.keyboard_arrow_down_outlined))
+            ],
+          ),
         ),
         SizedBox(
           height: context.height * 0.04,

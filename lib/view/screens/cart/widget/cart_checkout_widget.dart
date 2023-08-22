@@ -297,8 +297,10 @@ class CartCheckoutWidget extends StatelessWidget {
                                                     ? AppConstants.primaryColor
                                                     : Colors.white,
                                                 width: 1)),
-                                        width: context.width * 0.28,
-                                        height: context.width * 0.23,
+                                        // width: context.width * 0.23,
+                                        // height: context.width * 0.23,
+                                        width: 86,
+                                        height: 84,
                                         margin: const EdgeInsets.all(5.0),
                                         child: Column(
                                             mainAxisAlignment:
@@ -310,8 +312,8 @@ class CartCheckoutWidget extends StatelessWidget {
                                                         Dimensions.radiusSmall),
                                                 child: CustomImage(
                                                   image: payemnt?.icon ?? '',
-                                                  height: context.height * 0.07,
-                                                  width: context.height * 0.1,
+                                                  height: context.height * 0.05,
+                                                  width: context.height * 0.08,
                                                   fit: BoxFit.fitHeight,
                                                 ),
                                               ),
