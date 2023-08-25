@@ -46,7 +46,7 @@ class _CartItemsListWidgetState extends State<CartItemsListWidget> {
                             return CartItemWidget(
                                 cart: cartController.cartList[index],
                                 cartIndex: index,
-                                addOns: cartController.addOnsList[index],
+                                addOns: [],
                                 isAvailable:
                                     cartController.availableList[index]);
                           },

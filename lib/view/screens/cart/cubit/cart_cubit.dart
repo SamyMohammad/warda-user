@@ -72,7 +72,7 @@ class CartCubit extends Cubit<CartState> {
   bool generateMessageWithAI = false;
   Map<String, TextEditingController>? messageQuestionsControllers;
   Map<String, bool>? messageQuestionsBool;
-  Map<String, Map<String, bool>>? questionChoises;
+  Map<String, List<Map<String, bool>>>? questionChoises;
   final TextEditingController linkSongController = TextEditingController();
   List<Question> questions = [];
   final messageController = TextEditingController();
@@ -113,11 +113,13 @@ class CartCubit extends Cubit<CartState> {
         messageQuestionsBool?.addEntries({element.q: false}.entries);
       } else {
         if (element.choices.isNotEmpty) {
+          List<Map<String, bool>> chociesList = [];
+
           for (var choice in element.choices) {
-            questionChoises?.addEntries({
-              element.q: {choice.name: false}
-            }.entries);
+            chociesList.add({choice.name: false});
           }
+          questionChoises?[element.q] = chociesList;
+          print('helloOO ;:: ${questionChoises?.entries}');
         } else {
           messageQuestionsControllers
               ?.addEntries({element.q: TextEditingController()}.entries);
@@ -132,8 +134,15 @@ class CartCubit extends Cubit<CartState> {
       {bool isChoice = false, String? choiceName}) {
     emit(CartLoading());
     if (isChoice && choiceName.runtimeType != Null) {
-      questionChoises?[question.q]?.updateAll((key, value) => false);
-      questionChoises?[question.q]?[choiceName!] = value;
+      List<Map<String, bool>> choiseList = questionChoises?[question.q] ?? [];
+      for (var element in choiseList) {
+        element.updateAll((key, value) => false);
+      }
+      for (var element in choiseList) {
+        if (element.containsKey(choiceName)) {
+          element[choiceName!] = value;
+        }
+      }
     } else {
       messageQuestionsBool?[question.q] = value;
     }
@@ -180,13 +189,17 @@ class CartCubit extends Cubit<CartState> {
     List<Map<String, String>> answers = [];
     for (var element in questions) {
       if (element.type == 'text') {
-        bool containChoise =
-            questionChoises?[element.q]?.values.contains(true) ?? false;
+        List<Map<String, bool>> choiseList = questionChoises?[element.q] ?? [];
+        bool containChoise = false;
+        for (var element in choiseList) {
+          containChoise = element.containsValue(true);
+        }
+
         if (element.choices.isNotEmpty && containChoise) {
-          var choice = questionChoises?[element.q]
-              ?.entries
-              .firstWhere((element) => element.value == true);
-          answers.add({"q": element.q, "a": choice?.key ?? ""});
+          // choiseList.firstWhere((element) => false);
+          var choice =
+              choiseList.firstWhere((element) => element.values.first == true);
+          answers.add({"q": element.q, "a": choice.keys.first});
         } else {
           answers.add({
             "q": element.q,

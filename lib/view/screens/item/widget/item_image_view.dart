@@ -48,6 +48,7 @@ class ItemImageView extends StatelessWidget {
                       controller: _controller,
                       itemCount: imageList.length,
                       itemBuilder: (context, index) {
+                        print('helloooo ${baseUrl}/${imageList[index]}');
                         return ClipRRect(
                           borderRadius: BorderRadius.circular(0),
                           child: CustomImage(

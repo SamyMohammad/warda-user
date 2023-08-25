@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/gestures.dart';
 import 'package:warda/controller/banner_controller.dart';
 import 'package:warda/controller/item_controller.dart';
 import 'package:warda/controller/location_controller.dart';
@@ -51,8 +54,13 @@ class BannerView extends StatelessWidget {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
                             ),
-                            child: ListView.builder(
+                            child: PageView.builder(
                                 itemCount: bannerDataList?.length ?? 0,
+                                scrollDirection: Axis.horizontal,
+                                onPageChanged: (newBanner) {
+                                  bannerController.setCurrentIndex(
+                                      newBanner, true);
+                                },
                                 itemBuilder: (context, index) {
                                   return InkWell(
                                     onTap: () async {

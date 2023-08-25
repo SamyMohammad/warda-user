@@ -80,32 +80,22 @@ class CartController extends GetxController implements GetxService {
     _itemPrice = 0;
     _itemDiscountPrice = 0;
     _addOns = 0;
+    print('subtotal before increase $_subTotal');
     for (var cartModel in cartList) {
-      List<AddOns> addOnList = [];
-      for (var addOnId in cartModel.addOnIds!) {
-        for (AddOns addOns in cartModel.item!.addOns!) {
-          if (addOns.id == addOnId.id) {
-            addOnList.add(addOns);
-            break;
-          }
-        }
-      }
-      _addOnsList.add(addOnList);
+      // _addOnsList.add(addOnList);
 
       _availableList.add(DateConverter.isAvailable(
           cartModel.item!.availableTimeStarts,
           cartModel.item!.availableTimeEnds));
 
-      for (int index = 0; index < addOnList.length; index++) {
-        _addOns = _addOns +
-            (addOnList[index].price! * cartModel.addOnIds![index].quantity!);
-      }
       _itemPrice = _itemPrice + (cartModel.price! * cartModel.quantity!);
       _itemDiscountPrice = _itemDiscountPrice +
           ((cartModel.price! - cartModel.discountedPrice!) *
               cartModel.quantity!);
     }
-    _subTotal = (_itemPrice - _itemDiscountPrice) + _addOns;
+
+    print('subtotal after increase $_subTotal');
+    _subTotal = (_itemPrice - _itemDiscountPrice);
 
     return _subTotal;
   }

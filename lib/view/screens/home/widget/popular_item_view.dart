@@ -56,7 +56,7 @@ class PopularItemView extends StatelessWidget {
                   ),
                   Container(
                     constraints: BoxConstraints(
-                      maxHeight: context.height * 0.24,
+                      maxHeight: context.height * 0.25,
                       minHeight: context.height * 0.23,
                     ),
                     child: itemList != null

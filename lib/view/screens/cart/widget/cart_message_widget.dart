@@ -244,7 +244,7 @@ class _CartMessageWidgetState extends State<CartMessageWidget> {
                   ),
                   CustomButton(
                     buttonText: 'generate_message'.tr,
-                    isLoading: cubit.state is CartLoading,
+                    //isLoading: cubit.state is CartLoading,
                     color: Theme.of(context).cardColor,
                     textColor: Theme.of(context).primaryColor,
                     onPressed: () {
@@ -293,7 +293,7 @@ class _CartMessageWidgetState extends State<CartMessageWidget> {
           var question = cubit.questions[index];
           bool haveChoice = question.choices.isNotEmpty;
           bool textType = question.type == 'text';
-          var choiceValue;
+          List<Map<String, bool>> choiceValue = [];
           var questionController;
           var questionBool;
           if (!textType) {
@@ -301,8 +301,8 @@ class _CartMessageWidgetState extends State<CartMessageWidget> {
                 .firstWhere((element) => element.key == question.q);
           } else {
             if (haveChoice) {
-              choiceValue = cubit.questionChoises?.entries
-                  .firstWhere((element) => element.key == question.q);
+              choiceValue = cubit.questionChoises?[question.q] ?? [];
+              print('helloOO>>> ${cubit.questionChoises?[question.q] ?? []}');
             } else {
               questionController = cubit.messageQuestionsControllers?.entries
                   .firstWhere((element) => element.key == question.q);
@@ -322,40 +322,46 @@ class _CartMessageWidgetState extends State<CartMessageWidget> {
                           SizedBox(
                             height: context.height * 0.06,
                             width: context.width,
-                            child: ListView.builder(
-                                itemCount: question.choices.length,
-                                //itemCount: 5,
-                                scrollDirection: Axis.horizontal,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  var choice = question.choices[index];
-                                  var choiceOption = choiceValue?.value.entries
-                                      .firstWhere((element) =>
-                                          element.key == choice.name);
-                                  return Padding(
-                                    padding: EdgeInsets.only(
-                                        right: context.width * 0.05),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Checkbox(
-                                            value: choiceOption?.value,
-                                            onChanged: (value) {
-                                              cubit.changeQuestionBoolValue(
-                                                  question, value ?? false,
-                                                  isChoice: true,
-                                                  choiceName: choice.name);
-                                            }),
-                                        Text(
-                                          choice.name,
-                                          style: robotoRegular.copyWith(
-                                              fontSize: 13),
-                                        )
-                                      ],
-                                    ),
-                                  );
-                                }),
+                            child: question.choices.isNotEmpty
+                                ? ListView.builder(
+                                    itemCount: question.choices.length,
+                                    //itemCount: 5,
+                                    scrollDirection: Axis.horizontal,
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index) {
+                                      // index = 1;
+                                      var choice = question.choices[index];
+                                      var choiceOption = choiceValue.firstWhere(
+                                          (element) =>
+                                              element.entries.first.key ==
+                                              choice.name);
+
+                                      return Padding(
+                                        padding: EdgeInsets.only(
+                                            right: context.width * 0.05),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Checkbox(
+                                                value:
+                                                    choiceOption.values.first,
+                                                onChanged: (value) {
+                                                  cubit.changeQuestionBoolValue(
+                                                      question, value ?? false,
+                                                      isChoice: true,
+                                                      choiceName: choice.name);
+                                                }),
+                                            Text(
+                                              choice.name,
+                                              style: robotoRegular.copyWith(
+                                                  fontSize: 13),
+                                            )
+                                          ],
+                                        ),
+                                      );
+                                    })
+                                : SizedBox(),
                           ),
                         ],
                       )

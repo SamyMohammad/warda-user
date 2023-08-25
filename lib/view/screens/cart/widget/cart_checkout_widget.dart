@@ -991,7 +991,7 @@ class CartCheckoutWidget extends StatelessWidget {
                     cart: cartController.cartList[index],
                     forReview: true,
                     cartIndex: index,
-                    addOns: cartController.addOnsList[index],
+                    addOns: [],
                     isAvailable: cartController.availableList[index]);
               },
             ),
