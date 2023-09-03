@@ -53,6 +53,14 @@ class SearchRepo {
     return await apiClient.getData(AppConstants.getOccasionsUri);
   }
 
+  Future<Response> getFlowerTypesFilter() async {
+    return await apiClient.getData(AppConstants.getOccasionsUri);
+  }
+
+  Future<Response> getFlowerColorsFilter() async {
+    return await apiClient.getData(AppConstants.getOccasionsUri);
+  }
+
   Future<bool> saveSearchHistory(List<String?> searchHistories) async {
     return await sharedPreferences.setStringList(
         AppConstants.searchHistory, searchHistories as List<String>);

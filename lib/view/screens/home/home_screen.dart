@@ -97,6 +97,8 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
 
     Get.find<SearchingController>().getOccasionFilter();
+    Get.find<SearchingController>().getFlowerColorsFilter();
+    Get.find<SearchingController>().getFlowerTypesFilter();
     Get.find<SearchingController>().getSizesFilter();
     Get.find<SearchingController>().getFAQ();
     Get.find<WishListController>().getWishList();
@@ -404,16 +406,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   decoration: BoxDecoration(
                                                     color: Theme.of(context)
                                                         .cardColor,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            Dimensions
-                                                                .radiusSmall),
+                                                    borderRadius: BorderRadius
+                                                        .circular(Dimensions
+                                                            .radiusExtraSmall),
                                                     boxShadow: [
                                                       BoxShadow(
                                                           color: Colors.grey[
-                                                              Get.isDarkMode
-                                                                  ? 800
-                                                                  : 200]!,
+                                                                  Get.isDarkMode
+                                                                      ? 800
+                                                                      : 200]!
+                                                              .withOpacity(0.4),
                                                           spreadRadius: 1,
                                                           offset: Offset(1, 1),
                                                           blurRadius: 5)

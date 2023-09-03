@@ -10,8 +10,12 @@ import 'package:meta/meta.dart';
 
 import '../../../../controller/category_controller.dart';
 import '../../../../controller/search_controller.dart';
+import '../../../../data/model/response/category_model.dart';
+import '../../../../data/model/response/flower_colors_model.dart';
+import '../../../../data/model/response/flower_types_model.dart';
 import '../../../../data/model/response/occasion_model.dart';
 import '../../../../util/app_constants.dart';
+import '../../../../util/dimensions.dart';
 import '../../../../util/images.dart';
 import '../../../../util/styles.dart';
 import '../../../base/custom_button.dart';
@@ -27,6 +31,228 @@ class FilterCubit extends Cubit<FilterState> {
   double? minumimPrice;
   double? maximumPrice;
   final TextEditingController searchController = TextEditingController();
+
+  List<Occasion> occasionListSelected = [];
+  List<Size> sizeListSelected = [];
+  List<FlowerType> flowerTypeListSelected = [];
+  List<FlowerColor> flowerColorListSelected = [];
+  List<CategoryModel> categoryListSelected = [];
+
+  showBottomSheet(
+      {required BuildContext context,
+      required String title,
+      required Function()? onTapClear,
+      required Function()? onTapConfirm,
+      required dynamic itemList,
+      bool multiSelection = true}) {
+    showMaterialModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(Dimensions.radiusDefault),
+          topRight: Radius.circular(Dimensions.radiusDefault),
+        ),
+      ),
+      builder: (context) => StatefulBuilder(
+        builder: (BuildContext context, setState) {
+          return Container(
+            height: context.height * 0.5,
+            decoration: const BoxDecoration(),
+            padding: const EdgeInsets.symmetric(
+                vertical: Dimensions.paddingSizeSmall,
+                horizontal: Dimensions.paddingSizeDefault),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        title,
+                        style: robotoBlack.copyWith(
+                            fontSize: 19, fontWeight: FontWeight.w700),
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: const Icon(Icons.close))
+                    ],
+                  ),
+
+                  //items
+                  SizedBox(
+                    height: context.height * 0.32,
+                    child: ListView.separated(
+                        itemBuilder: (context, index) {
+                          String itemName = '';
+                          var element = itemList[index];
+                          bool isCategory = title.toLowerCase() == 'category';
+                          bool isFlowerType = title.toLowerCase() == 'flower';
+                          bool isFlowerColor = title.toLowerCase() == 'color';
+                          bool isOccasion = title.toLowerCase() == 'occasion';
+                          bool isSize = title.toLowerCase() == 'size';
+                          if (title.toLowerCase() == 'category') {
+                            itemList = itemList as List<CategoryModel>?;
+                            itemName = itemList[index].name ?? '';
+                          }
+
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                if (isCategory) {
+                                  if (categoryListSelected.contains(element)) {
+                                    categoryListSelected.remove(element);
+                                  } else {
+                                    categoryListSelected.add(element);
+                                  }
+                                } else if (isOccasion) {
+                                  if (occasionListSelected.contains(element)) {
+                                    occasionListSelected.remove(element);
+                                  } else {
+                                    occasionListSelected.add(element);
+                                  }
+                                } else if (isFlowerColor) {
+                                  if (flowerColorListSelected
+                                      .contains(element)) {
+                                    flowerColorListSelected.remove(element);
+                                  } else {
+                                    flowerColorListSelected.add(element);
+                                  }
+                                } else if (isSize) {
+                                  if (sizeListSelected.contains(element)) {
+                                    sizeListSelected.remove(element);
+                                  } else {
+                                    sizeListSelected.add(element);
+                                  }
+                                } else if (isFlowerType) {
+                                  if (flowerTypeListSelected
+                                      .contains(element)) {
+                                    flowerTypeListSelected.remove(element);
+                                  } else {
+                                    flowerTypeListSelected.add(element);
+                                  }
+                                }
+                              });
+                            },
+                            child: Container(
+                                alignment: Alignment.centerLeft,
+                                // ignore: prefer_const_constructors
+                                padding: EdgeInsets.symmetric(
+                                    vertical: Dimensions.paddingSizeSmall),
+                                child: isCategory
+                                    ? Text(
+                                        itemName,
+                                        style: categoryListSelected
+                                                .contains(element)
+                                            ? robotoRegular.copyWith(
+                                                fontWeight: FontWeight.bold)
+                                            : robotoRegular,
+                                      )
+                                    : isSize
+                                        ? Text(
+                                            itemName,
+                                            style: sizeListSelected
+                                                    .contains(element)
+                                                ? robotoRegular.copyWith(
+                                                    fontWeight: FontWeight.bold)
+                                                : robotoRegular,
+                                          )
+                                        : isFlowerType
+                                            ? Text(
+                                                itemName,
+                                                style: flowerTypeListSelected
+                                                        .contains(element)
+                                                    ? robotoRegular.copyWith(
+                                                        fontWeight:
+                                                            FontWeight.bold)
+                                                    : robotoRegular,
+                                              )
+                                            : isFlowerColor
+                                                ? Text(
+                                                    itemName,
+                                                    style: flowerColorListSelected
+                                                            .contains(element)
+                                                        ? robotoRegular
+                                                            .copyWith(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)
+                                                        : robotoRegular,
+                                                  )
+                                                : isOccasion
+                                                    ? Text(
+                                                        itemName,
+                                                        style: occasionListSelected
+                                                                .contains(
+                                                                    element)
+                                                            ? robotoRegular
+                                                                .copyWith(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold)
+                                                            : robotoRegular,
+                                                      )
+                                                    : SizedBox()),
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return Divider();
+                        },
+                        itemCount: itemList.length),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: onTapClear,
+                        child: Container(
+                          width: context.width * 0.45,
+                          height: context.height * 0.07,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius:
+                                BorderRadius.circular(Dimensions.radiusSmall),
+                            border:
+                                Border.all(color: AppConstants.primaryColor),
+                          ),
+                          child: Center(
+                              child: Text(
+                            'Clear all',
+                            style: robotoRegular.copyWith(
+                                fontWeight: FontWeight.w300),
+                          )),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: onTapConfirm,
+                        child: Container(
+                          width: context.width * 0.45,
+                          height: context.height * 0.07,
+                          decoration: BoxDecoration(
+                            color: AppConstants.primaryColor,
+                            borderRadius:
+                                BorderRadius.circular(Dimensions.radiusSmall),
+                            border:
+                                Border.all(color: AppConstants.primaryColor),
+                          ),
+                          child: Center(
+                              child: Text(
+                            'Confirm',
+                            style: robotoRegular.copyWith(
+                                fontWeight: FontWeight.w300,
+                                color: Theme.of(context).cardColor),
+                          )),
+                        ),
+                      ),
+                    ],
+                  )
+                ]),
+          );
+        },
+      ),
+    );
+  }
 
   changeCategoryId(int newCategoryId) {
     emit(FilterLoading());
@@ -376,7 +602,7 @@ class FilterCubit extends Cubit<FilterState> {
                                 ? SizedBox(
                                     height: context.height * 0.07,
                                   )
-                                : SizedBox(),
+                                : const SizedBox(),
                           ],
                         )),
                       ),

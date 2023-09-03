@@ -6,6 +6,8 @@ import 'package:warda/helper/date_converter.dart';
 import 'package:get/get.dart';
 
 import '../data/model/response/faq_model.dart';
+import '../data/model/response/flower_colors_model.dart';
+import '../data/model/response/flower_types_model.dart';
 import '../data/model/response/occasion_model.dart';
 import '../data/model/response/sizes_model.dart';
 
@@ -18,6 +20,8 @@ class SearchingController extends GetxController implements GetxService {
   List<Item>? _suggestedItemList;
   List<FaqItem>? _faqList;
   List<Occasion>? _occasionList;
+  List<FlowerColor>? _flowerColorList;
+  List<FlowerType>? _flowerTypeList;
   List<Size>? _sizeList;
   List<Store>? _searchStoreList;
   List<Store>? _allStoreList;
@@ -44,6 +48,8 @@ class SearchingController extends GetxController implements GetxService {
 
   List<Occasion>? get occasionList => _occasionList;
   List<Size>? get sizeList => _sizeList;
+  List<FlowerType>? get flowerTypeList => _flowerTypeList;
+  List<FlowerColor>? get flowerColorList => _flowerColorList;
   List<Store>? get searchStoreList => _searchStoreList;
   String? get searchText => _searchText;
   double get lowerValue => _lowerValue;
@@ -233,12 +239,38 @@ class SearchingController extends GetxController implements GetxService {
     update();
   }
 
+  void getFlowerTypesFilter() async {
+    Response response = await searchRepo.getFlowerTypesFilter();
+    if (response.statusCode == 200) {
+      _flowerTypeList = [];
+      response.body['data'].forEach((suggestedItem) =>
+          _flowerTypeList!.add(FlowerType.fromJson(suggestedItem)));
+    } else {
+      ApiChecker.checkApi(response);
+    }
+    update();
+  }
+
+  void getFlowerColorsFilter() async {
+    Response response = await searchRepo.getFlowerColorsFilter();
+    if (response.statusCode == 200) {
+      _flowerColorList = [];
+      response.body['data'].forEach((suggestedItem) =>
+          _flowerColorList!.add(FlowerColor.fromJson(suggestedItem)));
+    } else {
+      ApiChecker.checkApi(response);
+    }
+    update();
+  }
+
   void searchData(
     String? query,
     bool fromHome, {
     int? occationId,
     int? sizeId,
     int? categoryId,
+    int? flowerTypeIds,
+    int? flowerColorIds,
   }) async {
     _searchHomeText = query;
     _searchText = query;

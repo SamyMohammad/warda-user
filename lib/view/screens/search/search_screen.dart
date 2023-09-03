@@ -21,6 +21,7 @@ import 'package:get/get.dart';
 import 'package:warda/view/screens/store/widget/bottom_cart_widget.dart';
 
 import '../../../controller/category_controller.dart';
+import '../../../util/app_constants.dart';
 import 'cubit/filter_cubit.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -85,8 +86,7 @@ class SearchScreenState extends State<SearchScreen> {
                         : Center(
                             child: SizedBox(
                                 width: Dimensions.webMaxWidth,
-                                child: Row(
-                                  children: [
+                                child: Row(children: [
                                   const SizedBox(
                                       width: Dimensions.paddingSizeSmall),
                                   Expanded(
@@ -128,6 +128,171 @@ class SearchScreenState extends State<SearchScreen> {
                                     width: context.width * 0.2,
                                   ),
                                 ]))),
+                    SizedBox(
+                      height: context.height * 0.04,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                                horizontal: Dimensions.paddingSizeDefault),
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: AppConstants.primaryColor),
+                                color: cubit.categoryListSelected.isEmpty
+                                    ? AppConstants.lightPinkColor
+                                    : AppConstants.primaryColor,
+                                borderRadius: BorderRadius.circular(
+                                    Dimensions.radiusDefault)),
+                            child: Row(children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: Dimensions.paddingSizeSmall),
+                                child: Text(
+                                  'Category',
+                                  style: robotoRegular.copyWith(
+                                      color: cubit.categoryListSelected.isEmpty
+                                          ? AppConstants.primaryColor
+                                          : Colors.white),
+                                ),
+                              ),
+                              Icon(
+                                Icons.keyboard_arrow_down_outlined,
+                                color: cubit.categoryListSelected.isEmpty
+                                    ? AppConstants.primaryColor
+                                    : Colors.white,
+                              )
+                            ]),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                                horizontal: Dimensions.paddingSizeDefault),
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: AppConstants.primaryColor),
+                                color: cubit.occasionListSelected.isEmpty
+                                    ? AppConstants.lightPinkColor
+                                    : AppConstants.primaryColor,
+                                borderRadius: BorderRadius.circular(
+                                    Dimensions.radiusDefault)),
+                            child: Row(children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: Dimensions.paddingSizeSmall),
+                                child: Text(
+                                  'Occasion',
+                                  style: robotoRegular.copyWith(
+                                      color: cubit.occasionListSelected.isEmpty
+                                          ? AppConstants.primaryColor
+                                          : Colors.white),
+                                ),
+                              ),
+                              Icon(
+                                Icons.keyboard_arrow_down_outlined,
+                                color: cubit.occasionListSelected.isEmpty
+                                    ? AppConstants.primaryColor
+                                    : Colors.white,
+                              )
+                            ]),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                                horizontal: Dimensions.paddingSizeDefault),
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: AppConstants.primaryColor),
+                                color: cubit.flowerColorListSelected.isEmpty
+                                    ? AppConstants.lightPinkColor
+                                    : AppConstants.primaryColor,
+                                borderRadius: BorderRadius.circular(
+                                    Dimensions.radiusDefault)),
+                            child: Row(children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: Dimensions.paddingSizeSmall),
+                                child: Text(
+                                  'Color',
+                                  style: robotoRegular.copyWith(
+                                      color:
+                                          cubit.flowerColorListSelected.isEmpty
+                                              ? AppConstants.primaryColor
+                                              : Colors.white),
+                                ),
+                              ),
+                              Icon(
+                                Icons.keyboard_arrow_down_outlined,
+                                color: cubit.flowerColorListSelected.isEmpty
+                                    ? AppConstants.primaryColor
+                                    : Colors.white,
+                              )
+                            ]),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                                horizontal: Dimensions.paddingSizeDefault),
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: AppConstants.primaryColor),
+                                color: cubit.flowerTypeListSelected.isEmpty
+                                    ? AppConstants.lightPinkColor
+                                    : AppConstants.primaryColor,
+                                borderRadius: BorderRadius.circular(
+                                    Dimensions.radiusDefault)),
+                            child: Row(children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: Dimensions.paddingSizeSmall),
+                                child: Text(
+                                  'Flower',
+                                  style: robotoRegular.copyWith(
+                                      color:
+                                          cubit.flowerTypeListSelected.isEmpty
+                                              ? AppConstants.primaryColor
+                                              : Colors.white),
+                                ),
+                              ),
+                              Icon(
+                                Icons.keyboard_arrow_down_outlined,
+                                color: cubit.flowerTypeListSelected.isEmpty
+                                    ? AppConstants.primaryColor
+                                    : Colors.white,
+                              )
+                            ]),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                                horizontal: Dimensions.paddingSizeDefault),
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: AppConstants.primaryColor),
+                                color: cubit.sizeListSelected.isEmpty
+                                    ? AppConstants.lightPinkColor
+                                    : AppConstants.primaryColor,
+                                borderRadius: BorderRadius.circular(
+                                    Dimensions.radiusDefault)),
+                            child: Row(children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: Dimensions.paddingSizeSmall),
+                                child: Text(
+                                  'Size',
+                                  style: robotoRegular.copyWith(
+                                      color: cubit.sizeListSelected.isEmpty
+                                          ? AppConstants.primaryColor
+                                          : Colors.white),
+                                ),
+                              ),
+                              Icon(
+                                Icons.keyboard_arrow_down_outlined,
+                                color: cubit.sizeListSelected.isEmpty
+                                    ? AppConstants.primaryColor
+                                    : Colors.white,
+                              )
+                            ]),
+                          )
+                        ],
+                      ),
+                    ),
                     Expanded(
                         child: searchController.isSearchMode
                             ? SingleChildScrollView(
@@ -386,7 +551,7 @@ class SearchScreenState extends State<SearchScreen> {
                 return cartController.cartList.isNotEmpty &&
                         !ResponsiveHelper.isDesktop(context)
                     //? const BottomCartWidget()
-                    ? SizedBox()
+                    ? const SizedBox()
                     : const SizedBox();
               }));
         },
@@ -416,8 +581,14 @@ class SearchScreenState extends State<SearchScreen> {
             .filterBottomSheet(searchController, categoryController, context);
       }
     } else {
-      BlocProvider.of<FilterCubit>(context)
-          .filterBottomSheet(searchController, categoryController, context);
+      BlocProvider.of<FilterCubit>(context).showBottomSheet(
+          context: context,
+          title: 'Category',
+          onTapClear: () {},
+          onTapConfirm: () {},
+          itemList: categoryController.categoryList,
+          multiSelection: false);
+
       // List<double?> prices = [];
       // if (!Get.find<SearchingController>().isStore) {
       //   for (var product in Get.find<SearchingController>().allItemList!) {
