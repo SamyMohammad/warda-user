@@ -39,6 +39,7 @@ import '../../../controller/search_controller.dart';
 import '../../../controller/wishlist_controller.dart';
 import '../../../util/app_constants.dart';
 import '../search/cubit/filter_cubit.dart';
+import '../search/widget/search_field.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -146,6 +147,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 : SafeArea(
                     child: RefreshIndicator(
                       onRefresh: () async {
+                        Get.find<SearchingController>().getOccasionFilter();
+                        Get.find<SearchingController>().getFlowerColorsFilter();
+                        Get.find<SearchingController>().getFlowerTypesFilter();
+                        Get.find<SearchingController>().getSizesFilter();
                         if (Get.find<SplashController>().module != null) {
                           await Get.find<BannerController>()
                               .getBannerList(true);
@@ -390,50 +395,134 @@ class _HomeScreenState extends State<HomeScreen> {
                                             delegate: SliverDelegate(
                                                 child: Center(
                                                     child: Container(
-                                              height: context.height * 0.035,
-                                              width: context.width * 0.85,
-                                              color:
-                                                  Theme.of(context).cardColor,
-                                              child: InkWell(
-                                                onTap: () => Get.toNamed(
-                                                    RouteHelper
-                                                        .getSearchRoute()),
-                                                child: Container(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: Dimensions
-                                                          .paddingSizeSmall),
-                                                  decoration: BoxDecoration(
-                                                    color: Theme.of(context)
-                                                        .cardColor,
-                                                    borderRadius: BorderRadius
-                                                        .circular(Dimensions
-                                                            .radiusExtraSmall),
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                          color: Colors.grey[
-                                                                  Get.isDarkMode
-                                                                      ? 800
-                                                                      : 200]!
-                                                              .withOpacity(0.4),
-                                                          spreadRadius: 1,
-                                                          offset: Offset(1, 1),
-                                                          blurRadius: 5)
-                                                    ],
-                                                  ),
-                                                  child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment.end,
-                                                      children: const [
-                                                        Icon(
-                                                          Icons.search,
-                                                          size: 23,
-                                                          color: Colors.grey,
-                                                        ),
-                                                      ]),
-                                                ),
-                                              ),
-                                            ))),
+                                                        height: context.height *
+                                                            0.045,
+                                                        width: context.width *
+                                                            0.85,
+                                                        color: Theme.of(context)
+                                                            .cardColor,
+                                                        child: BlocBuilder<
+                                                            FilterCubit,
+                                                            FilterState>(
+                                                          builder:
+                                                              (context, state) {
+                                                            var cubit = BlocProvider
+                                                                .of<FilterCubit>(
+                                                                    context);
+                                                            return Container(
+                                                              padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      Dimensions
+                                                                          .paddingSizeSmall),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .cardColor,
+                                                                borderRadius:
+                                                                    BorderRadius.circular(
+                                                                        Dimensions
+                                                                            .radiusExtraSmall),
+                                                                boxShadow: [
+                                                                  BoxShadow(
+                                                                      color: Colors
+                                                                          .grey[Get.isDarkMode
+                                                                              ? 800
+                                                                              : 200]!
+                                                                          .withOpacity(
+                                                                              0.4),
+                                                                      spreadRadius:
+                                                                          1,
+                                                                      offset:
+                                                                          Offset(
+                                                                              1,
+                                                                              1),
+                                                                      blurRadius:
+                                                                          5)
+                                                                ],
+                                                              ),
+                                                              child: Center(
+                                                                child:
+                                                                    SearchField(
+                                                                  controller: cubit
+                                                                      .searchController,
+                                                                  suffixIcon:
+                                                                      Icons
+                                                                          .search,
+                                                                  suffixIconColor:
+                                                                      Colors
+                                                                          .grey,
+                                                                  hint:
+                                                                      'search_item_or_store'
+                                                                          .tr,
+                                                                  // suffixIcon: Icons.filter_alt,
+                                                                  iconPressed:
+                                                                      () {},
+                                                                  onSubmit:
+                                                                      (text) {
+                                                                    Get.toNamed(RouteHelper.getSearchRoute(
+                                                                        queryText:
+                                                                            text));
+                                                                    //   actionSearch(
+                                                                    // true,
+                                                                    // cubit
+                                                                    //     .searchController
+                                                                    //     .text
+                                                                    //     .trim(),
+                                                                    // false,
+                                                                    // Get.find<
+                                                                    //     SearchingController>(),
+                                                                    // Get.find<
+                                                                    //     CategoryController>())
+                                                                  },
+                                                                ),
+                                                              ),
+                                                            );
+                                                          },
+                                                        )
+
+                                                        // InkWell(
+                                                        //   onTap: () => Get.toNamed(
+                                                        //       RouteHelper
+                                                        //           .getSearchRoute()),
+                                                        //   child: Container(
+                                                        // padding: const EdgeInsets
+                                                        //         .symmetric(
+                                                        //     horizontal: Dimensions
+                                                        //         .paddingSizeSmall),
+                                                        // decoration: BoxDecoration(
+                                                        //   color: Theme.of(context)
+                                                        //       .cardColor,
+                                                        //   borderRadius: BorderRadius
+                                                        //       .circular(Dimensions
+                                                        //           .radiusExtraSmall),
+                                                        //   boxShadow: [
+                                                        //     BoxShadow(
+                                                        //         color: Colors.grey[
+                                                        //                 Get.isDarkMode
+                                                        //                     ? 800
+                                                        //                     : 200]!
+                                                        //             .withOpacity(0.4),
+                                                        //         spreadRadius: 1,
+                                                        //         offset: Offset(1, 1),
+                                                        //         blurRadius: 5)
+                                                        //   ],
+                                                        // ),
+                                                        //     child: Row(
+                                                        //         mainAxisAlignment:
+                                                        //             MainAxisAlignment.end,
+                                                        //         children: const [
+                                                        // Icon(
+                                                        //   Icons.search,
+                                                        //   size: 23,
+                                                        //   color: Colors.grey,
+                                                        // ),
+                                                        //         ]),
+                                                        //   ),
+                                                        // ),
+
+                                                        ))),
                                           )
                                         : const SliverToBoxAdapter(),
 

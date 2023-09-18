@@ -80,6 +80,7 @@ import 'package:get/get.dart';
 import 'package:warda/view/screens/wallet/wallet_screen.dart';
 
 import '../view/screens/auth/auth_onBoarding_screen.dart';
+import '../view/screens/cart/cart_checkout_screen.dart';
 import '../view/screens/f_q/f_q_screen.dart';
 import '../view/screens/favourite/favourite_screen.dart';
 import '../view/screens/location/cubit/location_cubit.dart';
@@ -125,6 +126,7 @@ class RouteHelper {
   static const String rateReview = '/rate-and-review';
   static const String update = '/update';
   static const String cart = '/cart';
+  static const String checkoutScreen = '/checkout_screen';
   static const String addAddress = '/add-address';
   static const String editAddress = '/edit-address';
   static const String storeReview = '/store-review';
@@ -249,6 +251,7 @@ class RouteHelper {
   static String getUpdateRoute(bool isUpdate) =>
       '$update?update=${isUpdate.toString()}';
   static String getCartRoute() => cart;
+  static String getCheckoutScreenRoute() => checkoutScreen;
   static String getAddAddressRoute(
           bool fromCheckout, bool fromRide, int? zoneId) =>
       '$addAddress?page=${fromCheckout ? 'checkout' : 'address'}&ride=$fromRide&zone_id=$zoneId';
@@ -361,7 +364,6 @@ class RouteHelper {
         page: () {
           bool isSelected =
               CasheHelper().read(AppConstants.zoneId).runtimeType == String;
-          print('hellllllllllll: ${isSelected}');
           return getRoute(
               DashboardScreen(
                   pageIndex: 0,
@@ -450,15 +452,15 @@ class RouteHelper {
         page: () => getRoute(DashboardScreen(
               pageIndex: Get.parameters['page'] == 'home'
                   ? 0
-                  : Get.parameters['page'] == 'favourite'
+                  // : Get.parameters['page'] == 'favourite'
+                  //     ? 1
+                  : Get.parameters['page'] == 'cart'
                       ? 1
-                      : Get.parameters['page'] == 'cart'
-                          ? 2
-                          : Get.parameters['page'] == 'order'
-                              ? 3
-                              : Get.parameters['page'] == 'menu'
-                                  ? 4
-                                  : 0,
+                      : Get.parameters['page'] == 'order'
+                          ? 3
+                          : Get.parameters['page'] == 'menu'
+                              ? 4
+                              : 0,
             ))),
     GetPage(
         name: forgotPassword,
@@ -605,6 +607,8 @@ class RouteHelper {
         name: update,
         page: () => UpdateScreen(isUpdate: Get.parameters['update'] == 'true')),
     GetPage(name: cart, page: () => getRoute(CartScreen(fromNav: false))),
+    GetPage(
+        name: checkoutScreen, page: () => getRoute(const CartCheckoutScreen())),
     GetPage(
         name: addAddress,
         page: () => getRoute(AddAddressScreen(

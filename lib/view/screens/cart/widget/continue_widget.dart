@@ -10,7 +10,9 @@ import '../../../base/custom_snackbar.dart';
 import '../cubit/cart_cubit.dart';
 
 class ContinueCartBtn extends StatelessWidget {
-  const ContinueCartBtn({Key? key}) : super(key: key);
+  ContinueCartBtn({Key? key, this.comeFromListItemCart = false})
+      : super(key: key);
+  bool comeFromListItemCart;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,7 @@ class ContinueCartBtn extends StatelessWidget {
             SizedBox(
               height: context.height * 0.02,
             ),
-            cubit.activeStep == 4
+            (!comeFromListItemCart && cubit.activeStep == 4)
                 ? const SizedBox()
                 : CustomButton(
                     buttonText: 'continue'.tr,
@@ -30,26 +32,31 @@ class ContinueCartBtn extends StatelessWidget {
                     height: context.height * 0.07,
                     radius: 30,
                     onPressed: () {
-                        Get.toNamed(RouteHelper.getCartRoute());
-                        
-                      String? message = cubit
-                              .validator(cubit.activeStep)
-                              ?.entries
-                              .first
-                              .value ??
-                          '';
-                      if (message.isNotEmpty) {
-                        cubit.changeActiveStep(cubit
+                      if (comeFromListItemCart) {
+                        Get.toNamed(RouteHelper.getCheckoutScreenRoute());
+                        cubit.changeActiveStep(1);
+                      } else {
+                        String? message = cubit
                                 .validator(cubit.activeStep)
                                 ?.entries
                                 .first
-                                .key ??
-                            0);
-                        showCustomSnackBar(message, isError: true);
-                      } else {
-                        cubit.changeActiveStep(cubit.activeStep == 4
-                            ? cubit.activeStep
-                            : cubit.activeStep + 1);
+                                .value ??
+                            '';
+                        if (message.isNotEmpty) {
+                          cubit.changeActiveStep(cubit
+                                  .validator(cubit.activeStep)
+                                  ?.entries
+                                  .first
+                                  .key ??
+                              0);
+                          showCustomSnackBar(message, isError: true);
+                        } else {
+                          cubit.changeActiveStep(cubit.activeStep == 4
+                              ? cubit.activeStep
+                              : cubit.activeStep == 1
+                                  ? cubit.activeStep + 2
+                                  : cubit.activeStep + 1);
+                        }
                       }
                     },
                   ),

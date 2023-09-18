@@ -131,7 +131,7 @@ class _CartItemsListWidgetState extends State<CartItemsListWidget> {
                           ),
                         ],
                       ),
-                const ContinueCartBtn(),
+                ContinueCartBtn(comeFromListItemCart: true),
                 // : CheckoutButton(
                 //     cartController: cartController,
                 //     availableList: cartController.availableList),

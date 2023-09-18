@@ -154,7 +154,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
             child: Container(
               child: ResponsiveHelper.isDesktop(context)
                   ? const CustomAppBar(title: '')
-                  : CustomAppBar(title: '', showLogo: true, actions: [
+                  : CustomAppBar(title: '', showLogo: false, actions: [
                       GetBuilder<WishListController>(builder: (wishController) {
                         return InkWell(
                           onTap: () {
@@ -187,11 +187,11 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                       const SizedBox(
                         width: 15,
                       ),
-                      InkWell(
-                        onTap: () => Get.toNamed(RouteHelper.getCartRoute()),
-                        child: const CartWidget(
-                            color: AppConstants.primaryColor, size: 25),
-                      ),
+                      // InkWell(
+                      //   onTap: () => Get.toNamed(RouteHelper.getCartRoute()),
+                      //   child: const CartWidget(
+                      //       color: AppConstants.primaryColor, size: 25),
+                      // ),
                       const SizedBox(
                         width: 8,
                       ),
@@ -723,10 +723,10 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                                                       cartModel!,
                                                                       itemController
                                                                           .cartIndex);
+                                                                  showCartSnackBar();
                                                                 }
-                                                                _key.currentState!
-                                                                    .shake();
-                                                                showCartSnackBar();
+                                                                // _key.currentState!
+                                                                //     .shake();
                                                                 // }
                                                               }
                                                             }

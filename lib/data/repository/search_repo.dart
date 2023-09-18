@@ -10,31 +10,39 @@ class SearchRepo {
 
   Future<Response> getSearchData(
     String? query, {
-    int? occationId,
-    int? sizeId,
-    int? categoryId,
+    List<int>? occationIds,
+    List<int>? sizeIds,
+    List<int>? categoryIds,
+    List<int>? flowerTypeIds,
+    List<int>? flowerColorIds,
   }) async {
     String searchQuery = '?';
-    if (query.runtimeType != Null) {
-      searchQuery = '${searchQuery}name=$query';
+    if (query.runtimeType != Null && query!.isNotEmpty) {
+      searchQuery = '${searchQuery}name=$query&';
     }
-    if (occationId.runtimeType != Null) {
-      searchQuery = '$searchQuery&occasion_id=$occationId';
+    if (occationIds!.isNotEmpty) {
+      searchQuery = '${searchQuery}occasions=$occationIds&';
     }
-    if (sizeId.runtimeType != Null) {
-      searchQuery = '$searchQuery&size_id=$sizeId';
+    if (sizeIds!.isNotEmpty) {
+      searchQuery = '${searchQuery}sizes=$sizeIds&';
     }
-    if (categoryId.runtimeType != Null) {
-      searchQuery = '$searchQuery&category_id=$categoryId';
+    if (categoryIds!.isNotEmpty) {
+      searchQuery = '${searchQuery}categories=$categoryIds&';
     }
-    if (searchQuery.length >= 2) {
-    } else {
-      searchQuery = '';
+    if (flowerColorIds!.isNotEmpty) {
+      searchQuery = '${searchQuery}colors=$flowerColorIds&';
     }
+    if (flowerTypeIds!.isNotEmpty) {
+      searchQuery = '${searchQuery}types=$flowerTypeIds&';
+    }
+    // if (searchQuery.length >= 2) {
+    // } else {
+    //   searchQuery = '';
+    // }
 
     print('search_query ${searchQuery}');
     return await apiClient.getData(
-        '${AppConstants.searchUri}items/search$searchQuery&offset=1&limit=50');
+        '${AppConstants.searchUri}items/search${searchQuery}offset=1&limit=50');
   }
 
   Future<Response> getSuggestedItems() async {
@@ -54,16 +62,16 @@ class SearchRepo {
   }
 
   Future<Response> getFlowerTypesFilter() async {
-    return await apiClient.getData(AppConstants.getOccasionsUri);
+    return await apiClient.getData(AppConstants.getFlowerTypesUri);
   }
 
   Future<Response> getFlowerColorsFilter() async {
-    return await apiClient.getData(AppConstants.getOccasionsUri);
+    return await apiClient.getData(AppConstants.getFlowerColorsUri);
   }
 
-  Future<bool> saveSearchHistory(List<String?> searchHistories) async {
+  Future<bool> saveSearchHistory(List<String> searchHistories) async {
     return await sharedPreferences.setStringList(
-        AppConstants.searchHistory, searchHistories as List<String>);
+        AppConstants.searchHistory, searchHistories);
   }
 
   List<String> getSearchAddress() {

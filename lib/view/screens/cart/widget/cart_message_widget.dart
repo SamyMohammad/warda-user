@@ -75,7 +75,7 @@ class _CartMessageWidgetState extends State<CartMessageWidget> {
                 SizedBox(
                   height: context.height * 0.01,
                 ),
-                const ContinueCartBtn(),
+                ContinueCartBtn(),
               ],
             ),
           );
@@ -125,34 +125,35 @@ class _CartMessageWidgetState extends State<CartMessageWidget> {
                                   textAlign: TextAlign.start,
                                   style: robotoRegular.copyWith(fontSize: 13)),
                             ),
-                            cubit.showGeneratedQrCode
-                                ? Container(
-                                    width: context.width,
-                                    alignment: Alignment.center,
-                                    child: QrImage(
-                                      data: cubit.linkSongController.text,
-                                      version: QrVersions.auto,
-                                      size: context.height * 0.24,
-                                      eyeStyle: const QrEyeStyle(
-                                          //eyeShape: QrEyeShape.square,
-                                          color: Colors.black),
-                                      dataModuleStyle: const QrDataModuleStyle(
-                                          color: Colors.black),
-                                      // Colors.black),
-                                      gapless: false,
-                                      embeddedImage:
-                                          const AssetImage(Images.logoCircle),
-                                      embeddedImageStyle: QrEmbeddedImageStyle(
-                                        size: Size((context.height * 0.22) / 4,
-                                            (context.height * 0.22) / 4),
-                                      ),
-                                    ),
-                                  )
-                                : CustomTextField(
-                                    controller: cubit.linkSongController,
-                                    titleText: 'paste_link_for_song_video'.tr,
-                                    showBorder: false,
-                                  ),
+                            // cubit.showGeneratedQrCode
+                            //     ? Container(
+                            //         width: context.width,
+                            //         alignment: Alignment.center,
+                            //         child: QrImage(
+                            //           data: cubit.linkSongController.text,
+                            //           version: QrVersions.auto,
+                            //           size: context.height * 0.24,
+                            //           eyeStyle: const QrEyeStyle(
+                            //               //eyeShape: QrEyeShape.square,
+                            //               color: Colors.black),
+                            //           dataModuleStyle: const QrDataModuleStyle(
+                            //               color: Colors.black),
+                            //           // Colors.black),
+                            //           gapless: false,
+                            //           embeddedImage:
+                            //               const AssetImage(Images.logoCircle),
+                            //           embeddedImageStyle: QrEmbeddedImageStyle(
+                            //             size: Size((context.height * 0.22) / 4,
+                            //                 (context.height * 0.22) / 4),
+                            //           ),
+                            //         ),
+                            //       )
+                            //     :
+                            CustomTextField(
+                              controller: cubit.linkSongController,
+                              titleText: 'paste_link_for_song_video'.tr,
+                              showBorder: false,
+                            ),
                           ]
                         : [
                             Row(
@@ -195,19 +196,19 @@ class _CartMessageWidgetState extends State<CartMessageWidget> {
         SizedBox(
           height: context.height * 0.04,
         ),
-        CustomButton(
-          onPressed: () {
-            !cubit.showGeneratedQrCode
-                ? cubit.generateQrCode()
-                : cubit.changeAudioLink();
-          },
-          buttonText: cubit.showGeneratedQrCode
-              ? 'change_media_link'.tr
-              : 'generate_qrCode'.tr,
-          radius: 30,
-          color: Theme.of(context).cardColor,
-          textColor: Theme.of(context).primaryColor,
-        ),
+        // CustomButton(
+        //   onPressed: () {
+        //     !cubit.showGeneratedQrCode
+        //         ? cubit.generateQrCode()
+        //         : cubit.changeAudioLink();
+        //   },
+        //   buttonText: cubit.showGeneratedQrCode
+        //       ? 'change_media_link'.tr
+        //       : 'generate_qrCode'.tr,
+        //   radius: 30,
+        //   color: Theme.of(context).cardColor,
+        //   textColor: Theme.of(context).primaryColor,
+        // ),
         SizedBox(
           height: context.height * 0.02,
         ),

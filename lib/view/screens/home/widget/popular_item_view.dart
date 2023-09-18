@@ -216,7 +216,7 @@ class PopularItemView extends StatelessWidget {
                                                                         Dimensions
                                                                             .fontSizeSmall,
                                                                     color: AppConstants
-                                                                        .priceColor),
+                                                                        .primaryColor),
                                                               ),
                                                               SizedBox(
                                                                   width: itemList[index]

@@ -1,39 +1,41 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:warda/controller/cart_controller.dart';
-import 'package:warda/controller/coupon_controller.dart';
-import 'package:warda/controller/splash_controller.dart';
-import 'package:warda/controller/store_controller.dart';
-import 'package:warda/data/model/response/item_model.dart';
-import 'package:warda/data/model/response/store_model.dart';
-import 'package:warda/helper/price_converter.dart';
-import 'package:warda/helper/responsive_helper.dart';
-import 'package:warda/helper/route_helper.dart';
-import 'package:warda/util/dimensions.dart';
-import 'package:warda/util/images.dart';
-import 'package:warda/util/styles.dart';
-import 'package:warda/view/base/custom_app_bar.dart';
-import 'package:warda/view/base/custom_button.dart';
-import 'package:warda/view/base/custom_snackbar.dart';
-import 'package:warda/view/base/menu_drawer.dart';
-import 'package:warda/view/base/no_data_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:warda/view/screens/cart/widget/not_available_bottom_sheet.dart';
 
+import '../../../controller/cart_controller.dart';
+import '../../../controller/coupon_controller.dart';
 import '../../../controller/order_controller.dart';
+import '../../../controller/splash_controller.dart';
+import '../../../controller/store_controller.dart';
+import '../../../data/model/response/item_model.dart';
+import '../../../data/model/response/store_model.dart';
+import '../../../helper/price_converter.dart';
+import '../../../helper/responsive_helper.dart';
+import '../../../helper/route_helper.dart';
 import '../../../util/app_constants.dart';
+import '../../../util/dimensions.dart';
+import '../../../util/images.dart';
+import '../../../util/styles.dart';
+import '../../base/custom_app_bar.dart';
+import '../../base/custom_button.dart';
+import '../../base/custom_snackbar.dart';
+import '../../base/menu_drawer.dart';
+import '../../base/no_data_screen.dart';
 import 'cubit/cart_cubit.dart';
-import 'widget/not_available_bottom_sheet.dart';
 
-class CartScreen extends StatefulWidget {
-  bool fromNav;
-  CartScreen({Key? key, required this.fromNav}) : super(key: key);
+class CartCheckoutScreen extends StatefulWidget {
+  const CartCheckoutScreen({Key? key}) : super(key: key);
 
   @override
-  State<CartScreen> createState() => _CartScreenState();
+  State<CartCheckoutScreen> createState() => _CartCheckoutScreenState();
 }
 
-class _CartScreenState extends State<CartScreen> {
+class _CartCheckoutScreenState extends State<CartCheckoutScreen> {
   @override
   void initState() {
     super.initState();
@@ -58,9 +60,7 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-          title: 'my_cart'.tr,
-          backButton: (ResponsiveHelper.isDesktop(context) || !widget.fromNav)),
+      appBar: CustomAppBar(title: 'my_cart'.tr, backButton: true),
       endDrawer: const MenuDrawer(),
       endDrawerEnableOpenDragGesture: false,
       body: GetBuilder<CartController>(
@@ -70,17 +70,20 @@ class _CartScreenState extends State<CartScreen> {
                   builder: (context, state) {
                     var cubit = BlocProvider.of<CartCubit>(context);
                     return Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SizedBox(
                           height: context.height * 0.02,
                         ),
-                        Container(
-                            alignment: Alignment.center,
-                            child: SingleChildScrollView(
-                                child: SizedBox(
-                                    child: cartBody(0, cubit)))),
+                        SizedBox(
+                          child: cartHeader(cartController, cubit),
+                        ),
+                        Expanded(
+                          child: SizedBox(
+                              child: SingleChildScrollView(
+                                  child: SizedBox(
+                                      child:
+                                          cartBody(cubit.activeStep, cubit)))),
+                        ),
                       ],
                     );
                   },
@@ -97,19 +100,19 @@ class _CartScreenState extends State<CartScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          stepperWidget(
-              context,
-              cubit,
-              Image.asset(
-                Images.cartHeader,
-                color: Colors.white,
-                width: 25,
-                height: 25,
-              ),
-              'cart'.tr,
-              0),
+          // stepperWidget(
+          //     context,
+          //     cubit,
+          //     Image.asset(
+          //       Images.cartHeader,
+          //       color: Colors.white,
+          //       width: 25,
+          //       height: 25,
+          //     ),
+          //     'cart'.tr,
+          //     0),
 
-          dividerWidget(cubit, 1),
+          // dividerWidget(cubit, 1),
           stepperWidget(
               context,
               cubit,
@@ -117,14 +120,14 @@ class _CartScreenState extends State<CartScreen> {
               'recipient_details'.tr,
               1),
 
-          dividerWidget(cubit, 2),
-          stepperWidget(
-              context,
-              cubit,
-              const Icon(Icons.av_timer_outlined,
-                  color: Colors.white, size: 25),
-              'time'.tr,
-              2),
+          // dividerWidget(cubit, 2),
+          // stepperWidget(
+          //     context,
+          //     cubit,
+          //     const Icon(Icons.av_timer_outlined,
+          //         color: Colors.white, size: 25),
+          //     'time'.tr,
+          //     2),
 
           dividerWidget(cubit, 3),
           stepperWidget(

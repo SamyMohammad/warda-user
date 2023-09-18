@@ -11,7 +11,7 @@ String sizessModelToJson(SizessModel data) => json.encode(data.toJson());
 
 class SizessModel {
   final String status;
-  final List<Size> size;
+  final List<SizeItem> size;
 
   SizessModel({
     required this.status,
@@ -20,7 +20,8 @@ class SizessModel {
 
   factory SizessModel.fromJson(Map<String, dynamic> json) => SizessModel(
         status: json["status"],
-        size: List<Size>.from(json["data"].map((x) => Size.fromJson(x))),
+        size:
+            List<SizeItem>.from(json["data"].map((x) => SizeItem.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -29,20 +30,20 @@ class SizessModel {
       };
 }
 
-class Size {
+class SizeItem {
   final int id;
   final String name;
   final String createdAt;
   final String updatedAt;
 
-  Size({
+  SizeItem({
     required this.id,
     required this.name,
     required this.createdAt,
     required this.updatedAt,
   });
 
-  factory Size.fromJson(Map<String, dynamic> json) => Size(
+  factory SizeItem.fromJson(Map<String, dynamic> json) => SizeItem(
         id: json["id"],
         name: json["name"],
         createdAt: json["created_at"],

@@ -224,12 +224,9 @@ class DashboardScreenState extends State<DashboardScreen> {
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              BottomNavItem(
-                                  selectedImg: Images.homeColor,
-                                  unselectedImg: Images.homeBlack,
-                                  title: 'home',
-                                  isSelected: _pageIndex == 0,
-                                  onTap: () => setPage(0)),
+                              SizedBox(
+                                width: context.width * 0.15,
+                              ),
                               BottomNavItem(
                                   selectedImg: Images.cartColor,
                                   unselectedImg: Images.cartBlack,
@@ -240,24 +237,34 @@ class DashboardScreenState extends State<DashboardScreen> {
                               BottomNavItem(
                                   selectedImg: Images.categoriesColor,
                                   unselectedImg: Images.categoriesBlack,
-                                  title: 'categories',
-                                  isSelected: _pageIndex == 2,
-                                  isCategoryItem: true,
-                                  onTap: () => setPage(2)),
+                                  title: 'home',
+                                  isSelected: _pageIndex == 0,
+                                  onTap: () => setPage(0)),
 
-                              const Expanded(child: SizedBox()),
-                              BottomNavItem(
-                                  selectedImg: Images.couponColor,
-                                  unselectedImg: Images.couponBlack,
-                                  title: 'Coupon',
-                                  isSelected: _pageIndex == 3,
-                                  onTap: () => setPage(3)),
+                              // BottomNavItem(
+                              //     selectedImg: Images.categoriesColor,
+                              //     unselectedImg: Images.categoriesBlack,
+                              //     title: 'categories',
+                              //     isSelected: _pageIndex == 2,
+                              //     isCategoryItem: true,
+                              //     onTap: () => setPage(2)),
+
+                              // BottomNavItem(
+                              //     selectedImg: Images.couponColor,
+                              //     unselectedImg: Images.couponBlack,
+                              //     title: 'Coupon',
+                              //     isSelected: _pageIndex == 3,
+                              //     onTap: () => setPage(3)),
                               BottomNavItem(
                                   selectedImg: Images.profileColor,
                                   unselectedImg: Images.profileBlack,
                                   title: 'profile',
                                   isSelected: _pageIndex == 4,
                                   onTap: () => setPage(4)),
+
+                              SizedBox(
+                                width: context.width * 0.15,
+                              ),
                               // BottomNavItem(iconData: Icons.menu, isSelected: _pageIndex == 4, onTap: () => _openEndDrawer()),
                               // BottomNavItem(iconData: Icons.menu, isSelected: _pageIndex == 4, onTap: () {
                               //   Get.bottomSheet(const MenuScreen(), backgroundColor: Colors.transparent, isScrollControlled: true);

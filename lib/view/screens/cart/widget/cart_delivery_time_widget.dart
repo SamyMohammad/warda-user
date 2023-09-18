@@ -19,13 +19,10 @@ class CartDeliveryTimeWidget extends StatefulWidget {
   State<CartDeliveryTimeWidget> createState() => _CartDeliveryTimeWidgetState();
 }
 
-class _CartDeliveryTimeWidgetState extends State<CartDeliveryTimeWidget>
-    with TickerProviderStateMixin {
+class _CartDeliveryTimeWidgetState extends State<CartDeliveryTimeWidget> {
   @override
   void initState() {
     // TODO: implement initState
-    BlocProvider.of<CartCubit>(context).tabController =
-        TabController(length: 3, vsync: this);
     super.initState();
   }
 
@@ -180,7 +177,7 @@ class _CartDeliveryTimeWidgetState extends State<CartDeliveryTimeWidget>
         SizedBox(
           height: context.height * 0.01,
         ),
-        const ContinueCartBtn(),
+        ContinueCartBtn(),
       ],
     );
   }
@@ -280,7 +277,7 @@ class _CartDeliveryTimeWidgetState extends State<CartDeliveryTimeWidget>
           SizedBox(
             height: context.height * 0.01,
           ),
-          const ContinueCartBtn(),
+          ContinueCartBtn(),
         ],
       ),
     );

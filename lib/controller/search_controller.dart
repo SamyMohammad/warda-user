@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:warda/data/api/api_checker.dart';
 import 'package:warda/data/model/response/item_model.dart';
 import 'package:warda/data/model/response/store_model.dart';
@@ -22,7 +23,7 @@ class SearchingController extends GetxController implements GetxService {
   List<Occasion>? _occasionList;
   List<FlowerColor>? _flowerColorList;
   List<FlowerType>? _flowerTypeList;
-  List<Size>? _sizeList;
+  List<SizeItem>? _sizeList;
   List<Store>? _searchStoreList;
   List<Store>? _allStoreList;
   String? _searchText = '';
@@ -30,7 +31,7 @@ class SearchingController extends GetxController implements GetxService {
   String? _itemResultText = '';
   double _lowerValue = 0;
   double _upperValue = 0;
-  List<String?> _historyList = [];
+  List<String> _historyList = [];
   bool _isSearchMode = true;
   final List<String> _sortList = ['ascending'.tr, 'descending'.tr];
   int _sortIndex = -1;
@@ -47,7 +48,7 @@ class SearchingController extends GetxController implements GetxService {
   List<FaqItem>? get faqList => _faqList;
 
   List<Occasion>? get occasionList => _occasionList;
-  List<Size>? get sizeList => _sizeList;
+  List<SizeItem>? get sizeList => _sizeList;
   List<FlowerType>? get flowerTypeList => _flowerTypeList;
   List<FlowerColor>? get flowerColorList => _flowerColorList;
   List<Store>? get searchStoreList => _searchStoreList;
@@ -220,7 +221,7 @@ class SearchingController extends GetxController implements GetxService {
     if (response.statusCode == 200) {
       _sizeList = [];
       response.body['data'].forEach(
-          (suggestedItem) => _sizeList!.add(Size.fromJson(suggestedItem)));
+          (suggestedItem) => _sizeList!.add(SizeItem.fromJson(suggestedItem)));
     } else {
       ApiChecker.checkApi(response);
     }
@@ -255,8 +256,10 @@ class SearchingController extends GetxController implements GetxService {
     Response response = await searchRepo.getFlowerColorsFilter();
     if (response.statusCode == 200) {
       _flowerColorList = [];
-      response.body['data'].forEach((suggestedItem) =>
-          _flowerColorList!.add(FlowerColor.fromJson(suggestedItem)));
+
+      response.body['data'].forEach((suggestedItem) {
+        _flowerColorList!.add(FlowerColor.fromJson(suggestedItem));
+      });
     } else {
       ApiChecker.checkApi(response);
     }
@@ -266,11 +269,11 @@ class SearchingController extends GetxController implements GetxService {
   void searchData(
     String? query,
     bool fromHome, {
-    int? occationId,
-    int? sizeId,
-    int? categoryId,
-    int? flowerTypeIds,
-    int? flowerColorIds,
+    List<int>? occationIds,
+    List<int>? sizeIds,
+    List<int>? categoryIds,
+    List<int>? flowerTypeIds,
+    List<int>? flowerColorIds,
   }) async {
     _searchHomeText = query;
     _searchText = query;
@@ -283,17 +286,22 @@ class SearchingController extends GetxController implements GetxService {
 
     if (query.runtimeType != Null) {
       if (!_historyList.contains(query)) {
-        _historyList.insert(0, query);
+        _historyList.insert(0, query ?? '');
       }
       searchRepo.saveSearchHistory(_historyList);
     }
     _isSearchMode = false;
     if (!fromHome) {
-      update();
+      WidgetsBinding.instance.addPostFrameCallback((_) => update());
     }
 
     Response response = await searchRepo.getSearchData(query,
-        categoryId: categoryId, sizeId: sizeId, occationId: occationId);
+        categoryIds: categoryIds,
+        sizeIds: sizeIds,
+        occationIds: occationIds,
+        flowerColorIds: flowerColorIds,
+        flowerTypeIds: flowerTypeIds);
+        print('helllllllllOOO ${response.statusCode}');
     if (response.statusCode == 200) {
       if (query.runtimeType == Null) {
         _searchItemList = [];

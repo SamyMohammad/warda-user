@@ -20,7 +20,7 @@ import '../../../../util/images.dart';
 import '../../../../util/styles.dart';
 import '../../../base/custom_button.dart';
 
-import '../../../../data/model/response/sizes_model.dart' as sizeModel;
+import '../../../../data/model/response/sizes_model.dart';
 part 'filter_state.dart';
 
 class FilterCubit extends Cubit<FilterState> {
@@ -33,7 +33,7 @@ class FilterCubit extends Cubit<FilterState> {
   final TextEditingController searchController = TextEditingController();
 
   List<Occasion> occasionListSelected = [];
-  List<Size> sizeListSelected = [];
+  List<SizeItem> sizeListSelected = [];
   List<FlowerType> flowerTypeListSelected = [];
   List<FlowerColor> flowerColorListSelected = [];
   List<CategoryModel> categoryListSelected = [];
@@ -41,7 +41,6 @@ class FilterCubit extends Cubit<FilterState> {
   showBottomSheet(
       {required BuildContext context,
       required String title,
-      required Function()? onTapClear,
       required Function()? onTapConfirm,
       required dynamic itemList,
       bool multiSelection = true}) {
@@ -55,6 +54,11 @@ class FilterCubit extends Cubit<FilterState> {
       ),
       builder: (context) => StatefulBuilder(
         builder: (BuildContext context, setState) {
+          bool isCategory = title.toLowerCase() == 'category';
+          bool isFlowerType = title.toLowerCase() == 'flower';
+          bool isFlowerColor = title.toLowerCase() == 'color';
+          bool isOccasion = title.toLowerCase() == 'occasion';
+          bool isSize = title.toLowerCase() == 'size';
           return Container(
             height: context.height * 0.5,
             decoration: const BoxDecoration(),
@@ -75,6 +79,8 @@ class FilterCubit extends Cubit<FilterState> {
                       IconButton(
                           onPressed: () {
                             Navigator.pop(context);
+                            emit(FilterLoading());
+                            emit(FilterInitial());
                           },
                           icon: const Icon(Icons.close))
                     ],
@@ -86,115 +92,73 @@ class FilterCubit extends Cubit<FilterState> {
                     child: ListView.separated(
                         itemBuilder: (context, index) {
                           String itemName = '';
+                          bool itemSelected = false;
                           var element = itemList[index];
-                          bool isCategory = title.toLowerCase() == 'category';
-                          bool isFlowerType = title.toLowerCase() == 'flower';
-                          bool isFlowerColor = title.toLowerCase() == 'color';
-                          bool isOccasion = title.toLowerCase() == 'occasion';
-                          bool isSize = title.toLowerCase() == 'size';
-                          if (title.toLowerCase() == 'category') {
+                          // bool isCategory = title.toLowerCase() == 'category';
+                          // bool isFlowerType = title.toLowerCase() == 'flower';
+                          // bool isFlowerColor = title.toLowerCase() == 'color';
+                          // bool isOccasion = title.toLowerCase() == 'occasion';
+                          // bool isSize = title.toLowerCase() == 'size';
+
+                          if (isCategory) {
                             itemList = itemList as List<CategoryModel>?;
                             itemName = itemList[index].name ?? '';
+                            itemSelected =
+                                categoryListSelected.contains(element);
+                          } else if (isOccasion) {
+                            itemName = itemList[index].name ?? '';
+                            itemSelected =
+                                occasionListSelected.contains(element);
+                          } else if (isFlowerColor) {
+                            itemName = itemList[index].color ?? '';
+                            itemSelected =
+                                flowerColorListSelected.contains(element);
+                          } else if (isFlowerType) {
+                            itemName = itemList[index].type ?? '';
+                            itemSelected =
+                                flowerTypeListSelected.contains(element);
+                          } else if (isSize) {
+                            itemName = itemList[index].name ?? '';
+                            itemSelected = sizeListSelected.contains(element);
                           }
 
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                if (isCategory) {
-                                  if (categoryListSelected.contains(element)) {
-                                    categoryListSelected.remove(element);
-                                  } else {
-                                    categoryListSelected.add(element);
-                                  }
-                                } else if (isOccasion) {
-                                  if (occasionListSelected.contains(element)) {
-                                    occasionListSelected.remove(element);
-                                  } else {
-                                    occasionListSelected.add(element);
-                                  }
-                                } else if (isFlowerColor) {
-                                  if (flowerColorListSelected
-                                      .contains(element)) {
-                                    flowerColorListSelected.remove(element);
-                                  } else {
-                                    flowerColorListSelected.add(element);
-                                  }
-                                } else if (isSize) {
-                                  if (sizeListSelected.contains(element)) {
-                                    sizeListSelected.remove(element);
-                                  } else {
-                                    sizeListSelected.add(element);
-                                  }
-                                } else if (isFlowerType) {
-                                  if (flowerTypeListSelected
-                                      .contains(element)) {
-                                    flowerTypeListSelected.remove(element);
-                                  } else {
-                                    flowerTypeListSelected.add(element);
-                                  }
-                                }
-                              });
-                            },
-                            child: Container(
-                                alignment: Alignment.centerLeft,
-                                // ignore: prefer_const_constructors
-                                padding: EdgeInsets.symmetric(
-                                    vertical: Dimensions.paddingSizeSmall),
-                                child: isCategory
-                                    ? Text(
+                          return Container(
+                              alignment: Alignment.centerLeft,
+                              // ignore: prefer_const_constructors
+                              padding: EdgeInsets.symmetric(
+                                  vertical: Dimensions.paddingSizeSmall),
+                              child: isCategory
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          filterItemClicked(title, element);
+                                        });
+                                      },
+                                      child: SizedBox(
+                                        width: context.width,
+                                        child: Text(
+                                          itemName,
+                                          style: itemSelected
+                                              ? robotoRegular.copyWith(
+                                                  fontWeight: FontWeight.bold)
+                                              : robotoRegular,
+                                        ),
+                                      ),
+                                    )
+                                  : CheckboxListTile(
+                                      value: itemSelected,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          filterItemClicked(title, element);
+                                        });
+                                      },
+                                      title: Text(
                                         itemName,
-                                        style: categoryListSelected
-                                                .contains(element)
+                                        style: itemSelected
                                             ? robotoRegular.copyWith(
                                                 fontWeight: FontWeight.bold)
                                             : robotoRegular,
-                                      )
-                                    : isSize
-                                        ? Text(
-                                            itemName,
-                                            style: sizeListSelected
-                                                    .contains(element)
-                                                ? robotoRegular.copyWith(
-                                                    fontWeight: FontWeight.bold)
-                                                : robotoRegular,
-                                          )
-                                        : isFlowerType
-                                            ? Text(
-                                                itemName,
-                                                style: flowerTypeListSelected
-                                                        .contains(element)
-                                                    ? robotoRegular.copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold)
-                                                    : robotoRegular,
-                                              )
-                                            : isFlowerColor
-                                                ? Text(
-                                                    itemName,
-                                                    style: flowerColorListSelected
-                                                            .contains(element)
-                                                        ? robotoRegular
-                                                            .copyWith(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)
-                                                        : robotoRegular,
-                                                  )
-                                                : isOccasion
-                                                    ? Text(
-                                                        itemName,
-                                                        style: occasionListSelected
-                                                                .contains(
-                                                                    element)
-                                                            ? robotoRegular
-                                                                .copyWith(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold)
-                                                            : robotoRegular,
-                                                      )
-                                                    : SizedBox()),
-                          );
+                                      )));
                         },
                         separatorBuilder: (context, index) {
                           return Divider();
@@ -205,7 +169,23 @@ class FilterCubit extends Cubit<FilterState> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
-                        onTap: onTapClear,
+                        onTap: () {
+                          emit(FilterLoading());
+                          setState(() {
+                            if (isCategory) {
+                              categoryListSelected.clear();
+                            } else if (isOccasion) {
+                              occasionListSelected.clear();
+                            } else if (isFlowerColor) {
+                              flowerColorListSelected.clear();
+                            } else if (isFlowerType) {
+                              flowerTypeListSelected.clear();
+                            } else if (isSize) {
+                              sizeListSelected.clear();
+                            }
+                          });
+                          emit(FilterInitial());
+                        },
                         child: Container(
                           width: context.width * 0.45,
                           height: context.height * 0.07,
@@ -225,7 +205,10 @@ class FilterCubit extends Cubit<FilterState> {
                         ),
                       ),
                       GestureDetector(
-                        onTap: onTapConfirm,
+                        onTap: () {
+                          Navigator.pop(context);
+                          search();
+                        },
                         child: Container(
                           width: context.width * 0.45,
                           height: context.height * 0.07,
@@ -254,6 +237,48 @@ class FilterCubit extends Cubit<FilterState> {
     );
   }
 
+  filterItemClicked(String title, dynamic element) {
+    bool isCategory = title.toLowerCase() == 'category';
+    bool isFlowerType = title.toLowerCase() == 'flower';
+    bool isFlowerColor = title.toLowerCase() == 'color';
+    bool isOccasion = title.toLowerCase() == 'occasion';
+    bool isSize = title.toLowerCase() == 'size';
+    if (isCategory) {
+      if (categoryListSelected.contains(element)) {
+        categoryListSelected.remove(element);
+      } else {
+        categoryListSelected.add(element);
+      }
+    } else if (isOccasion) {
+      if (occasionListSelected.contains(element)) {
+        occasionListSelected.remove(element);
+      } else {
+        occasionListSelected.add(element);
+      }
+    } else if (isFlowerColor) {
+      if (flowerColorListSelected.contains(element)) {
+        flowerColorListSelected.remove(element);
+      } else {
+        flowerColorListSelected.add(element);
+      }
+    } else if (isSize) {
+      print('hello i just clicked');
+      if (sizeListSelected.contains(element)) {
+        sizeListSelected.remove(element);
+      } else {
+        sizeListSelected.add(element);
+      }
+    } else if (isFlowerType) {
+      if (flowerTypeListSelected.contains(element)) {
+        flowerTypeListSelected.remove(element);
+      } else {
+        flowerTypeListSelected.add(element);
+      }
+    }
+    emit(FilterLoading());
+    emit(FilterInitial());
+  }
+
   changeCategoryId(int newCategoryId) {
     emit(FilterLoading());
     selectedCategoryId = newCategoryId;
@@ -274,10 +299,32 @@ class FilterCubit extends Cubit<FilterState> {
 
   search() {
     String? searchText = searchController.text;
+    List<int> categoryIds = [];
+    List<int> occasionIds = [];
+    List<int> colorIds = [];
+    List<int> typeIds = [];
+    List<int> sizeIds = [];
+    for (var element in categoryListSelected) {
+      categoryIds.add(element.id ?? 0);
+    }
+    for (var element in occasionListSelected) {
+      occasionIds.add(element.id);
+    }
+    for (var element in flowerColorListSelected) {
+      colorIds.add(element.id);
+    }
+    for (var element in flowerTypeListSelected) {
+      typeIds.add(element.id);
+    }
+    for (var element in sizeListSelected) {
+      sizeIds.add(element.id);
+    }
     Get.find<SearchingController>().searchData(searchText, false,
-        categoryId: selectedCategoryId,
-        sizeId: selectedSizeId,
-        occationId: selectedOccasionId);
+        categoryIds: categoryIds,
+        sizeIds: sizeIds,
+        occationIds: occasionIds,
+        flowerColorIds: colorIds,
+        flowerTypeIds: typeIds);
   }
 
   clearFilter() {
@@ -373,7 +420,7 @@ class FilterCubit extends Cubit<FilterState> {
                                 SizedBox(
                                   height: context.height * 0.02,
                                 ),
-                                Container(
+                                SizedBox(
                                   height: context.height * 0.05,
                                   child: ListView.builder(
                                       scrollDirection: Axis.horizontal,
@@ -545,7 +592,7 @@ class FilterCubit extends Cubit<FilterState> {
                                       //searchController.occasionList?.length,
                                       itemBuilder: (context, index) {
                                         // int index = 0;
-                                        sizeModel.Size size =
+                                        SizeItem size =
                                             searchController.sizeList![index];
                                         return Padding(
                                           padding: const EdgeInsets.symmetric(

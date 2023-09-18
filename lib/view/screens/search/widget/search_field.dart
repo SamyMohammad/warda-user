@@ -8,6 +8,7 @@ class SearchField extends StatefulWidget {
   final IconData? suffixIcon;
   final Function iconPressed;
   final Color? filledColor;
+  final Color? suffixIconColor;
   final Function? onSubmit;
   final Function? onChanged;
   const SearchField(
@@ -16,6 +17,7 @@ class SearchField extends StatefulWidget {
       required this.hint,
       this.suffixIcon,
       required this.iconPressed,
+      this.suffixIconColor,
       this.filledColor,
       this.onSubmit,
       this.onChanged})
@@ -42,11 +44,15 @@ class _SearchFieldState extends State<SearchField> {
         filled: true,
         fillColor: widget.filledColor ?? Theme.of(context).cardColor,
         isDense: true,
+        contentPadding: EdgeInsets.only(top: 12),
         suffixIcon: widget.suffixIcon.runtimeType != Null
-            ? IconButton(
-                onPressed: widget.iconPressed as void Function()?,
-                icon: Icon(widget.suffixIcon,
-                    color: Theme.of(context).primaryColor),
+            ? GestureDetector(
+                onTap: widget.iconPressed as void Function()?,
+                child: Icon(widget.suffixIcon,
+                    size: 23,
+                    color: widget.suffixIconColor.runtimeType == Null
+                        ? Theme.of(context).primaryColor
+                        : widget.suffixIconColor),
               )
             : null,
       ),

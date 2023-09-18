@@ -35,7 +35,8 @@ part 'cart_state.dart';
 class CartCubit extends Cubit<CartState> {
   CartCubit() : super(CartInitial());
   final ScrollController scrollController = ScrollController();
-  TabController? tabController;
+
+  late TabController tabController;
   int activeStep = 0;
   //recipient details params
   final fullNameController = TextEditingController();
@@ -227,7 +228,7 @@ class CartCubit extends Cubit<CartState> {
 
     activeStep = newIndex;
     if (tabController.runtimeType != Null) {
-      switch (tabController?.index) {
+      switch (tabController.index) {
         case 0:
           deliveryDate = dateToday;
           deliveryTime = arriveTimeToday;
