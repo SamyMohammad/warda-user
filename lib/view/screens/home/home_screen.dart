@@ -56,11 +56,12 @@ class HomeScreen extends StatefulWidget {
       //Get.find<LocationController>().syncZoneData();
       Get.find<CategoryController>().getCategoryList(reload);
       //Get.find<StoreController>().getPopularStoreList(reload, 'all', false);
-      // Get.find<CampaignController>().getItemCampaignList(reload);
+      Get.find<CampaignController>().getItemCampaignList(reload);
       // Get.find<StoreController>().getLatestStoreList(reload, 'all', false);
       // Get.find<ItemController>().getReviewedItemList(reload, 'all', false);
       //   Get.find<StoreController>().getStoreList(1, reload);
       Get.find<ItemController>().getPopularItemList(reload, 'all', false);
+      Get.find<ItemController>().getFeatyredItemList(reload, 'all', false);
       Get.find<ItemController>().getDiscountItemList(true, 'all', false);
     }
     if (Get.find<AuthController>().isLoggedIn()) {
@@ -159,10 +160,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               .getCategoryList(true);
                           // await Get.find<StoreController>()
                           //     .getPopularStoreList(true, 'all', false);
-                          // await Get.find<CampaignController>()
-                          //     .getItemCampaignList(true);
+                          await Get.find<CampaignController>()
+                              .getItemCampaignList(true);
                           await Get.find<ItemController>()
                               .getPopularItemList(true, 'all', false);
+                          await Get.find<ItemController>()
+                              .getFeatyredItemList(true, 'all', false);
 
                           await Get.find<ItemController>()
                               .getDiscountItemList(true, 'all', false);
@@ -541,7 +544,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     // const PopularStoreView(
                                                     //     isPopular: true,
                                                     //     isFeatured: false),
-                                                    //const ItemCampaignView(),
+                                                    const ItemCampaignView(),
                                                     Padding(
                                                       padding:
                                                           EdgeInsets.symmetric(
@@ -555,6 +558,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       height:
                                                           context.height * 0.02,
                                                     ),
+                                                    const PopularItemView(
+                                                        isPopular: false),
                                                     const PopularItemView(
                                                         isPopular: true),
                                                     SizedBox(

@@ -23,6 +23,8 @@ class ItemController extends GetxController implements GetxService {
 
   // Latest products
   List<Item>? _popularItemList;
+  ItemModel? _featuredItemList;
+  // List<Item>? _featuredItemList;
   List<Item>? _discountItemList;
 
   List<Item>? _reviewedItemList;
@@ -43,6 +45,7 @@ class ItemController extends GetxController implements GetxService {
   List<bool> _collapsVariation = [];
 
   List<Item>? get popularItemList => _popularItemList;
+  ItemModel? get featuredItemList => _featuredItemList;
   List<Item>? get discountItemList => _discountItemList;
   List<Item>? get reviewedItemList => _reviewedItemList;
   bool get isLoading => _isLoading;
@@ -74,6 +77,28 @@ class ItemController extends GetxController implements GetxService {
       if (response.statusCode == 200) {
         _popularItemList = [];
         _popularItemList!.addAll(ItemModel.fromJson(response.body).items!);
+        _isLoading = false;
+      } else {
+        ApiChecker.checkApi(response);
+      }
+      update();
+    }
+  }
+
+  Future<void> getFeatyredItemList(
+      bool reload, String type, bool notify) async {
+    if (reload) {
+      _featuredItemList = null;
+    }
+    if (notify) {
+      update();
+    }
+    if (_featuredItemList == null || reload) {
+      Response response = await itemRepo.getFeaturedItemList(type);
+      if (response.statusCode == 200) {
+        _featuredItemList = ItemModel();
+
+        _featuredItemList = ItemModel.fromJson(response.body);
         _isLoading = false;
       } else {
         ApiChecker.checkApi(response);

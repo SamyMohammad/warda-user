@@ -11,6 +11,10 @@ class ItemRepo extends GetxService {
     return await apiClient.getData('${AppConstants.popularItemUri}?type=$type');
   }
 
+  Future<Response> getFeaturedItemList(String type) async {
+    return await apiClient.getData(AppConstants.featuredItemUri);
+  }
+
   Future<Response> getDiscountItemList(String type) async {
     return await apiClient.getData(AppConstants.discountItemUri);
   }

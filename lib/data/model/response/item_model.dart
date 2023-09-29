@@ -6,11 +6,13 @@ class ItemModel {
   String? limit;
   int? offset;
   List<Item>? items;
+  String? title;
 
-  ItemModel({this.totalSize, this.limit, this.offset, this.items});
+  ItemModel({this.totalSize, this.limit, this.offset, this.items, this.title});
 
   ItemModel.fromJson(Map<String, dynamic> json) {
     totalSize = json['total_size'];
+    title = json['title'];
     limit = json['limit'].toString();
     offset =
         (json['offset'] != null && json['offset'].toString().trim().isNotEmpty)

@@ -2,8 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
+
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:warda/controller/location_controller.dart';
 import 'package:warda/controller/splash_controller.dart';
@@ -449,28 +450,28 @@ class _WebLandingPageState extends State<WebLandingPage> {
                                                     physics:
                                                         const BouncingScrollPhysics(),
                                                     padding: EdgeInsets.zero,
-                                                    child: Html(
-                                                      data: splashController
+                                                    child: HtmlWidget(
+                                                      splashController
                                                               .moduleList![
                                                                   index]
                                                               .description ??
                                                           '',
-                                                      shrinkWrap: true,
-                                                      onLinkTap: (String? url,
-                                                          Map<String, String>
-                                                              attributes,
-                                                          element) {
-                                                        if (url!.startsWith(
-                                                            'www.')) {
-                                                          url = 'https://$url';
-                                                        }
-                                                        if (kDebugMode) {
-                                                          print(
-                                                              'Redirect to url: $url');
-                                                        }
-                                                        html.window.open(
-                                                            url, "_blank");
-                                                      },
+                                                      // shrinkWrap: true,
+                                                      // onLinkTap: (String? url,
+                                                      //     Map<String, String>
+                                                      //         attributes,
+                                                      //     element) {
+                                                      //   if (url!.startsWith(
+                                                      //       'www.')) {
+                                                      //     url = 'https://$url';
+                                                      //   }
+                                                      //   if (kDebugMode) {
+                                                      //     print(
+                                                      //         'Redirect to url: $url');
+                                                      //   }
+                                                      //   html.window.open(
+                                                      //       url, "_blank");
+                                                      // },
                                                     ),
                                                   )),
                                                 ])),

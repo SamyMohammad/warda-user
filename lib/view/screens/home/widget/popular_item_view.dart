@@ -35,7 +35,7 @@ class PopularItemView extends StatelessWidget {
           ? itemController.discountItemList
           : isPopular
               ? itemController.popularItemList
-              : itemController.reviewedItemList;
+              : itemController.featuredItemList?.items ?? [];
 
       return (itemList != null && itemList.isEmpty)
           ? const SizedBox()
@@ -49,7 +49,7 @@ class PopularItemView extends StatelessWidget {
                     child: TitleWidget(
                       title: isPopular
                           ? 'popular_items'.tr
-                          : 'best_reviewed_item'.tr,
+                          : itemController.featuredItemList?.title ?? '',
                       onTap: () => Get.toNamed(
                           RouteHelper.getPopularItemRoute(isPopular)),
                     ),

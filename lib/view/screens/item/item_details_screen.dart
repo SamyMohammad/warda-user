@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:warda/controller/cart_controller.dart';
 import 'package:warda/controller/item_controller.dart';
@@ -589,19 +590,23 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                                                 height: Dimensions
                                                                     .paddingSizeExtraSmall),
                                                             Container(
-                                                              alignment: Alignment
-                                                                  .centerLeft,
-                                                              child: Text(
-                                                                  itemController
-                                                                      .item!
-                                                                      .description!,
-                                                                  maxLines: 12,
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                  style:
-                                                                      robotoRegular),
-                                                            ),
+                                                                alignment: Alignment
+                                                                    .centerLeft,
+                                                                // child: Text(
+                                                                //     itemController
+                                                                //         .item!
+                                                                //         .description!,
+                                                                //     maxLines: 12,
+                                                                //     overflow:
+                                                                //         TextOverflow
+                                                                //             .ellipsis,
+                                                                //     style:
+                                                                //         robotoRegular),
+                                                                child: HtmlWidget(
+                                                                    itemController
+                                                                            .item
+                                                                            ?.description ??
+                                                                        '')),
                                                             const SizedBox(
                                                                 height: Dimensions
                                                                     .paddingSizeLarge),
