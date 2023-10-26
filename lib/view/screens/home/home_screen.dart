@@ -15,9 +15,7 @@ import 'package:warda/helper/route_helper.dart';
 import 'package:warda/util/dimensions.dart';
 import 'package:warda/util/images.dart';
 import 'package:warda/util/styles.dart';
-import 'package:warda/view/base/item_view.dart';
 import 'package:warda/view/base/menu_drawer.dart';
-import 'package:warda/view/base/paginated_list_view.dart';
 import 'package:warda/view/base/web_menu_bar.dart';
 import 'package:warda/view/screens/home/theme1/theme1_home_screen.dart';
 import 'package:warda/view/screens/home/web_home_screen.dart';
@@ -321,7 +319,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                     shape: BoxShape
                                                                         .circle),
                                                                 margin: const EdgeInsets
-                                                                        .symmetric(
+                                                                    .symmetric(
                                                                     horizontal:
                                                                         2),
                                                                 child:
@@ -334,7 +332,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       Padding(
                                                                     padding:
                                                                         const EdgeInsets
-                                                                            .all(0),
+                                                                            .all(
+                                                                            0),
                                                                     child: Image
                                                                         .network(
                                                                       cubit.countrySelected
@@ -414,7 +413,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                     context);
                                                             return Container(
                                                               padding: const EdgeInsets
-                                                                      .symmetric(
+                                                                  .symmetric(
                                                                   horizontal:
                                                                       Dimensions
                                                                           .paddingSizeSmall),

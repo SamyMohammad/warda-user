@@ -66,7 +66,7 @@ dependencies:
   shimmer_animation: ^2.1.0+1
   sign_in_with_apple: ^4.3.0
   ticket_widget: ^0.0.1
-  universal_html: ^2.0.8
+  universal_html: ^2.2.4
   url_launcher: ^6.1.2
   url_strategy: ^0.2.0
 #  sliver_app_bar_builder: ^1.0.4
