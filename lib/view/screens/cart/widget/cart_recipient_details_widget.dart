@@ -224,63 +224,51 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget>
                       SizedBox(
                         height: context.height * 0.01,
                       ),
-                      TabBar(
-                          controller: cubit.tabController,
-                          // controller: tabController,
-                          unselectedLabelColor: Colors.grey,
-                          labelColor: AppConstants.greenColor,
-                          indicatorPadding: EdgeInsets.symmetric(
-                              horizontal: context.width * 0.05),
-                          indicatorColor: AppConstants.greenColor,
-                          labelStyle: robotoMedium.copyWith(
-                              fontWeight: FontWeight.w600),
-                          unselectedLabelStyle: robotoRegular.copyWith(),
-                          isScrollable: true,
-                          tabs: [
-                            Container(
-                              width: context.width * 0.18,
-                              alignment: Alignment.center,
-                              child: Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: Text(
-                                  'fast'.tr,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              alignment: Alignment.center,
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 5.0, horizontal: 2),
-                              width: context.width * 0.35,
-                              child: Text(
-                                'tomorrow'.tr,
-                              ),
-                            ),
-                            Container(
-                              width: context.width * 0.2,
-                              alignment: Alignment.center,
-                              child: Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: Text(
-                                  'custom'.tr,
-                                ),
-                              ),
-                            ),
-                          ]),
-                      SizedBox(
-                        height: cubit.tabController.index != 2
-                            // tabController.index != 2
-                            ? context.height * 0.25
-                            : context.height * 0.56,
-                        child: TabBarView(
-                            controller: cubit.tabController,
-                            // controller: tabController,
-                            children: [
-                              fastTomorrowTabBody(cubit, true),
-                              fastTomorrowTabBody(cubit, false),
-                              customTabBody(cubit)
-                            ]),
-                      ),
+                      // TabBar(
+                      //     controller: cubit.tabController,
+                      //     // controller: tabController,
+                      //     unselectedLabelColor: Colors.grey,
+                      //     labelColor: AppConstants.greenColor,
+                      //     indicatorPadding: EdgeInsets.symmetric(
+                      //         horizontal: context.width * 0.05),
+                      //     indicatorColor: AppConstants.greenColor,
+                      //     labelStyle: robotoMedium.copyWith(
+                      //         fontWeight: FontWeight.w600),
+                      //     unselectedLabelStyle: robotoRegular.copyWith(),
+                      //     isScrollable: true,
+                      //     tabs: [
+                      //       Container(
+                      //         width: context.width * 0.18,
+                      //         alignment: Alignment.center,
+                      //         child: Padding(
+                      //           padding: const EdgeInsets.all(5.0),
+                      //           child: Text(
+                      //             'fast'.tr,
+                      //           ),
+                      //         ),
+                      //       ),
+                      //       Container(
+                      //         alignment: Alignment.center,
+                      //         padding: const EdgeInsets.symmetric(
+                      //             vertical: 5.0, horizontal: 2),
+                      //         width: context.width * 0.35,
+                      //         child: Text(
+                      //           'tomorrow'.tr,
+                      //         ),
+                      //       ),
+                      //       Container(
+                      //         width: context.width * 0.2,
+                      //         alignment: Alignment.center,
+                      //         child: Padding(
+                      //           padding: const EdgeInsets.all(5.0),
+                      //           child: Text(
+                      //             'custom'.tr,
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ]),
+
+                      customTabBody(cubit,),
 
                       SizedBox(
                         height: context.height * 0.02,
@@ -386,9 +374,9 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget>
   Widget customTabBody(
     CartCubit cubit,
   ) {
-    return ListView(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
+    return Column(
+      // physics: const NeverScrollableScrollPhysics(),
+      // shrinkWrap: true,
       children: [
         SizedBox(
           height: context.height * 0.02,
@@ -404,10 +392,11 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget>
           height: context.height * 0.3,
           child: CalendarDatePicker2(
             config: CalendarDatePicker2Config(
+              selectableDayPredicate: isDaySelectable,
                 calendarType: CalendarDatePicker2Type.single,
                 firstDate: DateTime.now(),
                 selectedDayHighlightColor: AppConstants.greenColor,
-                lastDate: DateTime.now().add(const Duration(days: 60))),
+                lastDate: DateTime.now().add(const Duration(days: 365))),
             value: cubit.range,
             onValueChanged: (dates) {
               cubit.changeArriveDate(dates);
@@ -462,5 +451,8 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget>
         // const ContinueCartBtn(),
       ],
     );
+  }
+  bool isDaySelectable(DateTime day) {
+    return day.weekday != DateTime.saturday && day.weekday != DateTime.sunday;
   }
 }
