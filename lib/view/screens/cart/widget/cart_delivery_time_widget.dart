@@ -94,8 +94,8 @@ class _CartDeliveryTimeWidgetState extends State<CartDeliveryTimeWidget> {
                 ]),
             Expanded(
               child: TabBarView(controller: cubit.tabController, children: [
-                fastTomorrowTabBody(cubit, true),
-                fastTomorrowTabBody(cubit, false),
+                // fastTomorrowTabBody(cubit, true),
+                // fastTomorrowTabBody(cubit, false),
                 customTabBody(cubit)
               ]),
             )
@@ -105,82 +105,82 @@ class _CartDeliveryTimeWidgetState extends State<CartDeliveryTimeWidget> {
     );
   }
 
-  Widget fastTomorrowTabBody(CartCubit cubit, bool isToday) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: context.height * 0.02,
-        ),
-        Text(
-          isToday
-              ? '${'delivery_will_arrive'.tr} ${'today'.tr} - ${cubit.dateToday} ${'at_time'.tr}'
-              : '${'delivery_will_arrive'.tr} ${'tomorrow'.tr} - ${cubit.dateTomorrow} ${'at_time'.tr}',
-          style: robotoRegular.copyWith(color: AppConstants.primaryColor),
-        ),
-        SizedBox(
-          height: context.height * 0.02,
-        ),
-        Row(
-          children: [
-            const Icon(
-              Icons.access_time_outlined,
-              color: AppConstants.primaryColor,
-            ),
-            SizedBox(
-              width: context.width * 0.03,
-            ),
-            Text(
-              'select_a_time'.tr,
-              style: robotoRegular,
-            )
-          ],
-        ),
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            Container(
-              height: context.height * 0.04,
-              width: context.width * 0.5,
-              decoration: BoxDecoration(color: AppConstants.lightPinkColor),
-            ),
-            TimePickerSpinner(
-              is24HourMode: false,
-              normalTextStyle: robotoRegular.copyWith(color: Colors.grey),
-              highlightedTextStyle:
-                  robotoRegular.copyWith(color: AppConstants.primaryColor),
-              // spacing: 10,
-              itemHeight: context.height * 0.04,
-              isForce2Digits: true,
-              itemWidth: context.width * 0.06,
-              onTimeChange: (time) {
-                cubit.changeArriveTime(time, isToday: isToday);
-              },
-            ),
-          ],
-        ),
-        SizedBox(
-          height: context.height * 0.02,
-        ),
-        Text(
-          'delivery_notes'.tr,
-          style: robotoRegular.copyWith(),
-        ),
-        SizedBox(
-          height: context.height * 0.02,
-        ),
-        CustomTextField(
-          controller: cubit.deliveryNotes,
-          titleText: 'delivery_notes'.tr,
-          maxLines: 3,
-        ),
-        SizedBox(
-          height: context.height * 0.01,
-        ),
-        ContinueCartBtn(),
-      ],
-    );
-  }
+  // Widget fastTomorrowTabBody(CartCubit cubit, bool isToday) {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       SizedBox(
+  //         height: context.height * 0.02,
+  //       ),
+  //       Text(
+  //         isToday
+  //             ? '${'delivery_will_arrive'.tr} ${'today'.tr} - ${cubit.dateToday} ${'at_time'.tr}'
+  //             : '${'delivery_will_arrive'.tr} ${'tomorrow'.tr} - ${cubit.dateTomorrow} ${'at_time'.tr}',
+  //         style: robotoRegular.copyWith(color: AppConstants.primaryColor),
+  //       ),
+  //       SizedBox(
+  //         height: context.height * 0.02,
+  //       ),
+  //       Row(
+  //         children: [
+  //           const Icon(
+  //             Icons.access_time_outlined,
+  //             color: AppConstants.primaryColor,
+  //           ),
+  //           SizedBox(
+  //             width: context.width * 0.03,
+  //           ),
+  //           Text(
+  //             'select_a_time'.tr,
+  //             style: robotoRegular,
+  //           )
+  //         ],
+  //       ),
+  //       Stack(
+  //         alignment: Alignment.center,
+  //         children: [
+  //           Container(
+  //             height: context.height * 0.04,
+  //             width: context.width * 0.5,
+  //             decoration: BoxDecoration(color: AppConstants.lightPinkColor),
+  //           ),
+  //           TimePickerSpinner(
+  //             is24HourMode: false,
+  //             normalTextStyle: robotoRegular.copyWith(color: Colors.grey),
+  //             highlightedTextStyle:
+  //                 robotoRegular.copyWith(color: AppConstants.primaryColor),
+  //             // spacing: 10,
+  //             itemHeight: context.height * 0.04,
+  //             isForce2Digits: true,
+  //             itemWidth: context.width * 0.06,
+  //             onTimeChange: (time) {
+  //               cubit.changeArriveTime(time, isToday: isToday);
+  //             },
+  //           ),
+  //         ],
+  //       ),
+  //       SizedBox(
+  //         height: context.height * 0.02,
+  //       ),
+  //       Text(
+  //         'delivery_notes'.tr,
+  //         style: robotoRegular.copyWith(),
+  //       ),
+  //       SizedBox(
+  //         height: context.height * 0.02,
+  //       ),
+  //       CustomTextField(
+  //         controller: cubit.deliveryNotes,
+  //         titleText: 'delivery_notes'.tr,
+  //         maxLines: 3,
+  //       ),
+  //       SizedBox(
+  //         height: context.height * 0.01,
+  //       ),
+  //       ContinueCartBtn(),
+  //     ],
+  //   );
+  // }
 
   Widget customTabBody(
     CartCubit cubit,

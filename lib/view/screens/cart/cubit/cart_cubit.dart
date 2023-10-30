@@ -17,6 +17,7 @@ import '../../../../controller/user_controller.dart';
 import '../../../../data/model/body/place_order_body.dart';
 import '../../../../data/model/response/address_model.dart';
 import '../../../../data/model/response/cart_model.dart';
+import '../../../../data/model/response/config_model.dart';
 import '../../../../data/model/response/questions_model.dart';
 import '../../../../helper/date_converter.dart';
 import '../../../../helper/price_converter.dart';
@@ -30,6 +31,7 @@ import '../widget/cart_items_list_widget.dart';
 import '../widget/cart_message_widget.dart';
 import '../widget/cart_recipient_details_widget.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+
 part 'cart_state.dart';
 
 class CartCubit extends Cubit<CartState> {
@@ -38,6 +40,7 @@ class CartCubit extends Cubit<CartState> {
 
   late TabController tabController;
   int activeStep = 0;
+
   //recipient details params
   final fullNameController = TextEditingController();
   final phoneNumerController = TextEditingController();
@@ -52,16 +55,19 @@ class CartCubit extends Cubit<CartState> {
   bool keepSecret = false;
   bool showLinkArrowUp = false;
   String? paymentKey;
+
   //deliver time params
-  String dateToday = DateFormat.yMMMMd('en_US').format(DateTime.now());
+  // String dateToday = DateFormat.yMMMMd('en_US').format(DateTime.now());
+  // String dateTomorrow = DateFormat.yMMMMd('en_US').format(
+  //     DateFormat.yMMMMd('en_US')
+  //         .parse(DateFormat.yMMMMd('en_US').format(DateTime.now()))
+  //         .add(Duration(days: 1)));
   String dateCustom = DateFormat.yMMMMd('en_US').format(DateTime.now());
-  String dateTomorrow = DateFormat.yMMMMd('en_US').format(
-      DateFormat.yMMMMd('en_US')
-          .parse(DateFormat.yMMMMd('en_US').format(DateTime.now()))
-          .add(Duration(days: 1)));
+
   String deliveryDate = '';
-  late String arriveTimeToday = DateFormat.jm().format(DateTime.now());
-  late String arriveTimeTomorrow = DateFormat.jm().format(DateTime.now());
+
+  // late String arriveTimeToday = DateFormat.jm().format(DateTime.now());
+  // late String arriveTimeTomorrow = DateFormat.jm().format(DateTime.now());
   late String arriveTimeCustom = DateFormat.jm().format(DateTime.now());
   late String deliveryTime = '';
   final deliveryNotes = TextEditingController();
@@ -91,6 +97,7 @@ class CartCubit extends Cubit<CartState> {
   List<DateTime?> range = [
     DateTime.now(),
   ];
+
   changePaymentMethod(String key) {
     emit(CartLoading());
     paymentKey = key;
@@ -227,23 +234,25 @@ class CartCubit extends Cubit<CartState> {
     print('hello::: ${newIndex}');
 
     activeStep = newIndex;
-    if (tabController.runtimeType != Null) {
-      switch (tabController.index) {
-        case 0:
-          deliveryDate = dateToday;
-          deliveryTime = arriveTimeToday;
-          break;
-        case 1:
-          deliveryDate = dateTomorrow;
-          deliveryTime = arriveTimeTomorrow;
-          break;
-        case 2:
-          deliveryDate = dateCustom;
-          deliveryTime = arriveTimeCustom;
-          break;
-        default:
-      }
-    }
+    deliveryDate = dateCustom;
+    deliveryTime = arriveTimeCustom;
+    // if (tabController.runtimeType != Null) {
+    //   switch (tabController.index) {
+    //     case 0:
+    //       deliveryDate = dateToday;
+    //       deliveryTime = arriveTimeToday;
+    //       break;
+    //     case 1:
+    //       deliveryDate = dateTomorrow;
+    //       deliveryTime = arriveTimeTomorrow;
+    //       break;
+    //     case 2:
+    //       deliveryDate = dateCustom;
+    //       deliveryTime = arriveTimeCustom;
+    //       break;
+    //     default:
+    //   }
+    // }
     emit(CartInitial());
   }
 
@@ -275,17 +284,21 @@ class CartCubit extends Cubit<CartState> {
     }
   }
 
+  List<String?>? storeScheduleOpeningTimes = Get.find<SplashController>()
+      .configModel!
+      .storeSchedule!
+      .map((schedule) => schedule?.openingTime)
+      .toList();
+  List<String?>? storeScheduleClosingTimes = Get.find<SplashController>()
+      .configModel!
+      .storeSchedule!
+      .map((schedule) => schedule?.closingTime)
+      .toList();
+
   changeArriveTime(DateTime newArriveTime, {bool? isToday}) {
     emit(CartLoading());
-    if (isToday.runtimeType != Null) {
-      if (isToday!) {
-        arriveTimeToday = DateFormat.jm().format(newArriveTime);
-      } else {
-        arriveTimeTomorrow = DateFormat.jm().format(newArriveTime);
-      }
-    } else {
-      arriveTimeCustom = DateFormat.jm().format(newArriveTime);
-    }
+
+    arriveTimeCustom = DateFormat.jm().format(newArriveTime);
 
     emit(CartInitial());
   }
@@ -297,6 +310,155 @@ class CartCubit extends Cubit<CartState> {
         .format(newArriveDate.first ?? DateTime.now());
     deliveryDate = dateCustom;
     emit(CartInitial());
+  }
+
+  DateTime getOpeningTime({required num day}) {
+    List<StoreSchedule>? storeSchedule =
+        Get.find<SplashController>().configModel!.storeSchedule!;
+    StoreSchedule selectedDay = StoreSchedule();
+    if (!getDisabledDays().contains(day)) {
+      selectedDay = storeSchedule.firstWhere((time) => time.day == day);
+    }
+
+    return convertStringToDateTime(selectedDay.openingTime ?? "20:40:30");
+  }
+
+  DateTime getClosingTime({required num day}) {
+    List<StoreSchedule>? storeSchedule =
+        Get.find<SplashController>().configModel!.storeSchedule!;
+    StoreSchedule selectedDay = StoreSchedule();
+
+    if (!getDisabledDays().contains(day)) {
+      selectedDay = storeSchedule.firstWhere((time) => time.day == day);
+    }
+    return convertStringToDateTime(selectedDay.closingTime ?? "01:59:59")
+        .subtract(Duration(minutes: 120));
+  }
+
+  DateTime convertStringToDateTime(String timeString) {
+    DateFormat format = DateFormat.Hms();
+    DateTime dateTime = format.parse(timeString);
+    print(' date time $dateTime');
+
+    return dateTime;
+  }
+
+  bool isTomorrow() {
+    return DateTime.now().isAfter(getClosingTime(
+        day: convertDateTimeDayToDaysFromApi(DateTime.now().weekday)));
+    // return current.isAfter(startTime) && current.isBefore(endTime);
+  }
+
+  DateTime? getFirstDate() {
+    int counter = 1;
+    DateTime firstDateTime = DateTime.now();
+    List<num?>? storeScheduleDays = Get.find<SplashController>()
+        .configModel!
+        .storeSchedule!
+        .map((schedule) => schedule?.day)
+        .toList();
+    // firstDateTime =  storeScheduleDays.firstWhere((element) => storeScheduleDays.contains(element),orElse:()=>-1 );
+    if (isTomorrow()) {
+      while (true) {
+        firstDateTime.add(Duration(days: counter));
+        if (!storeScheduleDays
+            .contains(convertDateTimeDayToDaysFromApi(firstDateTime.weekday))) {
+          firstDateTime.add(Duration(days: counter));
+          counter++;
+        }
+
+        if (storeScheduleDays
+            .contains(convertDateTimeDayToDaysFromApi(firstDateTime.weekday))) {
+          break;
+        }
+      }
+    }
+
+    return firstDateTime;
+  }
+
+  List<num> getDisabledDays() {
+    List<num?>? storeScheduleDays = Get.find<SplashController>()
+        .configModel!
+        .storeSchedule!
+        .map((schedule) => schedule?.day)
+        .toList();
+
+    List<num> disabledDays = [];
+    for (var i = 0; i <= 6; i++) {
+      if (!storeScheduleDays.contains(i)) {
+        disabledDays.add(i);
+      }
+    }
+
+    return disabledDays;
+  }
+
+  bool isDaySelectable(DateTime day) {
+    List<num?>? storeScheduleDays = Get.find<SplashController>()
+        .configModel!
+        .storeSchedule!
+        .map((schedule) => schedule?.day)
+        .toList();
+print('storeScheduleDays $storeScheduleDays');
+    List<num> disabledDays = [];
+    for (var i = 0; i <= 6; i++) {
+      if (!storeScheduleDays.contains(i)) {
+        disabledDays.add(i);
+      }
+    }
+
+    return storeScheduleDays!.contains(day.weekday);
+// for
+//     return day.weekday != DateTime.saturday && day.weekday != DateTime.sunday;
+  }
+
+  convertDaysFromApiToDateTimeDay(int day) {
+    switch (day) {
+      case 0:
+        return DateTime.sunday;
+      case 1:
+        return DateTime.monday;
+      case 2:
+        return DateTime.tuesday;
+      case 3:
+        return DateTime.wednesday;
+      case 4:
+        return DateTime.thursday;
+      case 5:
+        return DateTime.friday;
+      case 6:
+        return DateTime.saturday;
+      default:
+        {
+          print("Invalid choice");
+        }
+        break;
+    }
+  }
+
+  convertDateTimeDayToDaysFromApi(int day) {
+    switch (day) {
+      case DateTime.sunday:
+        return 0;
+      case DateTime.monday:
+        return 1;
+      case DateTime.tuesday:
+        return 2;
+      case DateTime.wednesday:
+        return 3;
+      case DateTime.thursday:
+        return 4;
+      case DateTime.friday:
+        return 5;
+      case DateTime.saturday:
+        return 6;
+      default:
+        {
+          print("Invalid choice");
+        }
+        break;
+    }
   }
 
   placeOrder(
@@ -637,8 +799,8 @@ class CartCubit extends Cubit<CartState> {
       fullNameController.text = fullname;
     }
 
-    deliveryDate = dateToday;
-    deliveryTime = arriveTimeToday;
+    deliveryDate = dateCustom;
+    deliveryTime = arriveTimeCustom;
     emit(CartInitial());
   }
 

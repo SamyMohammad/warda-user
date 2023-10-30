@@ -1,6 +1,7 @@
 import 'package:warda/data/model/response/module_model.dart';
 
 class ConfigModel {
+
   String? businessName;
   String? logo;
   String? address;
@@ -61,8 +62,13 @@ class ConfigModel {
   int? taxIncluded;
   String? cookiesText;
 
+  // ass
+  List<StoreSchedule>? storeSchedule;
+  String? orderPrepareTime;
   ConfigModel(
-      {this.businessName,
+      {this.storeSchedule,
+        this.orderPrepareTime,
+        this.businessName,
         this.logo,
         this.address,
         this.phone,
@@ -213,6 +219,20 @@ class ConfigModel {
     prescriptionStatus = json['prescription_order_status'];
     taxIncluded = json['tax_included'];
     cookiesText = json['cookies_text'];
+    print('________________________');
+    print('storeSchedule ${json['store_schedule']}');
+
+    if (json['store_schedule'] != null) {
+      storeSchedule = [];
+      json['store_schedule'].forEach((v) {
+        storeSchedule?.add(StoreSchedule.fromJson(v));
+      });
+      print('________________________');
+      print('storeSchedule ${json['store_schedule']}');
+    }
+    orderPrepareTime = json['order_prepare_time'];
+    print('__________');
+    print(storeSchedule?.length);
   }
 
   Map<String, dynamic> toJson() {
@@ -292,6 +312,11 @@ class ConfigModel {
     }
     data['tax_included'] = taxIncluded;
     data['cookies_text'] = cookiesText;
+    if (storeSchedule != null) {
+      data['store_schedule'] = storeSchedule?.map((v) => v.toJson()).toList();
+      print(data['store_schedule']);
+    }
+    data['order_prepare_time'] = orderPrepareTime;
     return data;
   }
 }
@@ -625,3 +650,29 @@ class SocialLogin {
     return data;
   }
 }
+class StoreSchedule {
+  StoreSchedule({
+    this.day,
+    this.openingTime,
+    this.closingTime,});
+
+  StoreSchedule.fromJson(dynamic json) {
+    day = json['day'];
+    openingTime = json['opening_time'];
+    closingTime = json['closing_time'];
+  }
+  num? day;
+  String? openingTime;
+  String? closingTime;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['day'] = day;
+    map['opening_time'] = openingTime;
+    map['closing_time'] = closingTime;
+    return map;
+  }
+
+}
+
+

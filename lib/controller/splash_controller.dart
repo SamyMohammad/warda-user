@@ -61,6 +61,8 @@ class SplashController extends GetxController implements GetxService {
     if(response.statusCode == 200) {
       _data = response.body;
       _configModel = ConfigModel.fromJson(response.body);
+      print('getConfigData');
+      print(_data);
       if(_configModel!.module != null) {
         setModule(_configModel!.module);
       }else if(GetPlatform.isWeb || (loadModuleData && _module != null)) {
@@ -70,6 +72,8 @@ class SplashController extends GetxController implements GetxService {
        await getLandingPageData();
       }
       isSuccess = true;
+      print('__________');
+      print(_configModel!.storeSchedule!);
     }else {
       ApiChecker.checkApi(response);
       if(response.statusText == ApiClient.noInternetMessage) {

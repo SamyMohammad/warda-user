@@ -37,6 +37,7 @@ class _CartScreenState extends State<CartScreen> {
   @override
   void initState() {
     super.initState();
+    Get.find<SplashController>().getConfigData();
     if (Get.find<CartController>().cartList.isNotEmpty) {
       if (Get.find<CartController>().addCutlery) {
         Get.find<CartController>().updateCutlery(isUpdate: false);

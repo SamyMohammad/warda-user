@@ -38,6 +38,8 @@ class CartCheckoutScreen extends StatefulWidget {
 class _CartCheckoutScreenState extends State<CartCheckoutScreen> {
   @override
   void initState() {
+    Get.find<SplashController>().getConfigData();
+
     super.initState();
     if (Get.find<CartController>().cartList.isNotEmpty) {
       if (Get.find<CartController>().addCutlery) {

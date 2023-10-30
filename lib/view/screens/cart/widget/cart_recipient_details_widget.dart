@@ -1,10 +1,12 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:country_code_picker/country_code.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
+import 'package:warda/view/base/time_picker/homepage.dart';
 
 import '../../../../controller/auth_controller.dart';
 import '../../../../controller/cart_controller.dart';
@@ -17,6 +19,7 @@ import '../../../../util/dimensions.dart';
 import '../../../../util/images.dart';
 import '../../../../util/styles.dart';
 import '../../../base/custom_button.dart';
+import '../../../base/custom_controller.dart';
 import '../../../base/custom_snackbar.dart';
 import '../../../base/custom_text_field.dart';
 import '../../checkout/checkout_screen.dart';
@@ -35,9 +38,13 @@ class CartRecipientDetailsWidget extends StatefulWidget {
 class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget>
     with TickerProviderStateMixin {
   // late TabController tabController;
+  // final CustomContainerController _customContainerController=CustomContainerController();
+
   @override
   void initState() {
     // TODO: implement initState
+    // Get.find<SplashController>().getConfigData();
+    // print(Get.find<SplashController>().configModel!.storeSchedule!.length);
     BlocProvider.of<CartCubit>(context)
         .setupCountryCode(Get.find<UserController>());
     BlocProvider.of<CartCubit>(context).tabController =
@@ -52,13 +59,14 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget>
       builder: (context, state) {
         var cubit = BlocProvider.of<CartCubit>(context);
         return GetBuilder<CartController>(builder: (cartController) {
+          // Get.find<SplashController>().getConfigData();
           return GetBuilder<UserController>(
             builder: (userController) {
               bool isLoggedIn = Get.find<AuthController>().isLoggedIn();
               return SizedBox(
                 height: context.height * 0.8,
                 child: ListView(
-                    physics: AlwaysScrollableScrollPhysics(),
+                    physics: const AlwaysScrollableScrollPhysics(),
                     shrinkWrap: true,
                     // crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -268,7 +276,9 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget>
                       //       ),
                       //     ]),
 
-                      customTabBody(cubit,),
+                      customTabBody(
+                        cubit,
+                      ),
 
                       SizedBox(
                         height: context.height * 0.02,
@@ -311,65 +321,65 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget>
     );
   }
 
-  Widget fastTomorrowTabBody(CartCubit cubit, bool isToday) {
-    return ListView(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      children: [
-        SizedBox(
-          height: context.height * 0.02,
-        ),
-        Text(
-          isToday
-              ? '${'delivery_will_arrive'.tr} ${'today'.tr} - ${cubit.dateToday} ${'at_time'.tr}'
-              : '${'delivery_will_arrive'.tr} ${'tomorrow'.tr} - ${cubit.dateTomorrow} ${'at_time'.tr}',
-          style: robotoRegular.copyWith(color: AppConstants.primaryColor),
-        ),
-        SizedBox(
-          height: context.height * 0.02,
-        ),
-        Row(
-          children: [
-            const Icon(
-              Icons.access_time_outlined,
-              color: AppConstants.primaryColor,
-            ),
-            SizedBox(
-              width: context.width * 0.03,
-            ),
-            Text(
-              'select_a_time'.tr,
-              style: robotoRegular,
-            )
-          ],
-        ),
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            Container(
-              height: context.height * 0.04,
-              width: context.width * 0.5,
-              decoration: BoxDecoration(color: AppConstants.lightPinkColor),
-            ),
-            TimePickerSpinner(
-              is24HourMode: false,
-              normalTextStyle: robotoRegular.copyWith(color: Colors.grey),
-              highlightedTextStyle:
-                  robotoRegular.copyWith(color: AppConstants.primaryColor),
-              // spacing: 10,
-              itemHeight: context.height * 0.04,
-              isForce2Digits: true,
-              itemWidth: context.width * 0.06,
-              onTimeChange: (time) {
-                cubit.changeArriveTime(time, isToday: isToday);
-              },
-            ),
-          ],
-        ),
-        // const ContinueCartBtn(),
-      ],
-    );
-  }
+  // Widget fastTomorrowTabBody(CartCubit cubit, bool isToday) {
+  //   return ListView(
+  //     physics: const NeverScrollableScrollPhysics(),
+  //     shrinkWrap: true,
+  //     children: [
+  //       SizedBox(
+  //         height: context.height * 0.02,
+  //       ),
+  //       // Text(
+  //       //   isToday
+  //       //       ? '${'delivery_will_arrive'.tr} ${'today'.tr} - ${cubit.dateToday} ${'at_time'.tr}'
+  //       //       : '${'delivery_will_arrive'.tr} ${'tomorrow'.tr} - ${cubit.dateTomorrow} ${'at_time'.tr}',
+  //       //   style: robotoRegular.copyWith(color: AppConstants.primaryColor),
+  //       // ),
+  //       SizedBox(
+  //         height: context.height * 0.02,
+  //       ),
+  //       Row(
+  //         children: [
+  //           const Icon(
+  //             Icons.access_time_outlined,
+  //             color: AppConstants.primaryColor,
+  //           ),
+  //           SizedBox(
+  //             width: context.width * 0.03,
+  //           ),
+  //           Text(
+  //             'select_a_time'.tr,
+  //             style: robotoRegular,
+  //           )
+  //         ],
+  //       ),
+  //       Stack(
+  //         alignment: Alignment.center,
+  //         children: [
+  //           Container(
+  //             height: context.height * 0.04,
+  //             width: context.width * 0.5,
+  //             decoration: BoxDecoration(color: AppConstants.lightPinkColor),
+  //           ),
+  //           TimePickerSpinner(
+  //             is24HourMode: false,
+  //             normalTextStyle: robotoRegular.copyWith(color: Colors.grey),
+  //             highlightedTextStyle:
+  //                 robotoRegular.copyWith(color: AppConstants.primaryColor),
+  //             // spacing: 10,
+  //             itemHeight: context.height * 0.04,
+  //             isForce2Digits: true,
+  //             itemWidth: context.width * 0.06,
+  //             onTimeChange: (time) {
+  //               cubit.changeArriveTime(time, isToday: isToday);
+  //             },
+  //           ),
+  //         ],
+  //       ),
+  //       // const ContinueCartBtn(),
+  //     ],
+  //   );
+  // }
 
   Widget customTabBody(
     CartCubit cubit,
@@ -392,9 +402,9 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget>
           height: context.height * 0.3,
           child: CalendarDatePicker2(
             config: CalendarDatePicker2Config(
-              selectableDayPredicate: isDaySelectable,
+                selectableDayPredicate: cubit.isDaySelectable,
                 calendarType: CalendarDatePicker2Type.single,
-                firstDate: DateTime.now(),
+                firstDate: cubit.getFirstDate(),
                 selectedDayHighlightColor: AppConstants.greenColor,
                 lastDate: DateTime.now().add(const Duration(days: 365))),
             value: cubit.range,
@@ -424,35 +434,101 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget>
         Stack(
           alignment: Alignment.center,
           children: [
-            Container(
-              height: context.height * 0.04,
+            // Container(
+            //   height: context.height * 0.04,
+            //   width: context.width * 0.5,
+            //   decoration: const BoxDecoration(color: AppConstants.lightPinkColor),
+            // ),
+            SizedBox(
+              height: context.height * 0.2,
               width: context.width * 0.5,
-              decoration: BoxDecoration(color: AppConstants.lightPinkColor),
-            ),
-            TimePickerSpinner(
-              is24HourMode: false,
-              normalTextStyle: robotoRegular.copyWith(color: Colors.grey),
-              highlightedTextStyle: robotoRegular.copyWith(
-                  color: AppConstants.primaryColor,
-                  fontWeight: FontWeight.w600),
+              child: CupertinoTheme(
+                data: CupertinoThemeData(
+                  textTheme: CupertinoTextThemeData(
+                    dateTimePickerTextStyle: robotoRegular.copyWith(
+                        color: AppConstants.primaryColor,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ),
+                child: CupertinoDatePicker(
+                  initialDateTime: DateTime.now().copyWith(
+                      hour: cubit
+                          .getOpeningTime(
+                          day: cubit.convertDateTimeDayToDaysFromApi(
+                              cubit.range.first?.weekday ?? 0))
+                          .hour,
+                      minute: cubit
+                          .getOpeningTime(
+                          day: cubit.convertDateTimeDayToDaysFromApi(
+                              cubit.range.first?.weekday ?? 0))
+                          .minute),
+                  //               initialDateTime: cubit.getOpeningTime(
+                  // day: cubit.convertDateTimeDayToDaysFromApi(
+                  // cubit.range.first?.weekday??0)),
+                  //               minimumDate: cubit.getOpeningTime(
+                  //                   day: cubit.convertDateTimeDayToDaysFromApi(
+                  //                       cubit.range.first?.weekday??0)),
+                  use24hFormat: true,
+                  minimumDate: DateTime.now().copyWith(
+                      hour: cubit
+                          .getOpeningTime(
+                              day: cubit.convertDateTimeDayToDaysFromApi(
+                                  cubit.range.first?.weekday ?? 0))
+                          .hour,
+                      minute: cubit
+                          .getOpeningTime(
+                              day: cubit.convertDateTimeDayToDaysFromApi(
+                                  cubit.range.first?.weekday ?? 0))
+                          .minute),
+                  maximumDate: DateTime.now().copyWith(
+                      hour: cubit
+                          .getClosingTime(
+                              day: cubit.convertDateTimeDayToDaysFromApi(
+                                  cubit.range.first?.weekday ?? 0))
+                          .hour,
+                      minute: cubit
+                          .getClosingTime(
+                              day: cubit.convertDateTimeDayToDaysFromApi(
+                                  cubit.range.first?.weekday ?? 0))
+                          .minute),
+//
+//                   maximumDate: cubit.getClosingTime(
+//                       day: cubit.convertDateTimeDayToDaysFromApi(
+//                           cubit.range.first?.weekday??0)),
+                  mode: CupertinoDatePickerMode.time,
 
-              // spacing: 10,
-              itemHeight: context.height * 0.04,
-              isForce2Digits: true,
-              itemWidth: context.width * 0.055,
-              onTimeChange: (time) {
-                cubit.changeArriveTime(
-                  time,
-                );
-              },
-            ),
+                  onDateTimeChanged: (DateTime newDateTime) {
+                    print(newDateTime);
+
+                    cubit.changeArriveTime(
+                      newDateTime,
+                    );
+                  },
+                ),
+              ),
+            )
+            // TimePickerSpinner(
+            //   is24HourMode: false,
+            //   normalTextStyle: robotoRegular.copyWith(color: Colors.grey),
+            //   highlightedTextStyle: robotoRegular.copyWith(
+            //       color: AppConstants.primaryColor,
+            //       fontWeight: FontWeight.w600),
+            //
+            //   // spacing: 10,
+            //   itemHeight: context.height * 0.04,
+            //   isForce2Digits: true,
+            //
+            //   itemWidth: context.width * 0.055,
+            //   onTimeChange: (time) {
+            //     cubit.changeArriveTime(
+            //       time,
+            //     );
+            //   },
+            // ),
           ],
         ),
         // const ContinueCartBtn(),
       ],
     );
-  }
-  bool isDaySelectable(DateTime day) {
-    return day.weekday != DateTime.saturday && day.weekday != DateTime.sunday;
   }
 }

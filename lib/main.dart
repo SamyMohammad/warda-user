@@ -108,6 +108,7 @@ class _MyAppState extends State<MyApp> {
         .getConfigData(loadLandingData: GetPlatform.isWeb)
         .then((bool isSuccess) async {
       if (isSuccess) {
+        // print( 'storeSchedule __ ${Get.find<SplashController>().configModel?.storeSchedule!}');
         if (Get.find<AuthController>().isLoggedIn()) {
           Get.find<AuthController>().updateToken();
           //await Get.find<WishListController>().getWishList();
