@@ -366,7 +366,7 @@ class CartCheckoutWidget extends StatelessWidget {
                       promoCode(cubit, context, price, discount ?? 0, addOns,
                           deliveryCharge ?? 0, storeController),
                       SizedBox(
-                        height: context.height * 0.02,
+                        height: context.height * 0.025,
                       ),
                       summary(
                           cubit,
@@ -607,14 +607,36 @@ class CartCheckoutWidget extends StatelessWidget {
         GetBuilder<CouponController>(
       builder: (couponController) {
         return Container(
+          margin: EdgeInsets.symmetric(horizontal: 10),
+          decoration:  BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.grey.shade200,
+                  Colors.grey.shade300,
+                  Colors.grey.shade400,
+                  Colors.grey.shade500,
+                ],
+              ),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.grey.shade600,
+                  spreadRadius: 1,
+                  blurRadius: 8,
+                  // offset: const Offset(0, 15)
+              )
+            ],
+          ),
           child: Column(children: [
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               Row(
                 children: [
                   const Icon(Icons.place_outlined,
-                      color: AppConstants.primaryColor),
+                      color: AppConstants.primaryColor,),
                   SizedBox(
-                    width: context.width * 0.03,
+                    width: context.width * 0.02,
                   ),
                   Text('promo_code'.tr, style: robotoMedium),
                 ],
@@ -626,6 +648,7 @@ class CartCheckoutWidget extends StatelessWidget {
                         .then((value) {
                       if (value != null) {
                         cubit.couponController.text = value.toString();
+
                       }
                     });
                   } else {

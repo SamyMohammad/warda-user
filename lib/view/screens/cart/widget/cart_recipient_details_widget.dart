@@ -63,7 +63,8 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget>
           return GetBuilder<UserController>(
             builder: (userController) {
               bool isLoggedIn = Get.find<AuthController>().isLoggedIn();
-              return SizedBox(
+              return Container(
+                padding: EdgeInsets.only(top: context.height * 0.02,),
                 height: context.height * 0.8,
                 child: ListView(
                     physics: const AlwaysScrollableScrollPhysics(),
@@ -214,20 +215,23 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget>
                         height: context.height * 0.02,
                       ),
                       // time delivery data
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const Icon(Icons.calendar_today_outlined,
-                              color: AppConstants.primaryColor, size: 20),
-                          SizedBox(
-                            width: context.width * 0.04,
-                          ),
-                          Text(
-                            'delivery_time'.tr,
-                            style: robotoRegular,
-                          )
-                        ],
+                      Padding(
+                        padding: const EdgeInsets.only(left: 9.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const Icon(Icons.calendar_today_outlined,
+                                color: AppConstants.primaryColor, size: 22),
+                            SizedBox(
+                              width: context.width * 0.04,
+                            ),
+                            Text(
+                              'delivery_time'.tr,
+                              style: robotoRegular,
+                            )
+                          ],
+                        ),
                       ),
                       SizedBox(
                         height: context.height * 0.01,
@@ -388,13 +392,13 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget>
       // physics: const NeverScrollableScrollPhysics(),
       // shrinkWrap: true,
       children: [
-        SizedBox(
-          height: context.height * 0.02,
-        ),
-        Text(
-          '${cubit.dateCustom} ${'atTime'.tr} ${cubit.arriveTimeCustom}',
-          style: robotoRegular.copyWith(color: AppConstants.primaryColor),
-        ),
+        // SizedBox(
+        //   height: context.height * 0.02,
+        // ),
+        // Text(
+        //   '${cubit.dateCustom} ${'atTime'.tr} ${cubit.arriveTimeCustom}',
+        //   style: robotoRegular.copyWith(color: AppConstants.primaryColor),
+        // ),
         SizedBox(
           height: context.height * 0.02,
         ),

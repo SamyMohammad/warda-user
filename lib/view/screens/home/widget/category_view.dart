@@ -26,7 +26,7 @@ class CategoryView extends StatelessWidget {
               categoryController.categoryList!.isEmpty)
           ? const SizedBox()
           : Padding(
-              padding: EdgeInsets.only(left: context.width * 0.075),
+              padding: EdgeInsets.only(left: context.width * 0.065),
               child: Column(
                 children: [
                   Padding(

@@ -537,6 +537,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 children: [
                                                     const BannerView(
                                                         isFeatured: false),
+SizedBox(height: 13,),
                                                     const CategoryView(),
                                                     // const PopularStoreView(
                                                     //     isPopular: true,

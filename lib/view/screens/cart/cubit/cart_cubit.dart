@@ -439,19 +439,19 @@ print('storeScheduleDays $storeScheduleDays');
 
   convertDateTimeDayToDaysFromApi(int day) {
     switch (day) {
-      case DateTime.sunday:
+      case  7:
         return 0;
-      case DateTime.monday:
+      case 1:
         return 1;
-      case DateTime.tuesday:
+      case 2:
         return 2;
-      case DateTime.wednesday:
+      case 3:
         return 3;
-      case DateTime.thursday:
+      case 4:
         return 4;
-      case DateTime.friday:
+      case 5:
         return 5;
-      case DateTime.saturday:
+      case 6:
         return 6;
       default:
         {
