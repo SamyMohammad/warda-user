@@ -610,24 +610,7 @@ class CartCheckoutWidget extends StatelessWidget {
           margin: EdgeInsets.symmetric(horizontal: 10),
           decoration:  BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Colors.grey.shade200,
-                  Colors.grey.shade300,
-                  Colors.grey.shade400,
-                  Colors.grey.shade500,
-                ],
-              ),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.grey.shade600,
-                  spreadRadius: 1,
-                  blurRadius: 8,
-                  // offset: const Offset(0, 15)
-              )
-            ],
+
           ),
           child: Column(children: [
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -711,9 +694,20 @@ class CartCheckoutWidget extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(
                   horizontal: Dimensions.paddingSizeLarge),
+
               child: Row(children: [
                 Expanded(
-                  child: SizedBox(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black,
+                          // offset: Offset(0, 4), // Adjust the shadow offset (0, 4 for example)
+                          blurRadius: 6, // Adjust the blur radius as needed
+                          spreadRadius: -4, // Use a negative value for a shadow outside the container
+                        ),
+                      ],),
                     height: 45,
                     child: TextField(
                       controller: cubit.couponController,
@@ -752,6 +746,7 @@ class CartCheckoutWidget extends StatelessWidget {
                     ),
                   ),
                 ),
+
                 InkWell(
                   onTap: () {
                     String couponCode = cubit.couponController.text.trim();

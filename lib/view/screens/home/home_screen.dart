@@ -49,6 +49,7 @@ class HomeScreen extends StatefulWidget {
             .module!
             .isParcel!) {
       Get.find<BannerController>().getBannerList(reload);
+      Get.find<BannerController>().getCampaignList(reload);
       //Get.find<LocationController>().syncZoneData();
       Get.find<CategoryController>().getCategoryList(reload);
       //Get.find<StoreController>().getPopularStoreList(reload, 'all', false);
@@ -151,6 +152,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         if (Get.find<SplashController>().module != null) {
                           await Get.find<BannerController>()
                               .getBannerList(true);
+                          await Get.find<BannerController>()
+                              .getCampaignList(true);
                           //await Get.find<LocationController>().syncZoneData();
                           await Get.find<CategoryController>()
                               .getCategoryList(true);
@@ -535,8 +538,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.center,
                                                 children: [
-                                                    const BannerView(
-                                                        isFeatured: false),
+                                                    // const BannerView(
+                                                    //     isFeatured: false),
 SizedBox(height: 13,),
                                                     const CategoryView(),
                                                     // const PopularStoreView(

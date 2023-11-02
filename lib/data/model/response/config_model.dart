@@ -651,28 +651,25 @@ class SocialLogin {
   }
 }
 class StoreSchedule {
-  StoreSchedule({
-    this.day,
-    this.openingTime,
-    this.closingTime,});
+  int? day;
+  String? dayName;
+  List<String>? timeSlots;
 
-  StoreSchedule.fromJson(dynamic json) {
+  StoreSchedule({this.day, this.dayName, this.timeSlots});
+
+  StoreSchedule.fromJson(Map<String, dynamic> json) {
     day = json['day'];
-    openingTime = json['opening_time'];
-    closingTime = json['closing_time'];
+    dayName = json['day_name'];
+    timeSlots = json['time_slots'].cast<String>();
   }
-  num? day;
-  String? openingTime;
-  String? closingTime;
 
   Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['day'] = day;
-    map['opening_time'] = openingTime;
-    map['closing_time'] = closingTime;
-    return map;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['day'] = this.day;
+    data['day_name'] = this.dayName;
+    data['time_slots'] = this.timeSlots;
+    return data;
   }
-
 }
 
 

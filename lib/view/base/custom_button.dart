@@ -46,56 +46,58 @@ class CustomButton extends StatelessWidget {
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radius),
           side: BorderSide(
-              color: textColor ?? Theme.of(context).primaryColor, width: 0.6)),
+              color: color ?? Theme.of(context).primaryColor, width: 0.6)),
     );
 
     return Center(
-        child: SizedBox(
+        child: Container(
             width: width ?? Dimensions.webMaxWidth,
-            child: Padding(
-              padding: margin == null ? const EdgeInsets.all(0) : margin!,
-              child: TextButton(
-                onPressed: isLoading ? null : onPressed as void Function()?,
-                style: flatButtonStyle,
-                child: isLoading
-                    ? Center(
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                height: 15,
-                                width: 15,
-                                child: CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                      textColor ?? Theme.of(context).cardColor),
-                                  strokeWidth: 2,
-                                ),
+            padding: margin == null ? const EdgeInsets.all(0) : margin!,
+            child: TextButton(
+              
+              onPressed: isLoading ? null : onPressed as void Function()?,
+              style: flatButtonStyle,
+              child: isLoading
+                  ? Center(
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: 15,
+                              width: 15,
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    textColor ?? Theme.of(context).cardColor),
+                                strokeWidth: 2,
                               ),
-                              const SizedBox(
-                                  width: Dimensions.paddingSizeSmall),
-                              Text('loading'.tr,
-                                  style: robotoMedium.copyWith(
-                                      color: textColor ??
-                                          Theme.of(context).cardColor)),
-                            ]),
-                      )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                            icon != null
-                                ? Padding(
-                                    padding: const EdgeInsets.only(
-                                        right:
-                                            Dimensions.paddingSizeExtraSmall),
-                                    child: Icon(icon,
-                                        color: transparent
-                                            ? Theme.of(context).primaryColor
-                                            : Theme.of(context).cardColor),
-                                  )
-                                : const SizedBox(),
-                            Text(buttonText,
+                            ),
+                            const SizedBox(
+                                width: Dimensions.paddingSizeSmall),
+                            Text('loading'.tr,
+                                style: robotoMedium.copyWith(
+                                    color: textColor ??
+                                        Theme.of(context).cardColor)),
+                          ]),
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                          icon != null
+                              ? Padding(
+                                  padding: const EdgeInsets.only(
+                                      right:
+                                          Dimensions.paddingSizeExtraSmall),
+                                  child: Icon(icon,
+                                      color: transparent
+                                          ? Theme.of(context).primaryColor
+                                          : Theme.of(context).cardColor),
+                                )
+                              : const SizedBox(),
+                          FittedBox(
+                            fit: BoxFit.cover,
+                            child: Text(buttonText,
                                 textAlign: TextAlign.center,
-                                style: robotoBold.copyWith(
+                                style: robotoRegular.copyWith(
                                   color: textColor ??
                                       (transparent
                                           ? Theme.of(context).primaryColor
@@ -103,8 +105,8 @@ class CustomButton extends StatelessWidget {
                                   fontSize:
                                       fontSize ?? Dimensions.fontSizeLarge,
                                 )),
-                          ]),
-              ),
+                          ),
+                        ]),
             )));
   }
 }

@@ -284,16 +284,18 @@ class CartCubit extends Cubit<CartState> {
     }
   }
 
-  List<String?>? storeScheduleOpeningTimes = Get.find<SplashController>()
-      .configModel!
-      .storeSchedule!
-      .map((schedule) => schedule?.openingTime)
-      .toList();
-  List<String?>? storeScheduleClosingTimes = Get.find<SplashController>()
-      .configModel!
-      .storeSchedule!
-      .map((schedule) => schedule?.closingTime)
-      .toList();
+  List<String?> timeSlots = [];
+
+  late String currentOption = timeSlots[0]!;
+
+  onChangedRadioButton(String? value) {
+    emit(CartLoading());
+    currentOption = value.toString();
+    arriveTimeCustom = currentOption;
+    print('arriveTimeCustom$arriveTimeCustom');
+
+    emit(CartInitial());
+  }
 
   changeArriveTime(DateTime newArriveTime, {bool? isToday}) {
     emit(CartLoading());
@@ -302,6 +304,7 @@ class CartCubit extends Cubit<CartState> {
 
     emit(CartInitial());
   }
+
 
   changeArriveDate(List<DateTime?> newArriveDate) {
     emit(CartLoading());
@@ -320,7 +323,7 @@ class CartCubit extends Cubit<CartState> {
       selectedDay = storeSchedule.firstWhere((time) => time.day == day);
     }
 
-    return convertStringToDateTime(selectedDay.openingTime ?? "20:40:30");
+    return convertStringToDateTime("20:40:30" ?? "20:40:30");
   }
 
   DateTime getClosingTime({required num day}) {
@@ -331,8 +334,21 @@ class CartCubit extends Cubit<CartState> {
     if (!getDisabledDays().contains(day)) {
       selectedDay = storeSchedule.firstWhere((time) => time.day == day);
     }
-    return convertStringToDateTime(selectedDay.closingTime ?? "01:59:59")
+    return convertStringToDateTime("20:40:30" ?? "01:59:59")
         .subtract(Duration(minutes: 120));
+  }
+
+  getTimeSlotsList() {
+    List<StoreSchedule>? storeSchedule =
+        Get.find<SplashController>().configModel!.storeSchedule!;
+    StoreSchedule selectedDay = StoreSchedule();
+    final day = convertDateTimeDayToDaysFromApi(range.first?.weekday ?? 0);
+    if (!getDisabledDays().contains(day)) {
+      selectedDay = storeSchedule.firstWhere((time) => time.day == day);
+    }
+    print('selectedDay${selectedDay.timeSlots}');
+
+    timeSlots = selectedDay.timeSlots!;
   }
 
   DateTime convertStringToDateTime(String timeString) {
@@ -348,6 +364,8 @@ class CartCubit extends Cubit<CartState> {
         day: convertDateTimeDayToDaysFromApi(DateTime.now().weekday)));
     // return current.isAfter(startTime) && current.isBefore(endTime);
   }
+
+  String? selectedValue;
 
   DateTime? getFirstDate() {
     int counter = 1;
@@ -394,13 +412,18 @@ class CartCubit extends Cubit<CartState> {
     return disabledDays;
   }
 
+// List<String?> timeSlots=Get.find<SplashController>()
+//       .configModel!
+//       .storeSchedule!
+//       .map((schedule) => schedule?.timeSlots)
+//       .toList();
   bool isDaySelectable(DateTime day) {
     List<num?>? storeScheduleDays = Get.find<SplashController>()
         .configModel!
         .storeSchedule!
         .map((schedule) => schedule?.day)
         .toList();
-print('storeScheduleDays $storeScheduleDays');
+    print('storeScheduleDays $storeScheduleDays');
     List<num> disabledDays = [];
     for (var i = 0; i <= 6; i++) {
       if (!storeScheduleDays.contains(i)) {
@@ -439,7 +462,7 @@ print('storeScheduleDays $storeScheduleDays');
 
   convertDateTimeDayToDaysFromApi(int day) {
     switch (day) {
-      case  7:
+      case 7:
         return 0;
       case 1:
         return 1;
@@ -460,7 +483,36 @@ print('storeScheduleDays $storeScheduleDays');
         break;
     }
   }
+  String convertTimeFormat(String inputTime) {
+    // Split the input time into start and end times
+    List<String> times = inputTime.split('-');
 
+    // Convert the times to 12-hour format with AM/PM labels
+    String formattedStartTime = formatTime(times[0]);
+    String formattedEndTime = formatTime(times[1]);
+
+    return '$formattedStartTime - $formattedEndTime';
+  }
+
+  String formatTime(String time) {
+    // Split the time into hours and minutes
+    List<String> parts = time.split(':');
+    int hours = int.parse(parts[0]);
+    int minutes = int.parse(parts[1]);
+
+    // Determine AM or PM
+    String period = (hours < 12) ? 'AM' : 'PM';
+
+    // Convert hours to 12-hour format
+    if (hours > 12) {
+      hours -= 12;
+    }
+
+    // Format the time
+    String formattedTime = '$hours:${minutes.toString().padLeft(2, '0')} $period';
+
+    return formattedTime;
+  }
   placeOrder(
       OrderController orderController,
       CartController cartController,

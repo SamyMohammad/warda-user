@@ -1,12 +1,12 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:country_code_picker/country_code.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
-import 'package:warda/view/base/time_picker/homepage.dart';
 
 import '../../../../controller/auth_controller.dart';
 import '../../../../controller/cart_controller.dart';
@@ -47,6 +47,7 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget>
     // print(Get.find<SplashController>().configModel!.storeSchedule!.length);
     BlocProvider.of<CartCubit>(context)
         .setupCountryCode(Get.find<UserController>());
+    BlocProvider.of<CartCubit>(context).getTimeSlotsList();
     BlocProvider.of<CartCubit>(context).tabController =
         TabController(length: 3, vsync: this);
 
@@ -63,8 +64,11 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget>
           return GetBuilder<UserController>(
             builder: (userController) {
               bool isLoggedIn = Get.find<AuthController>().isLoggedIn();
+
               return Container(
-                padding: EdgeInsets.only(top: context.height * 0.02,),
+                padding: EdgeInsets.only(
+                  top: context.height * 0.02,
+                ),
                 height: context.height * 0.8,
                 child: ListView(
                     physics: const AlwaysScrollableScrollPhysics(),
@@ -96,6 +100,7 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget>
                             builder: (context, state) {
                               var cubit =
                                   BlocProvider.of<LocationCubit>(context);
+
                               return Container(
                                 child: Row(
                                   children: [
@@ -208,7 +213,7 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget>
                               });
                             }),
                       ),
-                      Divider(
+                      const Divider(
                         thickness: 1,
                       ),
                       SizedBox(
@@ -388,6 +393,12 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget>
   Widget customTabBody(
     CartCubit cubit,
   ) {
+    // List<String?>? timeSlots = cubit.getTimeSlotsList(
+    //     day: cubit
+    //         .convertDateTimeDayToDaysFromApi(cubit.range.first?.weekday ?? 0));
+// String? currentOption=timeSlots?[0];
+
+  TextDirection textDirection=TextDirection.rtl;
     return Column(
       // physics: const NeverScrollableScrollPhysics(),
       // shrinkWrap: true,
@@ -435,82 +446,130 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget>
             )
           ],
         ),
-        Stack(
-          alignment: Alignment.center,
+        Column(
           children: [
             // Container(
             //   height: context.height * 0.04,
             //   width: context.width * 0.5,
             //   decoration: const BoxDecoration(color: AppConstants.lightPinkColor),
             // ),
-            SizedBox(
-              height: context.height * 0.2,
-              width: context.width * 0.5,
-              child: CupertinoTheme(
-                data: CupertinoThemeData(
-                  textTheme: CupertinoTextThemeData(
-                    dateTimePickerTextStyle: robotoRegular.copyWith(
-                        color: AppConstants.primaryColor,
-                        fontWeight: FontWeight.w600),
-                  ),
-                ),
-                child: CupertinoDatePicker(
-                  initialDateTime: DateTime.now().copyWith(
-                      hour: cubit
-                          .getOpeningTime(
-                          day: cubit.convertDateTimeDayToDaysFromApi(
-                              cubit.range.first?.weekday ?? 0))
-                          .hour,
-                      minute: cubit
-                          .getOpeningTime(
-                          day: cubit.convertDateTimeDayToDaysFromApi(
-                              cubit.range.first?.weekday ?? 0))
-                          .minute),
-                  //               initialDateTime: cubit.getOpeningTime(
-                  // day: cubit.convertDateTimeDayToDaysFromApi(
-                  // cubit.range.first?.weekday??0)),
-                  //               minimumDate: cubit.getOpeningTime(
-                  //                   day: cubit.convertDateTimeDayToDaysFromApi(
-                  //                       cubit.range.first?.weekday??0)),
-                  use24hFormat: true,
-                  minimumDate: DateTime.now().copyWith(
-                      hour: cubit
-                          .getOpeningTime(
-                              day: cubit.convertDateTimeDayToDaysFromApi(
-                                  cubit.range.first?.weekday ?? 0))
-                          .hour,
-                      minute: cubit
-                          .getOpeningTime(
-                              day: cubit.convertDateTimeDayToDaysFromApi(
-                                  cubit.range.first?.weekday ?? 0))
-                          .minute),
-                  maximumDate: DateTime.now().copyWith(
-                      hour: cubit
-                          .getClosingTime(
-                              day: cubit.convertDateTimeDayToDaysFromApi(
-                                  cubit.range.first?.weekday ?? 0))
-                          .hour,
-                      minute: cubit
-                          .getClosingTime(
-                              day: cubit.convertDateTimeDayToDaysFromApi(
-                                  cubit.range.first?.weekday ?? 0))
-                          .minute),
+            SizedBox(height: context.height * 0.03,),
+            ...cubit.timeSlots
+                .map((item) => Column(
+                      children: [
+                     Directionality(
+                       textDirection: textDirection,
+                       child: RadioListTile<String>(
+                              activeColor:  AppConstants.primaryColor,
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 20,),
+                              value: item!,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: const BorderRadius.all(Radius.circular(9)),
+                                side: BorderSide(color:Colors.black.withOpacity(.7)),
+                              ),
+                              groupValue: cubit.currentOption,
+                              onChanged: cubit.onChangedRadioButton,
+                              title: Directionality(
+                                textDirection: TextDirection.ltr,
+
+                                child: Row(
+                                  children: [
+                                    if(textDirection==TextDirection.ltr)
+                                      const Spacer(),
+                                    Text(cubit.convertTimeFormat(item),style:robotoMedium.copyWith(color: Colors.black.withOpacity(.7),fontSize: 16) ,),
+                                    if(textDirection==TextDirection.rtl)
+                                      const Spacer(),
+
+                                  ],
+                                ),
+                              ),
+
+                              // child: Text(
+                              //   item!,
+                              //   style:  robotoRegular.copyWith(
+                              //       color: AppConstants.primaryColor,
+                              //       fontWeight: FontWeight.w600),
+                              //   overflow: TextOverflow.ellipsis,
+                              // ),
+                            ),
+                     ),
+
+                        const SizedBox(
+                          height: 15,
+                        ),
+                      ],
+                    ))
+                .toList(),
+
+//             SizedBox(
+//               height: context.height * 0.2,
+//               width: context.width * 0.5,
+//               child: CupertinoTheme(
+//                 data: CupertinoThemeData(
+//                   textTheme: CupertinoTextThemeData(
+//                     dateTimePickerTextStyle: robotoRegular.copyWith(
+//                         color: AppConstants.primaryColor,
+//                         fontWeight: FontWeight.w600),
+//                   ),
+//                 ),
+//                 child: CupertinoDatePicker(
+//                   initialDateTime: DateTime.now().copyWith(
+//                       hour: cubit
+//                           .getOpeningTime(
+//                           day: cubit.convertDateTimeDayToDaysFromApi(
+//                               cubit.range.first?.weekday ?? 0))
+//                           .hour,
+//                       minute: cubit
+//                           .getOpeningTime(
+//                           day: cubit.convertDateTimeDayToDaysFromApi(
+//                               cubit.range.first?.weekday ?? 0))
+//                           .minute),
+//                   //               initialDateTime: cubit.getOpeningTime(
+//                   // day: cubit.convertDateTimeDayToDaysFromApi(
+//                   // cubit.range.first?.weekday??0)),
+//                   //               minimumDate: cubit.getOpeningTime(
+//                   //                   day: cubit.convertDateTimeDayToDaysFromApi(
+//                   //                       cubit.range.first?.weekday??0)),
+//                   use24hFormat: true,
+//                   minimumDate: DateTime.now().copyWith(
+//                       hour: cubit
+//                           .getOpeningTime(
+//                               day: cubit.convertDateTimeDayToDaysFromApi(
+//                                   cubit.range.first?.weekday ?? 0))
+//                           .hour,
+//                       minute: cubit
+//                           .getOpeningTime(
+//                               day: cubit.convertDateTimeDayToDaysFromApi(
+//                                   cubit.range.first?.weekday ?? 0))
+//                           .minute),
+//                   maximumDate: DateTime.now().copyWith(
+//                       hour: cubit
+//                           .getClosingTime(
+//                               day: cubit.convertDateTimeDayToDaysFromApi(
+//                                   cubit.range.first?.weekday ?? 0))
+//                           .hour,
+//                       minute: cubit
+//                           .getClosingTime(
+//                               day: cubit.convertDateTimeDayToDaysFromApi(
+//                                   cubit.range.first?.weekday ?? 0))
+//                           .minute),
+// //
+// //                   maximumDate: cubit.getClosingTime(
+// //                       day: cubit.convertDateTimeDayToDaysFromApi(
+// //                           cubit.range.first?.weekday??0)),
+//                   mode: CupertinoDatePickerMode.time,
 //
-//                   maximumDate: cubit.getClosingTime(
-//                       day: cubit.convertDateTimeDayToDaysFromApi(
-//                           cubit.range.first?.weekday??0)),
-                  mode: CupertinoDatePickerMode.time,
-
-                  onDateTimeChanged: (DateTime newDateTime) {
-                    print(newDateTime);
-
-                    cubit.changeArriveTime(
-                      newDateTime,
-                    );
-                  },
-                ),
-              ),
-            )
+//                   onDateTimeChanged: (DateTime newDateTime) {
+//                     print(newDateTime);
+//
+//                     cubit.changeArriveTime(
+//                       newDateTime,
+//                     );
+//                   },
+//                 ),
+//               ),
+//             )
             // TimePickerSpinner(
             //   is24HourMode: false,
             //   normalTextStyle: robotoRegular.copyWith(color: Colors.grey),

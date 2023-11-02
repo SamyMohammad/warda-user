@@ -5,18 +5,22 @@ import 'package:warda/data/repository/banner_repo.dart';
 import 'package:get/get.dart';
 import 'package:warda/helper/responsive_helper.dart';
 
+import '../data/model/response/campaign_model.dart';
+
 class BannerController extends GetxController implements GetxService {
   final BannerRepo bannerRepo;
   BannerController({required this.bannerRepo});
 
   List<String?>? _bannerImageList;
+  CampaignModel? _campaignModel;
+
   List<String?>? _taxiBannerImageList;
   List<String?>? _featuredBannerList;
   List<dynamic>? _bannerDataList;
   List<dynamic>? _taxiBannerDataList;
   List<dynamic>? _featuredBannerDataList;
   int _currentIndex = 0;
-
+  CampaignModel? get campaignModel => _campaignModel;
   List<String?>? get bannerImageList => _bannerImageList;
   List<String?>? get featuredBannerList => _featuredBannerList;
   List<dynamic>? get bannerDataList => _bannerDataList;
@@ -93,7 +97,42 @@ class BannerController extends GetxController implements GetxService {
       update();
     }
   }
+  Future<void> getCampaignList(bool reload) async {
+    if(_campaignModel == null || reload) {
+      _campaignModel = null;
+      Response response = await bannerRepo.getCampaignList();
+      if (response.statusCode == 200) {
 
+        _bannerDataList = [];
+        CampaignModel campaignModel = CampaignModel.fromJson(response.body);
+        _campaignModel=campaignModel;
+        print(_campaignModel);
+        // for (var campaign in campaignModel.campaigns!) {
+        //   _campaignImageList!.add(campaign.image);
+        //   _bannerDataList!.add(campaign);
+        // }
+        // for (var banner in bannerModel.banners!) {
+        //   _campaignImageList!.add(banner.image);
+        //   if(banner.item != null) {
+        //     _bannerDataList!.add(banner.item);
+        //   }else if(banner.store != null){
+        //     _bannerDataList!.add(banner.store);
+        //   }else if(banner.type == 'default'){
+        //     _bannerDataList!.add(banner.link);
+        //   }else{
+        //     _bannerDataList!.add(null);
+        //   }
+        // }
+        // if(ResponsiveHelper.isDesktop(Get.context) && _bannerImageList!.length % 2 != 0){
+        //   _bannerImageList!.add(_bannerImageList![0]);
+        //   _bannerDataList!.add(_bannerDataList![0]);
+        // }
+      } else {
+        ApiChecker.checkApi(response);
+      }
+      update();
+    }
+  }
   Future<void> getTaxiBannerList(bool reload) async {
     if(_taxiBannerImageList == null || reload) {
       _taxiBannerImageList = null;
