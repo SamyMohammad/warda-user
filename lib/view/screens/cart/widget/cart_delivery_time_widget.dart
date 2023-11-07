@@ -193,10 +193,10 @@ class _CartDeliveryTimeWidgetState extends State<CartDeliveryTimeWidget> {
           SizedBox(
             height: context.height * 0.02,
           ),
-          Text(
-            '${cubit.dateCustom} ${'atTime'.tr} ${cubit.arriveTimeCustom}',
-            style: robotoRegular.copyWith(color: AppConstants.primaryColor),
-          ),
+          // Text(
+          //   '${cubit.dateCustom} ${'atTime'.tr} ${cubit.arriveTimeCustom}',
+          //   style: robotoRegular.copyWith(color: AppConstants.primaryColor),
+          // ),
           SizedBox(
             height: context.height * 0.02,
           ),

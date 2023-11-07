@@ -68,7 +68,7 @@ class CartCubit extends Cubit<CartState> {
 
   // late String arriveTimeToday = DateFormat.jm().format(DateTime.now());
   // late String arriveTimeTomorrow = DateFormat.jm().format(DateTime.now());
-  late String arriveTimeCustom = DateFormat.jm().format(DateTime.now());
+  // late String arriveTimeCustom = currentOption;
   late String deliveryTime = '';
   final deliveryNotes = TextEditingController();
 
@@ -94,9 +94,9 @@ class CartCubit extends Cubit<CartState> {
     const CartMessageWidget(),
     CartCheckoutWidget(),
   ];
-  List<DateTime?> range = [
-    DateTime.now(),
-  ];
+  DateTime initialDateTime = DateTime.now();
+
+  late List<DateTime?> range = [initialDateTime];
 
   changePaymentMethod(String key) {
     emit(CartLoading());
@@ -235,7 +235,7 @@ class CartCubit extends Cubit<CartState> {
 
     activeStep = newIndex;
     deliveryDate = dateCustom;
-    deliveryTime = arriveTimeCustom;
+    deliveryTime = currentOption;
     // if (tabController.runtimeType != Null) {
     //   switch (tabController.index) {
     //     case 0:
@@ -291,8 +291,9 @@ class CartCubit extends Cubit<CartState> {
   onChangedRadioButton(String? value) {
     emit(CartLoading());
     currentOption = value.toString();
-    arriveTimeCustom = currentOption;
-    print('arriveTimeCustom$arriveTimeCustom');
+    deliveryTime = currentOption;
+
+    print('deliveryTime$deliveryTime');
 
     emit(CartInitial());
   }
@@ -300,11 +301,10 @@ class CartCubit extends Cubit<CartState> {
   changeArriveTime(DateTime newArriveTime, {bool? isToday}) {
     emit(CartLoading());
 
-    arriveTimeCustom = DateFormat.jm().format(newArriveTime);
+    deliveryTime = DateFormat.jm().format(newArriveTime);
 
     emit(CartInitial());
   }
-
 
   changeArriveDate(List<DateTime?> newArriveDate) {
     emit(CartLoading());
@@ -312,6 +312,9 @@ class CartCubit extends Cubit<CartState> {
     dateCustom = DateFormat.yMMMMd('en_US')
         .format(newArriveDate.first ?? DateTime.now());
     deliveryDate = dateCustom;
+    getTimeSlotsList();
+    currentOption = timeSlots[0]!;
+    deliveryTime = currentOption;
     emit(CartInitial());
   }
 
@@ -330,12 +333,17 @@ class CartCubit extends Cubit<CartState> {
     List<StoreSchedule>? storeSchedule =
         Get.find<SplashController>().configModel!.storeSchedule!;
     StoreSchedule selectedDay = StoreSchedule();
-
+// timeSlots.last;
+    print('timeSlotsLast');
+    print(timeSlots.last);
+    int lastIndex = timeSlots.length - 1;
+    String? lastTime = timeSlots[lastIndex];
+    var closingTime = '${lastTime?.substring(0, 5)}';
+    print('closingTime $closingTime:00');
     if (!getDisabledDays().contains(day)) {
       selectedDay = storeSchedule.firstWhere((time) => time.day == day);
     }
-    return convertStringToDateTime("20:40:30" ?? "01:59:59")
-        .subtract(Duration(minutes: 120));
+    return convertStringToDateTime("$closingTime:00" ?? "01:59:59");
   }
 
   getTimeSlotsList() {
@@ -348,7 +356,7 @@ class CartCubit extends Cubit<CartState> {
     }
     print('selectedDay${selectedDay.timeSlots}');
 
-    timeSlots = selectedDay.timeSlots!;
+    timeSlots = selectedDay.timeSlots ?? [];
   }
 
   DateTime convertStringToDateTime(String timeString) {
@@ -367,8 +375,8 @@ class CartCubit extends Cubit<CartState> {
 
   String? selectedValue;
 
-  DateTime? getFirstDate() {
-    int counter = 1;
+  getFirstDate() {
+    int counter = 0;
     DateTime firstDateTime = DateTime.now();
     List<num?>? storeScheduleDays = Get.find<SplashController>()
         .configModel!
@@ -377,22 +385,26 @@ class CartCubit extends Cubit<CartState> {
         .toList();
     // firstDateTime =  storeScheduleDays.firstWhere((element) => storeScheduleDays.contains(element),orElse:()=>-1 );
     if (isTomorrow()) {
+      counter++;
       while (true) {
-        firstDateTime.add(Duration(days: counter));
-        if (!storeScheduleDays
-            .contains(convertDateTimeDayToDaysFromApi(firstDateTime.weekday))) {
-          firstDateTime.add(Duration(days: counter));
+        if (!storeScheduleDays.contains(convertDateTimeDayToDaysFromApi(
+            firstDateTime.add(Duration(days: counter)).weekday))) {
           counter++;
         }
 
-        if (storeScheduleDays
-            .contains(convertDateTimeDayToDaysFromApi(firstDateTime.weekday))) {
+        if (storeScheduleDays.contains(convertDateTimeDayToDaysFromApi(
+            firstDateTime.add(Duration(days: counter)).weekday))) {
           break;
         }
       }
+      print('firstDateTimedActive');
+      print(counter);
+      initialDateTime = firstDateTime.add(Duration(days: counter));
+      // return firstDateTime.add(Duration(days: counter));
+    } else {
+      initialDateTime = firstDateTime;
+      // return firstDateTime;
     }
-
-    return firstDateTime;
   }
 
   List<num> getDisabledDays() {
@@ -483,6 +495,7 @@ class CartCubit extends Cubit<CartState> {
         break;
     }
   }
+
   String convertTimeFormat(String inputTime) {
     // Split the input time into start and end times
     List<String> times = inputTime.split('-');
@@ -509,10 +522,12 @@ class CartCubit extends Cubit<CartState> {
     }
 
     // Format the time
-    String formattedTime = '$hours:${minutes.toString().padLeft(2, '0')} $period';
+    String formattedTime =
+        '$hours:${minutes.toString().padLeft(2, '0')} $period';
 
     return formattedTime;
   }
+
   placeOrder(
       OrderController orderController,
       CartController cartController,
@@ -852,7 +867,7 @@ class CartCubit extends Cubit<CartState> {
     }
 
     deliveryDate = dateCustom;
-    deliveryTime = arriveTimeCustom;
+    deliveryTime = currentOption;
     emit(CartInitial());
   }
 

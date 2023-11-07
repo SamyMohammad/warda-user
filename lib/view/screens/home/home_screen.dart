@@ -540,12 +540,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 children: [
                                                     // const BannerView(
                                                     //     isFeatured: false),
-SizedBox(height: 13,),
+SizedBox(height: 30,),
                                                     const CategoryView(),
                                                     // const PopularStoreView(
                                                     //     isPopular: true,
                                                     //     isFeatured: false),
                                                     const ItemCampaignView(),
+                                                  SizedBox(height: 15,),
+
                                                     Padding(
                                                       padding:
                                                           EdgeInsets.symmetric(
@@ -555,13 +557,16 @@ SizedBox(height: 13,),
                                                       child:
                                                           const DiscountWidget(),
                                                     ),
+
                                                     SizedBox(
                                                       height:
                                                           context.height * 0.02,
                                                     ),
                                                     const PopularItemView(
                                                         isPopular: false),
-                                                    const PopularItemView(
+                                                  SizedBox(height: 17,),
+
+                                                  const PopularItemView(
                                                         isPopular: true),
                                                     SizedBox(
                                                       height:

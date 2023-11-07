@@ -33,6 +33,8 @@ class ContinueCartBtn extends StatelessWidget {
                     radius: 30,
                     onPressed: () {
                       if (comeFromListItemCart) {
+                        print('deliveryTime ${cubit.deliveryTime}');
+
                         Get.toNamed(RouteHelper.getCheckoutScreenRoute());
                         cubit.changeActiveStep(1);
                       } else {
@@ -43,6 +45,8 @@ class ContinueCartBtn extends StatelessWidget {
                                 .value ??
                             '';
                         if (message.isNotEmpty) {
+                          print('deliveryTimeisNotEmpty ${cubit.deliveryTime}');
+
                           cubit.changeActiveStep(cubit
                                   .validator(cubit.activeStep)
                                   ?.entries
@@ -51,6 +55,8 @@ class ContinueCartBtn extends StatelessWidget {
                               0);
                           showCustomSnackBar(message, isError: true);
                         } else {
+                          print('deliveryTimechangeActiveStep ${cubit.deliveryTime}');
+
                           cubit.changeActiveStep(cubit.activeStep == 4
                               ? cubit.activeStep
                               : cubit.activeStep == 1

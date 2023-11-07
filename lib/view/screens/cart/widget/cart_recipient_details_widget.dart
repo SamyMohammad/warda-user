@@ -43,11 +43,12 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget>
   @override
   void initState() {
     // TODO: implement initState
-    // Get.find<SplashController>().getConfigData();
+    Get.find<SplashController>().getConfigData();
     // print(Get.find<SplashController>().configModel!.storeSchedule!.length);
     BlocProvider.of<CartCubit>(context)
         .setupCountryCode(Get.find<UserController>());
     BlocProvider.of<CartCubit>(context).getTimeSlotsList();
+    BlocProvider.of<CartCubit>(context).getFirstDate();
     BlocProvider.of<CartCubit>(context).tabController =
         TabController(length: 3, vsync: this);
 
@@ -398,7 +399,7 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget>
     //         .convertDateTimeDayToDaysFromApi(cubit.range.first?.weekday ?? 0));
 // String? currentOption=timeSlots?[0];
 
-  TextDirection textDirection=TextDirection.rtl;
+    TextDirection textDirection = TextDirection.rtl;
     return Column(
       // physics: const NeverScrollableScrollPhysics(),
       // shrinkWrap: true,
@@ -419,7 +420,8 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget>
             config: CalendarDatePicker2Config(
                 selectableDayPredicate: cubit.isDaySelectable,
                 calendarType: CalendarDatePicker2Type.single,
-                firstDate: cubit.getFirstDate(),
+                currentDate: cubit.range.first,
+                firstDate: cubit.range.first,
                 selectedDayHighlightColor: AppConstants.greenColor,
                 lastDate: DateTime.now().add(const Duration(days: 365))),
             value: cubit.range,
@@ -453,53 +455,11 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget>
             //   width: context.width * 0.5,
             //   decoration: const BoxDecoration(color: AppConstants.lightPinkColor),
             // ),
-            SizedBox(height: context.height * 0.03,),
+            SizedBox(
+              height: context.height * 0.03,
+            ),
             ...cubit.timeSlots
-                .map((item) => Column(
-                      children: [
-                     Directionality(
-                       textDirection: textDirection,
-                       child: RadioListTile<String>(
-                              activeColor:  AppConstants.primaryColor,
-                              contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 20,),
-                              value: item!,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: const BorderRadius.all(Radius.circular(9)),
-                                side: BorderSide(color:Colors.black.withOpacity(.7)),
-                              ),
-                              groupValue: cubit.currentOption,
-                              onChanged: cubit.onChangedRadioButton,
-                              title: Directionality(
-                                textDirection: TextDirection.ltr,
-
-                                child: Row(
-                                  children: [
-                                    if(textDirection==TextDirection.ltr)
-                                      const Spacer(),
-                                    Text(cubit.convertTimeFormat(item),style:robotoMedium.copyWith(color: Colors.black.withOpacity(.7),fontSize: 16) ,),
-                                    if(textDirection==TextDirection.rtl)
-                                      const Spacer(),
-
-                                  ],
-                                ),
-                              ),
-
-                              // child: Text(
-                              //   item!,
-                              //   style:  robotoRegular.copyWith(
-                              //       color: AppConstants.primaryColor,
-                              //       fontWeight: FontWeight.w600),
-                              //   overflow: TextOverflow.ellipsis,
-                              // ),
-                            ),
-                     ),
-
-                        const SizedBox(
-                          height: 15,
-                        ),
-                      ],
-                    ))
+                .map((item) => timeSlotWidget(textDirection, item, cubit))
                 .toList(),
 
 //             SizedBox(
@@ -591,6 +551,56 @@ class _RecipientDetailsWidgetState extends State<CartRecipientDetailsWidget>
           ],
         ),
         // const ContinueCartBtn(),
+      ],
+    );
+  }
+
+  Column timeSlotWidget(
+      TextDirection textDirection, String? item, CartCubit cubit) {
+    return Column(
+      children: [
+        Directionality(
+          textDirection: textDirection,
+          child: RadioListTile<String>(
+            activeColor: AppConstants.primaryColor,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 20,
+            ),
+            value: item!,
+            shape: RoundedRectangleBorder(
+              borderRadius: const BorderRadius.all(Radius.circular(9)),
+              side: BorderSide(color: Colors.black.withOpacity(.7)),
+            ),
+            groupValue: cubit.currentOption,
+
+            onChanged: cubit.onChangedRadioButton,
+            title: Directionality(
+              textDirection: TextDirection.ltr,
+              child: Row(
+                children: [
+                  if (textDirection == TextDirection.ltr) const Spacer(),
+                  Text(
+                    cubit.convertTimeFormat(item),
+                    style: robotoMedium.copyWith(
+                        color: Colors.black.withOpacity(.7), fontSize: 16),
+                  ),
+                  if (textDirection == TextDirection.rtl) const Spacer(),
+                ],
+              ),
+            ),
+
+            // child: Text(
+            //   item!,
+            //   style:  robotoRegular.copyWith(
+            //       color: AppConstants.primaryColor,
+            //       fontWeight: FontWeight.w600),
+            //   overflow: TextOverflow.ellipsis,
+            // ),
+          ),
+        ),
+        const SizedBox(
+          height: 15,
+        ),
       ],
     );
   }
